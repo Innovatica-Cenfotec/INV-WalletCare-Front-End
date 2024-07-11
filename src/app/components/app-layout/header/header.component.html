@@ -1,0 +1,40 @@
+<nz-header>
+    <div>
+        <span class="header-title">
+            <a routerLink="">
+                WalletCare
+            </a>
+        </span>
+        <span class="header-trigger" (click)="toggleCollapsed()">
+            <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+        </span>
+    </div>
+    <div>
+        <a class="header-calculator">
+            <span nz-icon nzType="calculator" nzTheme="outline"></span>
+        </a>
+        <a class="header-notification">
+            <span nz-icon nzType="notification" nzTheme="outline"></span>
+        </a>
+        <div>           
+            <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
+                <span nz-icon nzType="user" nzTheme="outline"></span>
+                {{user?.alias}}
+                <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item (click)="navigateToProfile()">
+                        <span nz-icon nzType="setting" nzTheme="outline"></span>
+                        Mi Perfil
+                    </li>
+                    <li nz-menu-divider></li>
+                    <li nz-menu-item (click)="logout()">
+                        <span nz-icon nzType="logout" nzTheme="outline"></span>
+                        Cerrar Sesión
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </div>
+    </div>
+</nz-header>
