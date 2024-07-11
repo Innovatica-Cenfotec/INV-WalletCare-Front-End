@@ -14,7 +14,7 @@ export class AdminRoleGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const hasRole = this.authService.hasRole(IRole.admin) || this.authService.hasRole(IRole.superAdmin);
+    const hasRole = this.authService.hasRole(IRole.admin);
 
     if (!hasRole) {
       this.router.navigate(['access-denied']);

@@ -1,66 +1,41 @@
-<div class="login-container">
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <div class="login-card">
-      <div class="w-100">
-        <div class="text-center">
-          <a class="logo text-center" routerLink="/">
-            <img
-              width="250"
-              class="img-fluid mb-4"
-              src="../../../../assets/icons/logo@2x.png"
-              alt="Logo"
-            />
-          </a>
-        </div>
-        <div class="login-main">
-          <form (ngSubmit)="handleLogin($event)" autocomplete="off" #frm="ngForm">
-            <div class="mb-3">
-              <h4>Sign in to account</h4>
-              <small style="color: #4f4f4f">
-                Enter your email & password to login
-              </small>
-            </div>
-
-            <div class="form-group mb-3">
-              <label for="email" class="form-label mb-2">
-                Email Address
-              </label>
-              <input #email="ngModel" type="text" class="form-control" id="email" name="email"
-                placeholder="agent@gmail.com" [(ngModel)]="loginForm.email" [ngClass]="{
-                  'is-invalid': email.invalid && email.touched,
-                  'is-valid': email.valid && email.touched
-                }" required />
-              <div *ngIf="email.invalid" class="invalid-feedback">
-                Please add a valid email
-              </div>
-            </div>
-
-            <div class="form-group mb-4">
-              <label for="password" class="form-label mb-2">Password</label>
-              <div class="form-input position-relative">
-                <input #password="ngModel" type="password" class="form-control" id="password" name="password"
-                placeholder="*****" [(ngModel)]="loginForm.password" [ngClass]="{
-                  'is-invalid': password.invalid && password.touched,
-                  'is-valid': password.valid && password.touched
-                }" required />
-                <div *ngIf="password.invalid" class="invalid-feedback">
-                  Please add a valid password
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group mb-0">
-              <button class="btn btn-primary btn-block w-100" type="submit">
-                Sign in
-              </button>
-              @if(loginError) {
-                <p class="text-danger">{{loginError}}</p>
-              }
-            </div>
-            <a href="/signup">Go SignUp</a>
-          </form>
-        </div>
+<nz-row class="login-form-container">
+  <nz-card>
+    <div nz-row class="login-form-header">
+      <div nz-col [nzSpan]="24">
+        <h1 class="login-form-title">WalletCare</h1>
       </div>
     </div>
-  </div>
-</div>
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="handleLogin()">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="email" placeholder="Correo electrónico" />
+            <ng-template #errorTpl let-control>
+              @if (control.errors?.['required']) {
+              Por favor ingrese su correo electrónico
+              }
+              @if (control.errors?.['email']) {
+              El correo electrónico no es válido
+              }
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Por favor ingrese su contraseña">
+          <nz-input-group nzPrefixIcon="lock">
+            <input type="password" nz-input formControlName="password" placeholder="Cotraseña" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-row class="login-form-margin">
+        <div nz-col [nzSpan]="12" [nzOffset]="12">
+          <a class="login-form-forgot">Olvidé mi contraseña</a>
+        </div>
+      </div>
+      <button nz-button class="login-form-button" [nzType]="'primary'">Iniciar sesión</button>
+      <nz-divider></nz-divider>
+      <button nz-button class="login-form-button login-form-margin" [nzType]="'default'">Registrarse</button>
+    </form>
+  </nz-card>
+</nz-row>

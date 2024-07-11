@@ -22,14 +22,8 @@
         <td>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
         <td>
           <div class="d-flex justify-content-evenly align-items-center">
-            <button type="button" (click)="showDetail(item, formModal)" class="btn btn-secondary">
-              <i class="fa-solid fa-eye white"
-              ></i>
-            </button>
-            <button type="button" (click)="deleteUser(item)" class="btn btn-danger">
-              <i class="fa-solid fa-trash white"
-              ></i>
-            </button>
+          
+           
           </div>
         </td>
       </tr>
@@ -37,12 +31,3 @@
     </tbody>
   </table>
 </div>
-
-<app-modal size="lg" #formModal>
-  <app-user-form 
-  [user]="currentUser" 
-  [action]="'edit'"
-  [title]="'Update User'"
-  >
-</app-user-form>
-</app-modal>

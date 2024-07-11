@@ -9,8 +9,9 @@ export interface IResponse<T> {
 
 export interface IUser {
   id?: number;
-  name?: string;
+  name?: string;  
   lastname?: string;
+  alias?: string;
   email?: string;
   password?: string;
   active?: boolean;
@@ -37,5 +38,14 @@ export enum IFeedbackStatus {
 export enum IRole {
   admin = "ROLE_ADMIN",
   user = "ROLE_USER",
-  superAdmin = 'ROLE_SUPER_ADMIN'
+}
+
+/**
+ * Interface for the layout
+ */
+export interface ILayout {
+  icon: string;
+  breadcrumb: string[];
+  name: string;
+  parentPath?: string;
 }

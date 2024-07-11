@@ -2,13 +2,15 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { SigUpComponent } from './pages/auth/sign-up/signup.component';
-import { UsersComponent } from './pages/users/users.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
-import { AdminRoleGuard } from './guards/admin-role.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
-import { IRole } from './interfaces';
+import { ILayout, IRole } from './interfaces';
+import { UsersComponent } from './pages/users/users.component';
+import { AccountsComponent } from './pages/accounts/accounts.component';
+import { AccountDetailComponent } from './components/account-detail/account-detail.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -36,34 +38,51 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'app',
-        redirectTo: 'users',
-        pathMatch: 'full',
-      },
-      {
-        path: 'users',
-        component: UsersComponent,
-        canActivate:[AdminRoleGuard],
-        data: { 
+        path: '',
+        component: DashboardComponent,
+        data: {
           authorities: [
-            IRole.admin, 
-            IRole.superAdmin
+            IRole.admin,
+            IRole.user
           ],
-          name: 'Users'
+          layout: <ILayout>{
+            icon: 'home',
+            breadcrumb: ['Inicio'],
+            name: 'Inicio',
+          },
         }
       },
       {
-        path: 'dashboard',
-        component: DashboardComponent,
-        data: { 
+        path: 'accounts',
+        component: AccountsComponent,
+        data: {
           authorities: [
-            IRole.admin, 
-            IRole.superAdmin,
+            IRole.admin,
             IRole.user
           ],
-          name: 'Dashboard'
+          layout: <ILayout>{
+            icon: 'form',
+            breadcrumb: ['Cuentas'],
+            name: 'Cuentas',
+          },
+        }
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: false,
+          layout: <ILayout>{
+            icon: 'user',
+            breadcrumb: ['Perfil'],
+            name: 'Perfil',
+          },
         }
       }
     ],
-  },
+  }
 ];
