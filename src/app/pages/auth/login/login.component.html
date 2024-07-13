@@ -6,6 +6,8 @@
       </div>
     </div>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="handleLogin()">
+      <nz-alert *ngIf="loginError" nzType="error" [nzMessage]="loginError" [nzShowIcon]="false"
+        class="login-form-margin" />
       <nz-form-item>
         <nz-form-control [nzErrorTip]="errorTpl">
           <nz-input-group nzPrefixIcon="user">
@@ -30,12 +32,13 @@
       </nz-form-item>
       <div nz-row class="login-form-margin">
         <div nz-col [nzSpan]="12" [nzOffset]="12">
-          <a class="login-form-forgot">Olvidé mi contraseña</a>
+          <a class="login-form-forgot login-form-margin" routerLink="/auth/forgot-password">Olvidé mi contraseña</a>
         </div>
       </div>
-      <button nz-button class="login-form-button" [nzType]="'primary'">Iniciar sesión</button>
+      <button nz-button class="login-form-button" [nzType]="'primary'" [nzLoading]="isLoggingIn">Iniciar sesión</button>
       <nz-divider></nz-divider>
-      <button nz-button class="login-form-button login-form-margin" [nzType]="'default'">Registrarse</button>
     </form>
+    <a nz-button class="login-form-button login-form-margin" [nzType]="'default'" routerLink="/auth/register">
+      Registrarse </a>
   </nz-card>
 </nz-row>
