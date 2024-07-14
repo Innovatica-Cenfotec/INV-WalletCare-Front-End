@@ -1,1 +1,54 @@
-<p>profile works!</p>
+<div class="profile-container">
+    <div class="profile-header">
+      <h2>Datos de perfil</h2>
+    </div>
+    <form class="profile-form">
+      <div class="form-group">
+        <label for="alias">Alias</label>
+        <div class="input-icon-container">
+          <input type="text" id="alias" value="EmiCas" />
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="fullName">Nombre completo</label>
+        <div class="input-icon-container">
+          <input type="text" id="fullName" value="Emilio Casablanca" />
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <div class="email-container">
+          <div class="input-icon-container">
+            <input type="text" id="emailUsername" value="emic4s" />
+            <i class="fas fa-envelope"></i>
+          </div>
+          <span class="at-symbol"></span>
+          <input type="text" id="emailDomain" value="innova.com" readonly />
+        </div>
+      </div>
+      <div class="form-group password-group">
+        <div class="half-width">
+          <label for="password">Contraseña</label>
+          <div class="input-icon-container">
+            <input type="password" id="password" value="********" />
+            <i class="fas fa-lock"></i>
+          </div>
+        </div>
+        <div class="half-width">
+          <label for="confirmPassword">Confirmar contraseña</label>
+          <div class="input-icon-container">
+            <input type="password" id="confirmPassword" value="********" />
+            <i class="fas fa-lock"></i>
+          </div>
+        </div>
+        <button type="button" class="btn-change-password">Cambiar contraseña</button>
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="btn-save">Guardar cambios</button>
+        <button type="button" class="btn-delete">Eliminar cuenta</button>
+      </div>
+    </form>
+  </div>
+  

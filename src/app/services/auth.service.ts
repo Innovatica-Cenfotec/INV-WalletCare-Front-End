@@ -90,13 +90,11 @@ export class AuthService {
   }
 
   public logout() {
-    this.http.post('auth/logout', {}).subscribe(() => {
-      this.user = { email: '', authorities: [] };
-      this.accessToken = '';
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('expiresIn');
-      localStorage.removeItem('auth_user');
-    });
+    this.user = { email: '', authorities: [] };
+    this.accessToken = '';
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('expiresIn');
+    localStorage.removeItem('auth_user');
   }
-  
+
 }
