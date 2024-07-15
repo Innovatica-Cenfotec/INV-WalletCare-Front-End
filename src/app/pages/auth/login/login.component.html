@@ -24,7 +24,7 @@
       <nz-form-item>
         <nz-form-control nzErrorTip="Por favor ingrese su contraseña">
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input formControlName="password" placeholder="Cotraseña" />
+            <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -34,8 +34,8 @@
         </div>
       </div>
       <button nz-button class="login-form-button" [nzType]="'primary'">Iniciar sesión</button>
-      <nz-divider></nz-divider>
-      <button nz-button class="login-form-button login-form-margin" [nzType]="'default'">Registrarse</button>
     </form>
+    <nz-divider></nz-divider>
+    <button nz-button class="login-form-button login-form-margin" [nzType]="'default'" onclick="window.location.href='/signup';">Registrarse</button>
   </nz-card>
 </nz-row>
