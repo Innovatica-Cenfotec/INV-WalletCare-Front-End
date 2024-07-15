@@ -1,0 +1,44 @@
+$header-font-size: 14px;
+
+nz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--ant-primary-color);
+    height: 40px;
+    color: white;
+    padding: 0px 20px;
+}
+
+nz-header>div {
+    display: flex;
+    align-items: center;
+}
+
+// add margin right to all elements
+nz-header>div>* {
+    margin-right: 20px;
+}
+
+// remove margin right from the last element
+nz-header>div>*:last-child {
+    margin-right: 0px;
+}
+
+.header-title a,
+.header-user {
+    font-size: $header-font-size;
+    color: white;
+    margin: 0px;
+}
+
+.header-trigger,
+.header-calculator,
+.header-notification {
+    color: white;
+
+    :hover {
+        color: #d9d9d9;
+    }
+}
+

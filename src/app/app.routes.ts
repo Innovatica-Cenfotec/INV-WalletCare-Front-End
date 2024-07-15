@@ -11,27 +11,42 @@ import { UsersComponent } from './pages/users/users.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { AccountDetailComponent } from './components/account-detail/account-detail.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { DefaultLayoutComponent } from './components/default-layout/default-layout.component';
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [GuestGuard],
-  },
-  {
-    path: 'signup',
-    component: SigUpComponent,
-    canActivate: [GuestGuard],
-  },
-  {
-    path: 'access-denied',
-    component: AccessDeniedComponent,
-  },
+
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
+    component: DefaultLayoutComponent,
+    children:[
+      {
+        path: '',
+        component: LandingPageComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'signup',
+        component: SigUpComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
+      }
+    ]
   },
+  
+  // {
+  //   path: '',
+  //   redirectTo: 'login',
+  //   pathMatch: 'full',
+  // },
   {
     path: 'app',
     component: AppLayoutComponent,
