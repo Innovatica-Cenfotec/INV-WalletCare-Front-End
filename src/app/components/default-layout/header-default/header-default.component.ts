@@ -36,10 +36,10 @@ export class HeaderComponent {
     this.router.navigateByUrl('/login');
   }
 
-   /**
-   * Navigates to the Sign Up Page
-   * @returns void
-   */
+  /**
+  * Navigates to the Sign Up Page
+  * @returns void
+  */
   navigateToSignUp(): void {
     // Navigate to the Sign Up Page
     this.router.navigateByUrl('/signup');

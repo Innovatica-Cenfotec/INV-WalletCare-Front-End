@@ -19,27 +19,27 @@ import { LayoutService } from '../../services/layout.service';
 import { filter } from 'rxjs'
 
 @Component({
-    selector: 'app-default-layout',
-    standalone: true,
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        RouterLink,
-        RouterLinkActive,
-        NzLayoutModule,
-        NzMenuModule,
-        NzIconModule,
-        NzBreadCrumbModule,
-        HeaderComponent,
-        NzToolTipModule
-      ],
-    templateUrl: './default-layout.component.html',
-    styleUrl: './default-layout.component.scss'
+  selector: 'app-default-layout',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    NzLayoutModule,
+    NzMenuModule,
+    NzIconModule,
+    NzBreadCrumbModule,
+    HeaderComponent,
+    NzToolTipModule
+  ],
+  templateUrl: './default-layout.component.html',
+  styleUrl: './default-layout.component.scss'
 })
-export class DefaultLayoutComponent { 
-    public isCollapsed: boolean = false;
+export class DefaultLayoutComponent {
+  public isCollapsed: boolean = false;
 
-    toggleCollapsed(): void {
-        this.isCollapsed = !this.isCollapsed;
-      }
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }
