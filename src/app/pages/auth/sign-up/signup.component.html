@@ -50,7 +50,7 @@
       <nz-form-item>
         <nz-form-control [nzErrorTip]="errorTpl">
           <nz-input-group>
-            <input type="text" nz-input formControlName="identyNumber" placeholder="Número de identificación" />
+            <input type="text" nz-input formControlName="identificationNumber" placeholder="Número de identificación" />
             <ng-template #errorTpl let-control>
               <span *ngIf="control.errors?.['required']">Por favor ingrese su número de identificación.</span>
             </ng-template>

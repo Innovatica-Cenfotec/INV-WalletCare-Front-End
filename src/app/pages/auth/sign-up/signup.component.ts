@@ -40,7 +40,7 @@ export class SignupComponent {
     lastname: FormControl<string>;
     nickname: FormControl<string>;
     email: FormControl<string>;
-    identyNumber: FormControl<string>;
+    identificationNumber: FormControl<string>;
     address: FormControl<string>;
     password: FormControl<string>;
   }> = this.form.group({
@@ -48,7 +48,7 @@ export class SignupComponent {
     lastname: ['', [Validators.required]],
     nickname: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    identyNumber: ['', [Validators.required]],
+    identificationNumber: ['', [Validators.required]],
     address: ['', [Validators.required]],
     password: ['', [Validators.required]]
   });
