@@ -11,7 +11,7 @@
           <nz-input-group>
             <input type="text" nz-input formControlName="name" placeholder="Nombre" />
             <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su nombre.</span>
+              <span *ngIf="control.errors?.['required']">Este campo no puede estar vacío.</span>
             </ng-template>
           </nz-input-group>
         </nz-form-control>
@@ -76,6 +76,7 @@
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      <br>
       <button nz-button class="login-form-button" [nzType]="'primary'">Registrarse</button>
     </form>
     <nz-divider></nz-divider>
