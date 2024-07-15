@@ -22,15 +22,13 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   @Input() isCollapsed: boolean = false;  
   @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
   public user?: IUser;
-  
-  constructor(
-    public router: Router,
-    public authService: AuthService
-  ) {}
-  
+    
   ngOnInit(): void {
     this.user = this.authService.getUser();
   }
@@ -59,6 +57,6 @@ export class HeaderComponent implements OnInit {
    */
   logout(): void {
     this.authService.logout();
-    this.router.navigateByUrl('/login');   
+    this.router.navigateByUrl('/login'); 
   }
 }
