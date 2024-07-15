@@ -9,7 +9,6 @@ import { GuestGuard } from './guards/guest.guard';
 import { ILayout, IRole } from './interfaces';
 import { UsersComponent } from './pages/users/users.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
-import { AccountDetailComponent } from './components/account-detail/account-detail.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
@@ -62,8 +61,8 @@ export const routes: Routes = [
           ],
           layout: <ILayout>{
             icon: 'form',
-            breadcrumb: ['Cuentas'],
-            name: 'Cuentas',
+            breadcrumb: ['Cuenta'],
+            name: 'Mis cuentas',
           },
         }
       },
