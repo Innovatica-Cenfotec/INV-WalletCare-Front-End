@@ -34,8 +34,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
 
+export class LoginComponent {
   /**
    * This is the form group that we will use to validate the form    *
    * */ 
