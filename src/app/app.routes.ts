@@ -11,12 +11,17 @@ import { UsersComponent } from './pages/users/users.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { AccountDetailComponent } from './components/account-detail/account-detail.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path:'forgot-password',
+    component: ForgotPasswordComponent,
   },
   {
     path: 'signup',
@@ -66,7 +71,7 @@ export const routes: Routes = [
             name: 'Cuentas',
           },
         }
-      },
+      }, 
       {
         path: 'profile',
         component: ProfileComponent,
@@ -82,7 +87,8 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
-      }
+      },
+
     ],
   }
 ];
