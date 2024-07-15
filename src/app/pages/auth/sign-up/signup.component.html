@@ -62,13 +62,15 @@
           <nz-input-group>
             <input type="text" nz-input formControlName="address" placeholder="Dirección" />
             <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su dirección.</span>
+              @if (control.errors?.['required']) {
+              Por favor ingrese su dirección.
+              }
             </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Por favor ingrese su contraseña">
+        <nz-form-control nzErrorTip="Por favor ingrese su contraseña.">
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
           </nz-input-group>
