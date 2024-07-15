@@ -12,10 +12,10 @@
             <input type="text" nz-input formControlName="email" placeholder="Correo electrónico" />
             <ng-template #errorTpl let-control>
               @if (control.errors?.['required']) {
-              Por favor ingrese su correo electrónico
+              Por favor ingrese su correo electrónico.
               }
               @if (control.errors?.['email']) {
-              El correo electrónico no es válido
+              El correo electrónico no es válido.
               }
             </ng-template>
           </nz-input-group>
