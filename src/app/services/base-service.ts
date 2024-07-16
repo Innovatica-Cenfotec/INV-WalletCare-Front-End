@@ -15,7 +15,7 @@ export class BaseService<T> {
    * @param id - The ID of the item to retrieve.
    * @returns An Observable that emits an IResponse containing the retrieved item.
    */
-  public find(id: string | number): Observable<IResponse<T>> {
+  public find(id: number | undefined): Observable<IResponse<T>> {
     return this.http.get<IResponse<T>>(this.source + '/' + id);
   }
 
