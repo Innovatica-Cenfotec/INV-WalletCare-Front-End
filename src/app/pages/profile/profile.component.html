@@ -1,54 +1,47 @@
 <div class="profile-container">
-    <div class="profile-header">
-      <h2>Datos de perfil</h2>
+  <h2>Datos de perfil</h2>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Alias</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Alias" [(ngModel)]="user.nickname" name="nickname"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Nombre Completo</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Nombre Completo" [value]="fullName" disabled/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Correo Electrónico</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Correo Electrónico" [(ngModel)]="user.email" name="email"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Contraseña</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input type="password" placeholder="Contraseña" [(ngModel)]="user.password" name="password"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Confirmar Contraseña</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <div class="confirm-password-container">
+          <input nz-input type="password" placeholder="Confirmar Contraseña" [(ngModel)]="confirmPassword" name="confirmPassword"/>
+          <button nz-button nzDanger (click)="changePassword()">Cambiar Contraseña</button>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="button-group">
+      <button nz-button nzType="primary" class="save-button" (click)="saveChanges()">Guardar Cambios</button>
+      <button nz-button nzDanger (click)="deleteAccount()">Eliminar Cuenta</button>
     </div>
-    <form class="profile-form">
-      <div class="form-group">
-        <label for="alias">Alias</label>
-        <div class="input-icon-container">
-          <input type="text" id="alias" value="EmiCas" />
-          <i class="fas fa-user"></i>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="fullName">Nombre completo</label>
-        <div class="input-icon-container">
-          <input type="text" id="fullName" value="Emilio Casablanca" />
-          <i class="fas fa-user"></i>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <div class="email-container">
-          <div class="input-icon-container">
-            <input type="text" id="emailUsername" value="emic4s" />
-            <i class="fas fa-envelope"></i>
-          </div>
-          <span class="at-symbol"></span>
-          <input type="text" id="emailDomain" value="innova.com" readonly />
-        </div>
-      </div>
-      <div class="form-group password-group">
-        <div class="half-width">
-          <label for="password">Contraseña</label>
-          <div class="input-icon-container">
-            <input type="password" id="password" value="********" />
-            <i class="fas fa-lock"></i>
-          </div>
-        </div>
-        <div class="half-width">
-          <label for="confirmPassword">Confirmar contraseña</label>
-          <div class="input-icon-container">
-            <input type="password" id="confirmPassword" value="********" />
-            <i class="fas fa-lock"></i>
-          </div>
-        </div>
-        <button type="button" class="btn-change-password">Cambiar contraseña</button>
-      </div>
-      <div class="form-buttons">
-        <button type="submit" class="btn-save">Guardar cambios</button>
-        <button type="button" class="btn-delete">Eliminar cuenta</button>
-      </div>
-    </form>
-  </div>
-  
+  </form>
+</div>
