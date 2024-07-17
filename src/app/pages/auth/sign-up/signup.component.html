@@ -47,6 +47,7 @@
             <ng-container *ngIf="control.errors?.['pattern']">El alias solo puede contener letras y números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El alias no puede tener más de 10 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El alias debe tener al menos 2 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['duplicated']">Ya existe una cuenta que usa este alias. </ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -97,7 +98,7 @@
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
             <ng-template #passwordErrorTpl let-control>
-              <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su contraseña. </ng-container>
+              <ng-container *ngIf="control.errors?.['required']">Por favor ingrese una contraseña. </ng-container>
               <ng-container *ngIf="control.errors?.['pattern']">La contraseña no puede tener espacios. </ng-container>
               <ng-container *ngIf="control.errors?.['minlength']">La contraseña no puede tener menos de 6 caracteres. </ng-container>
             </ng-template>
