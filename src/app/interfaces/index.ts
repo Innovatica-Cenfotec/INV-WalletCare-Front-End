@@ -9,7 +9,7 @@ export interface IResponse<T> {
 
 export interface IUser {
   id?: number;
-  name?: string;  
+  name?: string;
   lastname?: string;
   nickname?: string;
   email?: string;
@@ -48,4 +48,34 @@ export interface ILayout {
   breadcrumb: string[];
   name: string;
   parentPath?: string;
+}
+
+/**
+ * Interface for type of form
+ */
+export enum ITypeForm {
+  create = "CREATE",
+  update = "UPDATE"
+}
+
+/**
+ * Interface for account type
+ */
+export enum IAccountType {
+  personal = 0,
+  shared = 1,
+}
+
+/**
+ * Interface for account
+ */
+export interface IAccount {
+  id?: number;
+  name?: string;
+  description?: string;
+  owner?: IUser;
+  type?: IAccountType;
+  balance?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

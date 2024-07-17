@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ILoginResponse, IResponse, IUser } from '../interfaces';
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -132,14 +132,20 @@ export class AuthService {
     return permittedRoutes;
   }
 
-  /**
-   * Signs up a new user.
-   * 
-   * @param {IUser} user The user to sign up.
-   * @returns {Observable<ILoginResponse>} An observable containing the signup response.
-   */
-  public signup(user: IUser): Observable<ILoginResponse> {
-    return this.http.post<ILoginResponse>('auth/signup', user);
+/**
+ * Method to register a new user.
+ * 
+ * @param {IUser} user - Object containing the user information to be registered.
+ * @param {any} accountName - Name of the account to be associated with the user.
+ * @param {any} accountDescription - Description of the account to be associated with the user.
+ * @returns {Observable<ILoginResponse>} - Observable that emits the server response after the signup attempt.
+ * 
+ * This method makes an HTTP POST request to the 'auth/signup' endpoint with the user data and additional parameters.
+ * The parameters are added to the URL as query parameters.
+ */
+  public signup(user: IUser, accountName: any, accountDescription: any): Observable<ILoginResponse> {
+    let params = new HttpParams().set('accountName', accountName).set('accountDescription', accountDescription);
+    return this.http.post<ILoginResponse>('auth/signup', user, { params: params });
   }
 
   /**

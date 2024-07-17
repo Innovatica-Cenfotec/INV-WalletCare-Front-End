@@ -43,14 +43,18 @@ export class SignupComponent {
     identificationNumber: FormControl<string>;
     address: FormControl<string>;
     password: FormControl<string>;
+    accountName: FormControl<string>;
+    accountDescription: FormControl<string>;
   }> = this.form.group({
-    name: ['', [Validators.required]],
-    lastname: ['', [Validators.required]],
-    nickname: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]*'), Validators.minLength(2), Validators.maxLength(10)]],
     email: ['', [Validators.required, Validators.email]],
-    identificationNumber: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    identificationNumber: ['', [Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
+    address: ['', [Validators.maxLength(225)]],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(`^[A-Za-z0-9!@#$%^&*()_+\-=\{};':"\\|,.<>\/?]*`)]],
+    accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
+    accountDescription: ['', [Validators.maxLength(200)]]
   });
 
   public signUpError: string = '';
@@ -64,8 +68,10 @@ export class SignupComponent {
   public handleSignup(): void {
     if (this.validateForm.valid) {
       let user = this.validateForm.value as any;
+      let accountName = this.validateForm.value.accountName;
+      let accountDescription = this.validateForm.value.accountDescription;
 
-      this.authService.signup(user).subscribe({
+      this.authService.signup(user, accountName, accountDescription).subscribe({
         next: () => this.router.navigateByUrl('/app'),
         error: (err: any) => (this.signUpError = err.error.description),
       });
