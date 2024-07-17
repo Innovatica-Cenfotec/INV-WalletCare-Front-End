@@ -74,7 +74,7 @@
           <ng-template #idErrorTpl let-control>
             <ng-container *ngIf="control.errors?.['pattern']">El número de identificación solo puede contener números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El número de identificación no puede tener más de 16 caracteres. </ng-container>
-            <ng-container *ngIf="control.errors?.['minlength']">El número de identificación debe tener al menos 10 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El número de identificación debe tener al menos 8 caracteres. </ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>

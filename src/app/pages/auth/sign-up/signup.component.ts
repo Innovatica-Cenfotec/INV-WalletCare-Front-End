@@ -50,7 +50,7 @@ export class SignupComponent {
     lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
     nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(2), Validators.maxLength(10)]],
     email: ['', [Validators.required, Validators.email]],
-    identificationNumber: ['', [Validators.pattern('[0-9]*'), Validators.minLength(10), Validators.maxLength(16)]],
+    identificationNumber: ['', [Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
     address: ['', [Validators.maxLength(225)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.pattern('[a-zA-Z]*')]],
     accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
