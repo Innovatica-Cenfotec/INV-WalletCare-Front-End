@@ -76,6 +76,31 @@
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      <nz-divider></nz-divider>
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group>
+            <input type="text" nz-input formControlName="accountName" placeholder="Nombre de cuenta" />
+            <ng-template #errorTpl let-control>
+              @if (control.errors?.['required']) {
+              Por favor ingrese el nombre de su cuenta financiera.
+              }
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group>
+            <input type="text" nz-input formControlName="accountDescription" placeholder="Descripción de cuenta" />
+            <ng-template #errorTpl let-control>
+              @if (control.errors?.['required']) {
+              Por favor ingrese la Descripción de su cuenta financiera.
+              }
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
       <br>
       <button nz-button class="login-form-button" [nzType]="'primary'">Registrarse</button>
     </form>

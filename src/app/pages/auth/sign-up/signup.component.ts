@@ -43,6 +43,8 @@ export class SignupComponent {
     identificationNumber: FormControl<string>;
     address: FormControl<string>;
     password: FormControl<string>;
+    accountName: FormControl<string>;
+    accountDescription: FormControl<string>;
   }> = this.form.group({
     name: ['', [Validators.required]],
     lastname: ['', [Validators.required]],
@@ -50,7 +52,9 @@ export class SignupComponent {
     email: ['', [Validators.required, Validators.email]],
     identificationNumber: ['', [Validators.required]],
     address: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
+    accountName: ['', [Validators.required]],
+    accountDescription: ['', [Validators.required]]
   });
 
   public signUpError: string = '';
@@ -64,8 +68,10 @@ export class SignupComponent {
   public handleSignup(): void {
     if (this.validateForm.valid) {
       let user = this.validateForm.value as any;
+      let accountName = this.validateForm.value.accountName;
+      let accountDescription = this.validateForm.value.accountDescription;
 
-      this.authService.signup(user).subscribe({
+      this.authService.signup(user, accountName, accountDescription).subscribe({
         next: () => this.router.navigateByUrl('/app'),
         error: (err: any) => (this.signUpError = err.error.description),
       });

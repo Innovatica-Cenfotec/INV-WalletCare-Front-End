@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ILoginResponse, IResponse, IUser } from '../interfaces';
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -85,8 +85,9 @@ export class AuthService {
     return permittedRoutes;
   }
 
-  public signup(user: IUser): Observable<ILoginResponse> {
-    return this.http.post<ILoginResponse>('auth/signup', user);
+  public signup(user: IUser, accountName: any, accountDescription: any): Observable<ILoginResponse> {
+    let params = new HttpParams().set('accountName', accountName).set('accountDescription', accountDescription);
+    return this.http.post<ILoginResponse>('auth/signup', user, { params: params });
   }
 
   public logout() {
