@@ -48,7 +48,7 @@ export class SignupComponent {
   }> = this.form.group({
     name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
     lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
-    nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(2), Validators.maxLength(10)]],
+    nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9 ]*'), Validators.minLength(2), Validators.maxLength(10)]],
     email: ['', [Validators.required, Validators.email]],
     identificationNumber: ['', [Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
     address: ['', [Validators.maxLength(225)]],
