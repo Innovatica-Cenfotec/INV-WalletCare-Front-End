@@ -9,7 +9,6 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
-
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
 import { IAccount, IAccountType, ITypeForm } from '../../interfaces';
@@ -35,8 +34,7 @@ export class AccountsComponent {
   private NzNotificationService = inject(NzNotificationService);
 
   public isVisible = false;
-  public isLoading = false;
-  public title = 'Create Account';
+  public title = 'Crear cuenta';
   public IITypeForm = ITypeForm;
 
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
@@ -68,7 +66,7 @@ export class AccountsComponent {
     this.accountService.saveAccountSignal(item).subscribe({
       next: (response: any) => {
         this.isVisible = false;
-        this.NzNotificationService.create("success", "", 'Account created successfully', { nzDuration: 5000 });
+        this.NzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
         // Displaying the error message in the form
