@@ -52,7 +52,7 @@ export class SignupComponent {
     email: ['', [Validators.required, Validators.email]],
     identificationNumber: ['', [Validators.minLength(14), Validators.maxLength(16)]],
     address: ['', [Validators.maxLength(225)]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
     accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
     accountDescription: ['', [Validators.maxLength(200)]]
   });

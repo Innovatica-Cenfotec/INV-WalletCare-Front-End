@@ -87,16 +87,19 @@
           </nz-textarea-count>
           <ng-template #addressErrorTpl let-control>
             <ng-container *ngIf="control.errors?.['maxlength']">La dirección no puede tener más de 225 caracteres.</ng-container>
-            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
 
       <!-- Password Field -->
       <nz-form-item>
-        <nz-form-control nzErrorTip="Por favor ingrese su contraseña.">
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+            <ng-template #passwordErrorTpl let-control>
+              <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su contraseña.</ng-container>
+              <ng-container *ngIf="control.errors?.['minlength']">La contraseña no puede tener menos de 6 caracteres.</ng-container>
+            </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
