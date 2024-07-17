@@ -46,15 +46,15 @@ export class SignupComponent {
     accountName: FormControl<string>;
     accountDescription: FormControl<string>;
   }> = this.form.group({
-    name: ['', [Validators.required]],
-    lastname: ['', [Validators.required]],
-    nickname: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(2), Validators.maxLength(10)]],
     email: ['', [Validators.required, Validators.email]],
-    identificationNumber: ['', [Validators.required]],
-    address: ['', [Validators.required]],
+    identificationNumber: ['', [Validators.minLength(14), Validators.maxLength(16)]],
+    address: ['', [Validators.maxLength(225)]],
     password: ['', [Validators.required]],
-    accountName: ['', [Validators.required]],
-    accountDescription: ['', [Validators.required]]
+    accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
+    accountDescription: ['', [Validators.maxLength(200)]]
   });
 
   public signUpError: string = '';
