@@ -6,76 +6,135 @@
       </div>
     </div>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="handleSignup()">
+      <!-- Name Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-control [nzErrorTip]="nameErrorTpl">
           <nz-input-group>
             <input type="text" nz-input formControlName="name" placeholder="Nombre" />
-            <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Este campo no puede estar vacío.</span>
-            </ng-template>
           </nz-input-group>
+          <ng-template #nameErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su nombre. </ng-container>
+            <ng-container *ngIf="control.errors?.['pattern']">El nombre solo puede contener letras y números. </ng-container>
+            <ng-container *ngIf="control.errors?.['maxlength']">El nombre no puede tener más de 50 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El nombre debe tener al menos 3 caracteres. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Lastname Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-control [nzErrorTip]="lastnameErrorTpl">
           <nz-input-group>
             <input type="text" nz-input formControlName="lastname" placeholder="Apellido" />
-            <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su apellido.</span>
-            </ng-template>
           </nz-input-group>
+          <ng-template #lastnameErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su apellido. </ng-container>
+            <ng-container *ngIf="control.errors?.['pattern']">El apellido solo puede contener letras y números. </ng-container>
+            <ng-container *ngIf="control.errors?.['maxlength']">El apellido no puede tener más de 50 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El apellido debe tener al menos 3 caracteres. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Nickname Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-control [nzErrorTip]="nicknameErrorTpl">
           <nz-input-group>
             <input type="text" nz-input formControlName="nickname" placeholder="Alias" />
-            <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su alias.</span>
-            </ng-template>
           </nz-input-group>
+          <ng-template #nicknameErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su alias. </ng-container>
+            <ng-container *ngIf="control.errors?.['pattern']">El alias solo puede contener letras y números. </ng-container>
+            <ng-container *ngIf="control.errors?.['maxlength']">El alias no puede tener más de 10 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El alias debe tener al menos 2 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['duplicated']">Ya existe una cuenta que usa este alias. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Email Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-control [nzErrorTip]="emailErrorTpl">
           <nz-input-group>
             <input type="text" nz-input formControlName="email" placeholder="Correo electrónico" />
-            <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su correo electrónico.</span>
-              <span *ngIf="control.errors?.['email']">El correo electrónico no es válido.</span>
-            </ng-template>
           </nz-input-group>
+          <ng-template #emailErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su correo electrónico. </ng-container>
+            <ng-container *ngIf="control.errors?.['email']">El correo electrónico no es válido. </ng-container>
+            <ng-container *ngIf="control.errors?.['duplicated']">Ya existe una cuenta que usa este correo electrónico. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Identification Number Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-control [nzErrorTip]="idErrorTpl">
           <nz-input-group>
             <input type="text" nz-input formControlName="identificationNumber" placeholder="Número de identificación" />
-            <ng-template #errorTpl let-control>
-              <span *ngIf="control.errors?.['required']">Por favor ingrese su número de identificación.</span>
-            </ng-template>
           </nz-input-group>
+          <ng-template #idErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['pattern']">El número de identificación solo puede contener números. </ng-container>
+            <ng-container *ngIf="control.errors?.['maxlength']">El número de identificación no puede tener más de 16 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El número de identificación debe tener al menos 8 caracteres. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Address Field -->
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-input-group>
-            <input type="text" nz-input formControlName="address" placeholder="Dirección" />
-            <ng-template #errorTpl let-control>
-              @if (control.errors?.['required']) {
-              Por favor ingrese su dirección.
-              }
-            </ng-template>
-          </nz-input-group>
+        <nz-form-control [nzErrorTip]="addressErrorTpl">
+          <nz-textarea-count [nzMaxCharacterCount]="225">
+            <textarea rows="3" formControlName="address" nz-input placeholder="Dirección"></textarea>
+          </nz-textarea-count>
+          <ng-template #addressErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['maxlength']">La dirección no puede tener más de 225 caracteres. </ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <!-- Password Field -->
       <nz-form-item>
-        <nz-form-control nzErrorTip="Por favor ingrese su contraseña.">
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+            <ng-template #passwordErrorTpl let-control>
+              <ng-container *ngIf="control.errors?.['required']">Por favor ingrese una contraseña. </ng-container>
+              <ng-container *ngIf="control.errors?.['pattern']">La contraseña no puede tener espacios. </ng-container>
+              <ng-container *ngIf="control.errors?.['minlength']">La contraseña no puede tener menos de 6 caracteres. </ng-container>
+            </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      
+      <nz-divider></nz-divider>
+
+      <!-- Account Name Field -->
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="accountNameErrorTpl">
+          <nz-input-group>
+            <input type="text" nz-input formControlName="accountName" placeholder="Nombre de cuenta financiera" />
+          </nz-input-group>
+          <ng-template #accountNameErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['maxlength']">El nombre de la cuenta no puede tener más de 100 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['minlength']">El nombre de la cuenta debe tener al menos 4 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['required']">Por favor ingrese el nombre de la cuenta financiera. </ng-container>
+            <ng-container *ngIf="control.errors?.['pattern']">El nombre de la cuenta financiera solo puede contener letras y números. </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Account Description Field -->
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="accountDescriptionErrorTpl">
+          <nz-textarea-count [nzMaxCharacterCount]="200">
+            <textarea rows="3" formControlName="accountDescription" nz-input placeholder="Descripción de cuenta financiera"></textarea>
+          </nz-textarea-count>
+          <ng-template #accountDescriptionErrorTpl let-control>
+            <ng-container *ngIf="control.errors?.['maxlength']">La descripción de su cuenta financiera no puede tener más de 200 caracteres. </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
       <br>
       <button nz-button class="login-form-button" [nzType]="'primary'">Registrarse</button>
     </form>
