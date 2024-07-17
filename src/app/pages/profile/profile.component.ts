@@ -32,11 +32,18 @@ export class ProfileComponent implements OnInit {
   };
   public profileService = inject(ProfileService);
   public confirmPassword: string = '';
+  public isEditing: boolean = false;
 
+  /**
+   * Initializes the component and loads the user profile.
+   */
   ngOnInit(): void {
       this.loadUserProfile();
   }
 
+  /**
+   * Loads the user profile from the profile service.
+   */
   loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe({
       next: (data: IUser) => {
@@ -48,19 +55,29 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  get fullName(): string {
-    return `${this.user.name} ${this.user.lastname}`
-  }
-
+  /**
+   * Saves changes to the user profile and disables editing mode.
+   */
   saveChanges(): void {
-    // Implement save changes logic
+    this.isEditing = false;
+    this.user.authorities = undefined;
+    this.profileService.updateUserProfile(this.user);
   }
 
-  changePassword(): void {
-    // Implement change password logic
+  /**
+   * Placeholder method for changing the user's password.
+   */
+  changePassword(): void {}
+
+  /**
+   * Enables editing mode for the user profile.
+   */
+  editProfile(): void {
+    this.isEditing = true;
   }
 
-  deleteAccount(): void {
-    // Implement delete account logic
-  }
+  /**
+   * Placeholder method for deleting the user's account.
+   */
+  deleteAccount(): void {}
 }

@@ -15,6 +15,9 @@ export class AuthService {
     this.load();
   }
 
+  /**
+   * Saves the user, access token, and expiration time to local storage.
+   */
   public save(): void {
     if (this.user) localStorage.setItem('auth_user', JSON.stringify(this.user));
 
@@ -25,6 +28,9 @@ export class AuthService {
       localStorage.setItem('expiresIn', JSON.stringify(this.expiresIn));
   }
 
+  /**
+   * Loads the user, access token, and expiration time from local storage.
+   */
   private load(): void {
     let token = localStorage.getItem('access_token');
     if (token) this.accessToken = token;
@@ -34,14 +40,29 @@ export class AuthService {
     if (user) this.user = JSON.parse(user);
   }
 
+  /**
+   * Retrieves the current user.
+   * 
+   * @returns {IUser | undefined} The current user.
+   */
   public getUser(): IUser | undefined {
     return this.user;
   }
 
+  /**
+   * Retrieves the access token.
+   * 
+   * @returns {string | null} The access token.
+   */
   public getAccessToken(): string | null {
     return this.accessToken;
   }
 
+  /**
+   * Checks if the user is authenticated.
+   * 
+   * @returns {boolean} True if the user is authenticated, otherwise false.
+   */
   public check(): boolean {
     if (!this.accessToken) {
       return false;
@@ -50,6 +71,14 @@ export class AuthService {
     }
   }
 
+  /**
+   * Logs in the user with the given credentials.
+   * 
+   * @param {Object} credentials The user's login credentials.
+   * @param {string} credentials.email The user's email.
+   * @param {string} credentials.password The user's password.
+   * @returns {Observable<ILoginResponse>} An observable containing the login response.
+   */
   public login(credentials: {
     email: string;
     password: string;
@@ -65,14 +94,32 @@ export class AuthService {
     );
   }
 
+  /**
+   * Checks if the user has a specific role.
+   * 
+   * @param {string} role The role to check for.
+   * @returns {boolean} True if the user has the role, otherwise false.
+   */
   public hasRole(role: string): boolean {
     return this.user.authorities ? this.user?.authorities.some(authority => authority.authority == role) : false;
   }
 
+  /**
+   * Checks if the user has any of the specified roles.
+   * 
+   * @param {any[]} roles The roles to check for.
+   * @returns {boolean} True if the user has any of the roles, otherwise false.
+   */
   public hasAnyRole(roles: any[]): boolean {
     return roles.some(role => this.hasRole(role));
   }
 
+  /**
+   * Retrieves the routes permitted for the user based on their roles.
+   * 
+   * @param {any[]} routes The routes to check.
+   * @returns {any[]} The permitted routes for the user.
+   */
   public getPermittedRoutes(routes: any[]): any[] {
     let permittedRoutes: any[] = [];
     for (const route of routes) {
@@ -85,16 +132,35 @@ export class AuthService {
     return permittedRoutes;
   }
 
+  /**
+   * Signs up a new user.
+   * 
+   * @param {IUser} user The user to sign up.
+   * @returns {Observable<ILoginResponse>} An observable containing the signup response.
+   */
   public signup(user: IUser): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>('auth/signup', user);
   }
 
+  /**
+   * Logs out the current user.
+   */
   public logout() {
     this.user = { email: '', authorities: [] };
     this.accessToken = '';
     localStorage.removeItem('access_token');
     localStorage.removeItem('expiresIn');
     localStorage.removeItem('auth_user');
+  }
+
+  /**
+   * Updates the nickname of the current user.
+   * 
+   * @param {string | undefined} nickname The new nickname.
+   */
+  public updateNickname(nickname: string | undefined) {
+    this.user.nickname = nickname;
+    if (this.user) localStorage.setItem('auth_user', JSON.stringify(this.user));
   }
 
 }
