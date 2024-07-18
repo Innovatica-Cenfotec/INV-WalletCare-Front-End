@@ -1,4 +1,4 @@
-import { Component, inject, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
@@ -9,29 +9,35 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
-
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
-import { IAccount, IAccountType, ITypeForm } from '../../interfaces';
+import {AccountListComponent} from '../../components/account/account-list/account-list.component'
+import { IAccount, IAccountType, ITypeForm, IUser } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
   imports: [
+    CommonModule,
+
+    //Custom modules
+    AccountFromComponent,
+    AccountListComponent,
+    //Ng-Zorro modules
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
     NzDescriptionsModule,
     NzStatisticModule,
-    NzGridModule,
-    AccountFromComponent
+    NzGridModule
   ],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
 })
-export class AccountsComponent {
-  private accountService = inject(AccountService);
+export class AccountsComponent implements OnInit{
+  public accountService = inject(AccountService);
   private NzNotificationService = inject(NzNotificationService);
 
   public isVisible = false;
@@ -39,7 +45,14 @@ export class AccountsComponent {
   public title = 'Create Account';
   public IITypeForm = ITypeForm;
 
+  @Input() accountsList: IAccount[]=[];
+
+
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
+
+  ngOnInit(): void {
+    this.accountService.findAllSignal();
+  }
 
   /**
    * Opens the account creation form.
@@ -78,4 +91,6 @@ export class AccountsComponent {
       }
     });
   }
+
+
 }
