@@ -13,7 +13,8 @@
 
   </nz-page-header-content>
 </nz-page-header>
- 
+
+
 <app-account-from #form
   [isVisible]="isVisible"
   [type]="IITypeForm.create"
@@ -21,3 +22,6 @@
   (onCanceled)="onCanceled()"
   (onSubmitted)="onSubmitted($event)">
 </app-account-from>
+
+
+<app-account-list [accountsList]="accountService.accounts$()"></app-account-list>

@@ -4,7 +4,7 @@ import { IAccount, IUser } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class AccountService extends BaseService<IAccount> {
     protected override source: string = 'accounts';
@@ -32,5 +32,20 @@ export class AccountService extends BaseService<IAccount> {
                 throw error;
             })
         );
+    }
+
+
+/**
+ * Get all accounts by owner
+ * @returns An signal with all accounts by owner
+*/
+    findAllSignal() {
+        return this.findAll().subscribe({
+            next: (response: any) => {
+                this.accountListSignal.set(response);
+            }, error: (error: any) => {
+                console.error('Error  fectching accounts', error);
+            }
+        });
     }
 }

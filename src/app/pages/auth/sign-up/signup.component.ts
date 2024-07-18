@@ -1,49 +1,86 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { IUser } from '../../../interfaces';
+import { ReactiveFormsModule, FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    NzIconModule,
+    NzCardModule,
+    NzCheckboxModule,
+    NzTypographyModule,
+    NzDividerModule
+  ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+  styleUrls: ['./signup.component.scss']
 })
-export class SigUpComponent {
-  public signUpError!: String;
-  public validSignup!: boolean;
-  @ViewChild('name') nameModel!: NgModel;
-  @ViewChild('lastname') lastnameModel!: NgModel;
-  @ViewChild('email') emailModel!: NgModel;
-  @ViewChild('password') passwordModel!: NgModel;
 
-  public user: IUser = {};
+export class SignupComponent {
+  public validateForm: FormGroup<{
+    name: FormControl<string>;
+    lastname: FormControl<string>;
+    nickname: FormControl<string>;
+    email: FormControl<string>;
+    identificationNumber: FormControl<string>;
+    address: FormControl<string>;
+    password: FormControl<string>;
+    accountName: FormControl<string>;
+    accountDescription: FormControl<string>;
+  }> = this.form.group({
+    name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]*'), Validators.minLength(2), Validators.maxLength(10)]],
+    email: ['', [Validators.required, Validators.email]],
+    identificationNumber: ['', [Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
+    address: ['', [Validators.maxLength(225)]],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(`^[A-Za-z0-9!@#$%^&*()_+\-=\{};':"\\|,.<>\/?]*`)]],
+    accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
+    accountDescription: ['', [Validators.maxLength(200)]]
+  });
 
-  constructor(private router: Router, 
-    private authService: AuthService
-  ) {}
+  public signUpError: string = '';
 
-  public handleSignup(event: Event) {
-    event.preventDefault();
-    if (!this.nameModel.valid) {
-      this.nameModel.control.markAsTouched();
-    }
-    if (!this.lastnameModel.valid) {
-      this.lastnameModel.control.markAsTouched();
-    }
-    if (!this.emailModel.valid) {
-      this.emailModel.control.markAsTouched();
-    }
-    if (!this.passwordModel.valid) {
-      this.passwordModel.control.markAsTouched();
-    }
-    if (this.emailModel.valid && this.passwordModel.valid) {
-      this.authService.signup(this.user).subscribe({
-        next: () => this.validSignup = true,
-        error: (err: any) => (this.signUpError = err.description),
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private form: NonNullableFormBuilder
+  ) { }
+
+  public handleSignup(): void {
+    if (this.validateForm.valid) {
+      let user = this.validateForm.value as any;
+      let accountName = this.validateForm.value.accountName;
+      let accountDescription = this.validateForm.value.accountDescription;
+
+      this.authService.signup(user, accountName, accountDescription).subscribe({
+        next: () => this.router.navigateByUrl('/app'),
+        error: (err: any) => (this.signUpError = err.error.description),
+      });
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
       });
     }
   }
