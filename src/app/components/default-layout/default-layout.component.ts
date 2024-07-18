@@ -37,9 +37,4 @@ import { filter } from 'rxjs'
   styleUrl: './default-layout.component.scss'
 })
 export class DefaultLayoutComponent {
-  public isCollapsed: boolean = false;
-
-  toggleCollapsed(): void {
-    this.isCollapsed = !this.isCollapsed;
-  }
 }

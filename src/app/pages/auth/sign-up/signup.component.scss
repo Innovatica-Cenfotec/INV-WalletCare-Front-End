@@ -1,10 +1,10 @@
-.login-form-container {
+
+.signup-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-
-  background-color: white;
+  background-color: #FFFFFF;
   background-image: url("https://res.cloudinary.com/dqryzh0n1/image/upload/v1720853172/walletcare-background_grdwao.jpg");
   background-size: contain;
   background-repeat: no-repeat;
@@ -12,24 +12,40 @@
   background-position-y: center;
 }
 
-.login-form-title {
+.signup-form-title {
   text-align: center;
-  color: var(--ant-primary-color);
 }
 
-.login-form {
+.signup-form-subtitle {
+  text-align: center;
+}
+
+.signup-form {
   width: 300px;
   max-width: 300px;
+  min-height: 300px;
 }
 
-.login-form-margin {
+.signup-form-margin {
   margin-bottom: 16px;
 }
 
-.login-form-forgot {
-  float: right;
+.signup-form-button {
+  width: 100%;
 }
 
-.login-form-button {
-  width: 100%;
+.signup-step-action {
+  // Align right
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+
+  // button with
+  button {
+    width: 100%;
+  }
+
+  button:not(:last-child) {
+    margin-right: 8px;
+  }
 }

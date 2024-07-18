@@ -132,20 +132,19 @@ export class AuthService {
     return permittedRoutes;
   }
 
-/**
- * Method to register a new user.
- * 
- * @param {IUser} user - Object containing the user information to be registered.
- * @param {any} accountName - Name of the account to be associated with the user.
- * @param {any} accountDescription - Description of the account to be associated with the user.
- * @returns {Observable<ILoginResponse>} - Observable that emits the server response after the signup attempt.
- * 
- * This method makes an HTTP POST request to the 'auth/signup' endpoint with the user data and additional parameters.
- * The parameters are added to the URL as query parameters.
- */
+  /**
+   * Retrieves the user's nickname.
+   * 
+   * @returns {string} The user's nickname.
+   */
   public signup(user: IUser, accountName: any, accountDescription: any): Observable<ILoginResponse> {
-    let params = new HttpParams().set('accountName', accountName).set('accountDescription', accountDescription);
-    return this.http.post<ILoginResponse>('auth/signup', user, { params: params });
+    let resquest = {
+      user: user,
+      accountName: accountName,
+      accountDescription: accountDescription
+    };
+
+    return this.http.post<ILoginResponse>('auth/signup', resquest);
   }
 
   /**
