@@ -132,5 +132,7 @@ dist
 
 .angular/
 .vscode/
-.idea/
+
+.idea
+
 package-lock.json
