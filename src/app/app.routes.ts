@@ -44,7 +44,7 @@ export const routes: Routes = [
       },
       {
         path: 'signup',
-        component: SigUpComponent,
+        component: SignupComponent,
         canActivate: [GuestGuard],
       },
       {
