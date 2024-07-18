@@ -15,20 +15,6 @@ import { DefaultLayoutComponent } from './components/default-layout/default-layo
 
 export const routes: Routes = [
   {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [GuestGuard],
-  },
-  {
-    path: 'signup',
-    component: SignupComponent,
-    canActivate: [GuestGuard],
-  },
-  {
-    path: 'access-denied',
-    component: AccessDeniedComponent,
-  },
-  {
     path: '',
     component: DefaultLayoutComponent,
     children:[
