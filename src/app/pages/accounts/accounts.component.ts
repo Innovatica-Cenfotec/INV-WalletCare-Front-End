@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Inject, inject, Input, OnChanges, OnInit, Signal, signal, SimpleChanges, ViewChild } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
@@ -8,13 +8,16 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
-import {AccountListComponent} from '../../components/account/account-list/account-list.component'
+import { AccountListComponent } from '../../components/account/account-list/account-list.component'
 import { IAccount, IAccountType, ITypeForm, IUser } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
+import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
+
 
 @Component({
   selector: 'app-accounts',
@@ -25,18 +28,20 @@ import { CommonModule } from '@angular/common';
     //Custom modules
     AccountFromComponent,
     AccountListComponent,
+    AccountCardsComponent,
     //Ng-Zorro modules
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
     NzDescriptionsModule,
     NzStatisticModule,
-    NzGridModule
+    NzGridModule,
+    NzCardModule
   ],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
 })
-export class AccountsComponent implements OnInit{
+export class AccountsComponent implements OnInit {
   public accountService = inject(AccountService);
   private NzNotificationService = inject(NzNotificationService);
 
@@ -44,7 +49,10 @@ export class AccountsComponent implements OnInit{
   public title = 'Crear cuenta';
   public IITypeForm = ITypeForm;
 
-  @Input() accountsList: IAccount[]=[];
+
+
+
+  private accountList: IAccount[] = [];
 
 
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
@@ -52,6 +60,7 @@ export class AccountsComponent implements OnInit{
   ngOnInit(): void {
     this.accountService.findAllSignal();
   }
+
 
   /**
    * Opens the account creation form.
