@@ -79,3 +79,12 @@ export interface IAccount {
   createdAt?: string;
   updatedAt?: string;
 }
+
+/**
+ * Interface for balance colors
+ */
+export enum IBalance{
+  surplus = '#3E7422',
+  deficit = '#D23537',
+  balance = '#B17A0C'
+}
