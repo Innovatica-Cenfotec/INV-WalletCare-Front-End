@@ -61,12 +61,30 @@ export class SignupComponent {
     accountDescription: ['', [Validators.maxLength(200)]]
   });
 
+
+  /**
+   * This is the error message that will be displayed if the sign-up fails
+   */
   public signUpError: string = '';
+
+  /**
+   * This is the current step of the sign-up process
+   */
   public currenStep: number = 0;
-  public previousStep: number = 0;
-  public index: string = 'First-content';
+
+  /**
+   * This is the visibility of the password
+   */
   public passwordVisible = false;
+
+  /**
+   * This is the visibility of the confirm password
+   */
   public confirmPasswordVisible = false;
+
+  /**
+   * This is the visibility of the confirm password
+   */
   public isDisabled = false;
 
   constructor(
@@ -174,11 +192,17 @@ export class SignupComponent {
     return valid;
   }
 
-
+  /**
+   * Moves to the previous step of the sign-up process
+   */
   pre(): void {
     this.currenStep -= 1;
   }
 
+  /**
+   * Moves to the next step of the sign-up process 
+   * @returns {void} - Moves to the next step of the sign-up process
+   */
   next(): void {
     if (!this.validateStep()) {
       return;
@@ -187,6 +211,10 @@ export class SignupComponent {
     this.currenStep += 1;
   }
 
+  /**
+   * Handles the sign-up process
+   * @returns {void} - Handles the sign
+   */
   done(): void {
     if (!this.validateStep()) {
       return;
@@ -198,7 +226,7 @@ export class SignupComponent {
     this.isDisabled = true;
 
     this.authService.signup(user, accountName, accountDescription).subscribe({
-      next: (response: any) => {   
+      next: (response: any) => {
         this.nzNotificationService.create("success", "Cuenta creada correctamente", 'Se redirigira al inicio de sesión en 5 segundos', { nzDuration: 5000 }).onClose!.subscribe(() => {
           this.router.navigateByUrl('/app')
         });

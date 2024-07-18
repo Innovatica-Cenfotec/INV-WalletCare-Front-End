@@ -58,6 +58,11 @@ export class LoginComponent implements OnInit {
   loginError: string | null = null;
 
   /**
+   * This is the visibility of the password
+   */
+  public passwordVisible = false;
+
+  /**
    * This is the form group that we will use to validate the form    *
    */
   validateForm = this.fb.nonNullable.group({

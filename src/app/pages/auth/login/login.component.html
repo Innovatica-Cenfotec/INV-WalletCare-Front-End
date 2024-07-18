@@ -24,13 +24,21 @@
               }
             </ng-template>
           </nz-input-group>
+          
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control nzErrorTip="Por favor ingrese su contraseña">
-          <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input formControlName="password" placeholder="Cotraseña" />
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+            <input nz-input formControlName="password" placeholder="Cotraseña" [type]="passwordVisible ? 'text' : 'password'"/>
           </nz-input-group>
+          <ng-template #suffixTemplate>
+            <span
+              nz-icon
+              [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+              (click)="passwordVisible = !passwordVisible"
+            ></span>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
       <div nz-row class="login-form-margin">
