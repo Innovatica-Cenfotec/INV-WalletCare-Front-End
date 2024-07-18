@@ -24,7 +24,6 @@ import { AccountCardsComponent } from '../../components/account/account-cards/ac
   standalone: true,
   imports: [
     CommonModule,
-
     //Custom modules
     AccountFromComponent,
     AccountListComponent,
@@ -58,6 +57,11 @@ export class AccountsComponent implements OnInit {
 
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
 
+
+  /**
+   * This method is called once after the component's properties have been initialized and the component
+   * is ready
+   */
   ngOnInit(): void {
     this.accountService.findAllSignal();
   }
