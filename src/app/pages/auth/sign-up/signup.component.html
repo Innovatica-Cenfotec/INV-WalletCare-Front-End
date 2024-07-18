@@ -17,6 +17,7 @@
             <ng-container *ngIf="control.errors?.['pattern']">El nombre solo puede contener letras y números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El nombre no puede tener más de 50 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El nombre debe tener al menos 3 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -32,6 +33,7 @@
             <ng-container *ngIf="control.errors?.['pattern']">El apellido solo puede contener letras y números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El apellido no puede tener más de 50 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El apellido debe tener al menos 3 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -48,6 +50,7 @@
             <ng-container *ngIf="control.errors?.['maxlength']">El alias no puede tener más de 10 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El alias debe tener al menos 2 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['duplicated']">Ya existe una cuenta que usa este alias. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -62,6 +65,7 @@
             <ng-container *ngIf="control.errors?.['required']">Por favor ingrese su correo electrónico. </ng-container>
             <ng-container *ngIf="control.errors?.['email']">El correo electrónico no es válido. </ng-container>
             <ng-container *ngIf="control.errors?.['duplicated']">Ya existe una cuenta que usa este correo electrónico. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -76,6 +80,7 @@
             <ng-container *ngIf="control.errors?.['pattern']">El número de identificación solo puede contener números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El número de identificación no puede tener más de 16 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El número de identificación debe tener al menos 8 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -88,6 +93,7 @@
           </nz-textarea-count>
           <ng-template #addressErrorTpl let-control>
             <ng-container *ngIf="control.errors?.['maxlength']">La dirección no puede tener más de 225 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -99,8 +105,11 @@
             <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
             <ng-template #passwordErrorTpl let-control>
               <ng-container *ngIf="control.errors?.['required']">Por favor ingrese una contraseña. </ng-container>
-              <ng-container *ngIf="control.errors?.['pattern']">La contraseña no puede tener espacios. </ng-container>
-              <ng-container *ngIf="control.errors?.['minlength']">La contraseña no puede tener menos de 6 caracteres. </ng-container>
+              <ng-container *ngIf="control.errors?.['pattern']">
+                La contraseña debe incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial (ej: !#$%^&*).
+              </ng-container>
+              <ng-container *ngIf="control.errors?.['minlength']">La contraseña no puede tener menos de 8 caracteres. </ng-container>
+              <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
             </ng-template>
           </nz-input-group>
         </nz-form-control>
@@ -119,6 +128,7 @@
             <ng-container *ngIf="control.errors?.['minlength']">El nombre de la cuenta debe tener al menos 4 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['required']">Por favor ingrese el nombre de la cuenta financiera. </ng-container>
             <ng-container *ngIf="control.errors?.['pattern']">El nombre de la cuenta financiera solo puede contener letras y números. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -131,6 +141,7 @@
           </nz-textarea-count>
           <ng-template #accountDescriptionErrorTpl let-control>
             <ng-container *ngIf="control.errors?.['maxlength']">La descripción de su cuenta financiera no puede tener más de 200 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
