@@ -23,11 +23,6 @@ export const routes: Routes = [
         canActivate: [GuestGuard],
       },
       {
-        path: 'signup',
-        component: SignupComponent,
-        canActivate: [GuestGuard],
-      },
-      {
         path: 'access-denied',
         component: AccessDeniedComponent,
       }
@@ -36,6 +31,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
     canActivate: [GuestGuard],
   },
   {
