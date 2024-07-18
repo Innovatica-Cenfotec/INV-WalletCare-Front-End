@@ -12,6 +12,7 @@ import { AccountsComponent } from './pages/accounts/accounts.component';
 import { AccountDetailComponent } from './components/account-detail/account-detail.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,9 @@ export const routes: Routes = [
   {
     path:'forgot-password',
     component: ForgotPasswordComponent,
+  },
+  {
+    path: 'forgot-password-reset',component:ForgotPasswordResetComponent
   },
   {
     path: 'signup',

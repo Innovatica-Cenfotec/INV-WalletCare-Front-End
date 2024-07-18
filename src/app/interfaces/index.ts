@@ -49,3 +49,8 @@ export interface ILayout {
   name: string;
   parentPath?: string;
 }
+export interface IForgotResetPassword{
+  otp:string;
+  newPassword:string;
+  email:string;
+}

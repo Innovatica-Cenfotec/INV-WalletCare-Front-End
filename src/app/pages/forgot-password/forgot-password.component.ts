@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { PasswordRecoveryService } from '../../services/password-recovery.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -9,6 +9,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { Router, RouterLink } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-forgot-password',
@@ -28,6 +31,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 })
 export class ForgotPasswordComponent {
   validateForm: FormGroup;
+  private router = inject(Router);
+
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +48,7 @@ export class ForgotPasswordComponent {
     if (this.validateForm.valid) {
       const { email } = this.validateForm.value;
       this.passwordRecoveryService.sendOTP(email).subscribe({
-        next: () => this.message.success('OTP enviado a tu correo electrónico'),
+        next: () => this.message.success('OTP enviado a tu correo electrónico , proceda con la verificación'),
         error: () => this.message.error('Error al enviar OTP, por favor intente más tarde')
       });
     } else {
@@ -55,4 +60,5 @@ export class ForgotPasswordComponent {
       });
     }
   }
+  
 }

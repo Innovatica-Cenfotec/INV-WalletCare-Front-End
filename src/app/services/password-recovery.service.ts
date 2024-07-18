@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { IForgotResetPassword } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PasswordRecoveryService {
-  private apiUrl = 'http://localhost:4200/password'; 
-
+  
   constructor(private http: HttpClient) {}
 
   sendOTP(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot`, { email });
+    const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
+    return this.http.post(`password/forgot`, email, { headers, responseType: 'text' });
   }
 
   validateOTP(email: string, otp: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/validate-otp`, { email, otp });
+    return this.http.post(`validate-otp`, { email, otp });
   }
 
-  resetPassword(email: string, otp: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, { email, otp, newPassword });
+  resetPassword(forgotResetPassword:IForgotResetPassword): Observable<any> {
+    return this.http.post(`password/reset-password`,  forgotResetPassword);
   }
 }

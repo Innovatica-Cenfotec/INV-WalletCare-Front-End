@@ -42,3 +42,15 @@
       Registrarse </a>
   </nz-card>
 </nz-row>
+
+
+<nz-modal nzTitle="Recuperar contraseña" [nzVisible]="isVisible">
+  <div *nzModalContent>
+    <app-forgot-password></app-forgot-password>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="closeModal()">
+      Cerrar
+    </button>
+  </div>
+</nz-modal>
