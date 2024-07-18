@@ -17,6 +17,7 @@
             <ng-container *ngIf="control.errors?.['pattern']">El nombre solo puede contener letras y números. </ng-container>
             <ng-container *ngIf="control.errors?.['maxlength']">El nombre no puede tener más de 50 caracteres. </ng-container>
             <ng-container *ngIf="control.errors?.['minlength']">El nombre debe tener al menos 3 caracteres. </ng-container>
+            <ng-container *ngIf="control.errors?.['message']">{{control.errors?.['message']}}</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
