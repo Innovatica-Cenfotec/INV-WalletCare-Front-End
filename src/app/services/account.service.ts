@@ -45,6 +45,7 @@ export class AccountService extends BaseService<IAccount> {
                 this.accountListSignal.set(response);
             }, error: (error: any) => {
                 console.error('Error  fectching accounts', error);
+                throw error;
             }
         });
     }
