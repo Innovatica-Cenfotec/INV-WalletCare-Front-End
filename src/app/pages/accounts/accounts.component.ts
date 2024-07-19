@@ -1,4 +1,4 @@
-import { Component, inject, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Inject, inject, Input, OnChanges, OnInit, Signal, signal, SimpleChanges, ViewChild } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
@@ -8,38 +8,59 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
-import { IAccount, IAccountType, ITypeForm } from '../../interfaces';
+import { AccountListComponent } from '../../components/account/account-list/account-list.component'
+import { IAccount, IAccountType, ITypeForm, IUser } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
+import { CommonModule } from '@angular/common';
+import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
+
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
   imports: [
+    CommonModule,
+
+    //Custom modules
+    AccountFromComponent,
+    AccountListComponent,
+    AccountCardsComponent,
+    //Ng-Zorro modules
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
     NzDescriptionsModule,
     NzStatisticModule,
     NzGridModule,
-    AccountFromComponent
+    NzCardModule
   ],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
 })
-export class AccountsComponent {
-  private accountService = inject(AccountService);
+export class AccountsComponent implements OnInit {
+  public accountService = inject(AccountService);
   private NzNotificationService = inject(NzNotificationService);
 
   public isVisible = false;
-  public isLoading = false;
-  public title = 'Create Account';
+  public title = 'Crear cuenta';
   public IITypeForm = ITypeForm;
 
+
+
+
+  private accountList: IAccount[] = [];
+
+
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
+
+  ngOnInit(): void {
+    this.accountService.findAllSignal();
+  }
+
 
   /**
    * Opens the account creation form.
@@ -68,7 +89,7 @@ export class AccountsComponent {
     this.accountService.saveAccountSignal(item).subscribe({
       next: (response: any) => {
         this.isVisible = false;
-        this.NzNotificationService.create("success", "", 'Account created successfully', { nzDuration: 5000 });
+        this.NzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
         // Displaying the error message in the form
@@ -79,3 +100,5 @@ export class AccountsComponent {
     });
   }
 }
+
+
