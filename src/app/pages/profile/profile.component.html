@@ -1,1 +1,59 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <div class="title-container">
+    <h2>Datos de perfil</h2>
+    <button nz-button nzType="default" nzShape="circle" (click)="editProfile()">
+      <i nz-icon nzType="edit"></i>
+    </button>
+  </div>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Alias</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Alias" [(ngModel)]="user.nickname" name="nickname" [disabled]="!isEditing"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Nombre</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Nombre" [(ngModel)]="user.name" name="name" [disabled]="!isEditing"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Apellido</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Apellido" [(ngModel)]="user.lastname" name="lastname" [disabled]="!isEditing"/>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Correo Electrónico</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input placeholder="Correo Electrónico" [(ngModel)]="user.email" name="email" disabled/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Contraseña</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input type="password" placeholder="Contraseña" [(ngModel)]="user.password" name="password" disabled/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Confirmar Contraseña</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <div class="confirm-password-container">
+          <input nz-input type="password" placeholder="Confirmar Contraseña" [(ngModel)]="confirmPassword" name="confirmPassword" disabled/>
+          <button nz-button nzDanger nzType="primary" (click)="changePassword()">Cambiar Contraseña</button>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="button-group">
+      <button nz-button nzType="primary" class="save-button" (click)="saveChanges()">Guardar Cambios</button>
+      <button nz-button nzDanger nzType="primary" (click)="deleteAccount()">Eliminar Cuenta</button>
+    </div>
+  </form>
+</div>

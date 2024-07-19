@@ -1,20 +1,35 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
-import { SigUpComponent } from './pages/auth/sign-up/signup.component';
+import { SignupComponent } from './pages/auth/sign-up/signup.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
 import { ILayout, IRole } from './interfaces';
-import { UsersComponent } from './pages/users/users.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
-import { AccountDetailComponent } from './components/account-detail/account-detail.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { DefaultLayoutComponent } from './components/default-layout/default-layout.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    children:[
+      {
+        path: '',
+        component: LandingPageComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
+      }
+    ]
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -29,17 +44,8 @@ export const routes: Routes = [
   },
   {
     path: 'signup',
-    component: SigUpComponent,
+    component: SignupComponent,
     canActivate: [GuestGuard],
-  },
-  {
-    path: 'access-denied',
-    component: AccessDeniedComponent,
-  },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
   },
   {
     path: 'app',
@@ -71,8 +77,8 @@ export const routes: Routes = [
           ],
           layout: <ILayout>{
             icon: 'form',
-            breadcrumb: ['Cuentas'],
-            name: 'Cuentas',
+            breadcrumb: ['Cuenta'],
+            name: 'Mis cuentas',
           },
         }
       }, 

@@ -1,51 +1,51 @@
-.login-container {
+
+.signup-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  // background-image: url("../../../../assets/img/login/login-bg.jpg");
-  background-position: left;
-  background-size: cover;
+  background-color: #FFFFFF;
+  background-image: url("https://res.cloudinary.com/dqryzh0n1/image/upload/v1720853172/walletcare-background_grdwao.jpg");
+  background-size: contain;
   background-repeat: no-repeat;
-  padding: 20px 20%;
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según necesites */
-    z-index: 1;
+  background-position-x: center;
+  background-position-y: center;
+}
+
+.signup-form-title {
+  text-align: center;
+}
+
+.signup-form-subtitle {
+  text-align: center;
+}
+
+.signup-form {
+  width: 300px;
+  max-width: 300px;
+  min-height: 300px;
+}
+
+.signup-form-margin {
+  margin-bottom: 16px;
+}
+
+.signup-form-button {
+  width: 100%;
+}
+
+.signup-step-action {
+  // Align right
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+
+  // button with
+  button {
+    width: 100%;
   }
-  .login-card {
-    position: relative;
-    z-index: 2;
-    width: 50%;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 37px rgba(8, 21, 66, 0.05);
-    margin: 0 auto;
-    background-color: #fff;
-  }
-  .invalid-feedback {
-    position: absolute;
-    margin-top: 0px;
-  }
-  @media screen and (min-width: 801px) and (max-width: 1500px) {
-    padding: 20px 5%;
-    .login-card {
-      width: 60%;
-      .login-main {
-        padding: 0px;
-      }
-    }
-  }
-  @media screen and (max-width: 800px) {
-    padding: 20px 5%;
-    .login-card {
-      width: 100%;
-      .login-main {
-        padding: 0px;
-      }
-    }
+
+  button:not(:last-child) {
+    margin-right: 8px;
   }
 }

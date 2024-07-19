@@ -16,7 +16,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { StatusService } from '../../../services/status.service';
-import { NzMessageModule, NzMessageRef, NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ForgotPasswordComponent } from '../../forgot-password/forgot-password.component';
@@ -64,10 +64,9 @@ export class LoginComponent implements OnInit {
   loginError: string | null = null;
 
   /**
-   * This is the message reference for the server status
-   * message that will be displayed if the server is down
+   * This is the visibility of the password
    */
-  MsgServerStatusRef: NzMessageRef | null = null;
+  public passwordVisible = false;
 
   /**
    * This is the form group that we will use to validate the form    *
@@ -81,7 +80,7 @@ export class LoginComponent implements OnInit {
     // Check the server status
     this.statusService.checkServerStatus().then(status => {
       if (!status)
-        this.MsgServerStatusRef = this.message.error('El servidor no está disponible en este momento, por favor intente más tarde', { nzDuration: 0 });
+        this.message.error('El servidor no está disponible en este momento, por favor intente más tarde', { nzDuration: 0 });
     });
   }
 
@@ -91,13 +90,9 @@ export class LoginComponent implements OnInit {
       let credentials = this.validateForm.value as { email: string, password: string };
       this.isLoggingIn = true;
       this.authService.login(credentials).subscribe({
-        next: () => {
-          this.message.remove(this.MsgServerStatusRef?.messageId);
-          this.router.navigateByUrl('/app')
-        },
+        next: () => this.router.navigateByUrl('/app'),
         error: (err: any) => {
           if (err.status === 401) {
-            this.message.remove(this.MsgServerStatusRef?.messageId);
             this.loginError = 'Usuario o contraseña incorrectos';
           } else {
             this.loginError = 'Ocurrió un error inesperado, por favor intente más tarde';
