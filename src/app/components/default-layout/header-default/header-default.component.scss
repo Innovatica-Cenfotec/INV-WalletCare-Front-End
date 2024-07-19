@@ -25,19 +25,15 @@ nz-header>div>*:last-child {
     margin-right: 0px;
 }
 
-.header-title a,
-.header-user {
+.header-title a {
     font-size: $header-font-size;
     color: white;
     margin: 0px;
 }
 
-.header-trigger,
-.header-calculator,
-.header-notification {
-    color: white;
 
-    :hover {
-        color: #d9d9d9;
-    }
+.header {
+    font-size: $header-font-size;
+    color: white;
+    margin: 0px;
 }
