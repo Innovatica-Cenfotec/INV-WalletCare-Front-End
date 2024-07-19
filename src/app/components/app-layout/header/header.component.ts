@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges,  } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output  } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 // Importing Ng-Zorro modules
@@ -8,6 +8,7 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-layout-header',
@@ -22,17 +23,24 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  private authService = inject(AuthService);
+  private profileService = inject(ProfileService);
+  private router = inject(Router);
+
   @Input() isCollapsed: boolean = false;  
   @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
   public user?: IUser;
-  
-  constructor(
-    public router: Router,
-    public authService: AuthService
-  ) {}
-  
+    
   ngOnInit(): void {
     this.user = this.authService.getUser();
+    this.profileService.getUserObservable()?.subscribe(user => {
+      if (user === undefined) {
+        return;
+      }
+      if (this.user) {
+        this.user.nickname = user.nickname;
+      }
+    });
   }
   
   /**
@@ -59,6 +67,6 @@ export class HeaderComponent implements OnInit {
    */
   logout(): void {
     this.authService.logout();
-    this.router.navigateByUrl('/login');   
+    this.router.navigateByUrl('/login'); 
   }
 }
