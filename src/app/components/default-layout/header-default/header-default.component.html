@@ -1,21 +1,15 @@
 <nz-header>
     <div>
         <span class="header-title">
-            <a (click)="navigaToLanding()">
+            <a [href]="['']">
                 WalletCare
             </a>
         </span>
     </div>
     <div>
-        <a class="header-calculator" (click)="navigateToSignUp()">
-            <span nz-icon nzType="user-add" nzTheme="outline"></span>
-            Crea una cuenta
+        <a class="header" [href]="'/login'">
+            <span nz-icon nzType="wallet" nzTheme="outline"></span>
+            Iniciar Sesión
         </a>
-        <div>
-            <a class="header-user" (click)="navigateToLogin()">
-                <span nz-icon nzType="user" nzTheme="outline"></span>
-                Iniciar Sesión
-            </a>
-        </div>
     </div>
 </nz-header>

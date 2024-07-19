@@ -22,35 +22,4 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './header-default.component.scss'
 })
 export class HeaderComponent {
-
-  constructor(
-    public router: Router,
-  ) { }
-
-  /**
-   * Navigates to the Login Page
-   * @returns void
-   */
-  navigateToLogin(): void {
-    // Navigate to the Login Page
-    this.router.navigateByUrl('/login');
-  }
-
-  /**
-  * Navigates to the Sign Up Page
-  * @returns void
-  */
-  navigateToSignUp(): void {
-    // Navigate to the Sign Up Page
-    this.router.navigateByUrl('/signup');
-  }
-
-  /**
-   * Navigates to the Landing Page
-   * @returns void
-   */
-  navigaToLanding(): void {
-    // Navigate to the Landing Page
-    this.router.navigateByUrl('');
-  }
 }

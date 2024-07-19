@@ -7,7 +7,6 @@ import { AccessDeniedComponent } from './pages/access-denied/access-denied.compo
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
 import { ILayout, IRole } from './interfaces';
-import { UsersComponent } from './pages/users/users.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
@@ -24,27 +23,21 @@ export const routes: Routes = [
         canActivate: [GuestGuard],
       },
       {
-        path: 'login',
-        component: LoginComponent,
-        canActivate: [GuestGuard],
-      },
-      {
-        path: 'signup',
-        component: SignupComponent,
-        canActivate: [GuestGuard],
-      },
-      {
         path: 'access-denied',
         component: AccessDeniedComponent,
       }
     ]
   },
-  
-  // {
-  //   path: '',
-  //   redirectTo: 'login',
-  //   pathMatch: 'full',
-  // },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
+    canActivate: [GuestGuard],
+  },
   {
     path: 'app',
     component: AppLayoutComponent,
