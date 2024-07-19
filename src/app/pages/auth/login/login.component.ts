@@ -18,6 +18,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { StatusService } from '../../../services/status.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { ForgotPasswordComponent } from '../../forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +37,9 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzTypographyModule,
     NzDividerModule,
     NzMessageModule,
-    NzAlertModule
+    NzAlertModule,
+    NzModalModule,
+    ForgotPasswordComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -45,7 +49,9 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  private message = inject(NzMessageService)
+  private message = inject(NzMessageService);
+  public isVisible=false;
+  //private modal = inject(NzModalService);
 
   /**
    * This is the error message that will be displayed if the login fails
@@ -103,5 +109,17 @@ export class LoginComponent implements OnInit {
         }
       });
     }
+
+  }
+  public forgotPassowrd(): void {
+    this.isVisible=true;
+    /*this.modal.create({
+      nzTitle: 'Recuperar Contraseña',
+      nzContent: ForgotPasswordComponent,
+      nzFooter:null
+    })*/
+  }
+  public closeModal(): void {
+    this.isVisible=false;
   }
 }
