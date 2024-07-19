@@ -43,7 +43,7 @@
       </nz-form-item>
       <div nz-row class="login-form-margin">
         <div nz-col [nzSpan]="12" [nzOffset]="12">
-          <a class="login-form-forgot login-form-margin" routerLink="/auth/forgot-password">Olvidé mi contraseña</a>
+          <a class="login-form-forgot login-form-margin" (click)="forgotPassowrd()">Olvidé mi contraseña</a>
         </div>
       </div>
       <button nz-button class="login-form-button" [nzType]="'primary'" [nzLoading]="isLoggingIn">Iniciar sesión</button>
@@ -53,3 +53,15 @@
       Registrarse </a>
   </nz-card>
 </nz-row>
+
+
+<nz-modal nzTitle="Recuperar contraseña" [nzVisible]="isVisible">
+  <div *nzModalContent>
+    <app-forgot-password></app-forgot-password>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="closeModal()">
+      Cerrar
+    </button>
+  </div>
+</nz-modal>
