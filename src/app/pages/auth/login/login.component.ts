@@ -113,11 +113,6 @@ export class LoginComponent implements OnInit {
   }
   public forgotPassowrd(): void {
     this.isVisible=true;
-    /*this.modal.create({
-      nzTitle: 'Recuperar Contraseña',
-      nzContent: ForgotPasswordComponent,
-      nzFooter:null
-    })*/
   }
   public closeModal(): void {
     this.isVisible=false;

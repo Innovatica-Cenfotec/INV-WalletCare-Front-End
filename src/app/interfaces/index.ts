@@ -87,6 +87,7 @@ export enum IBalance{
   surplus = '#3E7422',
   deficit = '#D23537',
   balance = '#B17A0C'
+}
 
 export interface IForgotResetPassword{
   otp:string;
