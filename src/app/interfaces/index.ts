@@ -74,10 +74,11 @@ export interface IAccount {
   name?: string;
   description?: string;
   owner?: IUser;
-  type?: IAccountType;
+  type?: IAccountType | string;
   balance?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  default?: boolean;
 }
 
 /**
@@ -93,4 +94,20 @@ export interface IForgotResetPassword{
   otp:string;
   newPassword:string;
   email:string;
+}
+
+/**
+ * Interface for account user
+ */ 
+export interface IAccountUser{
+  id?: number;
+  account?: IAccount;
+  user?: IUser;
+  isActive?: boolean;
+  lastTransactionId?: string;
+  lastTransactionBalance?: string;
+  joinedAt?: Date;
+  leftAt?: Date;
+  invitationStatus?: number;
+  isDeleted?: boolean;
 }

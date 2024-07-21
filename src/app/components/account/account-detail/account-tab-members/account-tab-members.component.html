@@ -1,1 +1,29 @@
-<p>account-tab-members works!</p>
+<nz-table #fixedTable [nzData]="accountUsers" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '1000px', y: null}">
+    <thead>
+        <tr>
+            <th nzLeft>Nombres</th>
+            <th>Correo electrónico</th>
+            <th>Estado</th>
+            <th>Balace</th>
+            <th>Fecha de unión</th>
+            <th>Fecha de salida</th>
+            <th *ngIf="isOwner" nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td nzLeft>{{ data.user?.name + ' ' + data.user?.lastname }}</td>
+            <td>{{ data.user?.email }}</td>
+            <td>{{ getStatus(data) }}</td>
+            <td>{{ data.lastTransactionBalance }}</td>
+            <td>{{ getDate(data.joinedAt) }}</td>
+            <td>{{ getDate(data.leftAt) }}</td>
+            <td *ngIf="isOwner" nzRight>
+                <a nz-popconfirm nzTitle="¿Estás seguro de que deseas eliminar a este amigo?"
+                    (nzOnConfirm)="deleteFriend.emit(data)" nzOkText="Sí" nzCancelText="No">
+                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

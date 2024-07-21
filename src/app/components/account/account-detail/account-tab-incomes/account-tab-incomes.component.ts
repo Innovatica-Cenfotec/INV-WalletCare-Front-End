@@ -7,7 +7,7 @@ import {DatePipe, NgIf} from "@angular/common";
 import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
 
 @Component({
-  selector: 'app-account-tab-expense',
+  selector: 'app-account-tab-incomes',
   standalone: true,
   imports: [
     NzTabsModule,
@@ -16,10 +16,10 @@ import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
     NzPopconfirmModule
   ],
   providers: [DatePipe],
-  templateUrl: './account-tab-expense.component.html',
-  styleUrl: './account-tab-expense.component.scss'
+  templateUrl: './account-tab-incomes.component.html',
+  styleUrl: './account-tab-incomes.component.scss'
 })
-export class AccountTabExpenseComponent {
+export class AccountTabIncomesComponent {
   private datePipe = inject(DatePipe);
 
   /**
