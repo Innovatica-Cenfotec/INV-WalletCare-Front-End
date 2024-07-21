@@ -70,6 +70,11 @@ export class AccountsComponent implements OnInit {
    */
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
 
+
+  /**
+   * This method is called once after the component's properties have been initialized and the component
+   * is ready
+   */
   ngOnInit(): void {
     this.accountService.findAllSignal();
   }
