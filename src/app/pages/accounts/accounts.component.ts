@@ -9,58 +9,70 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
 import { AccountListComponent } from '../../components/account/account-list/account-list.component'
-import { IAccount, IAccountType, ITypeForm, IUser } from '../../interfaces';
+import { IAccount, ITypeForm } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
-
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
   imports: [
     CommonModule,
-
-    //Custom modules
     AccountFromComponent,
     AccountListComponent,
     AccountCardsComponent,
-    //Ng-Zorro modules
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
     NzDescriptionsModule,
     NzStatisticModule,
     NzGridModule,
-    NzCardModule
+    NzCardModule,
+    NzIconModule
   ],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
 })
 export class AccountsComponent implements OnInit {
   public accountService = inject(AccountService);
+  public router = inject(Router);
   private NzNotificationService = inject(NzNotificationService);
 
+  /**
+   * The visibility of the account creation form.
+   */
   public isVisible = false;
+
+  /**
+   * The title of the account creation form.
+   */
   public title = 'Crear cuenta';
+
+  /**
+   * The list of account types to be displayed in the account type form.
+   */
   public IITypeForm = ITypeForm;
 
-
-
-
+  /*
+   * The list of accounts to be displayed in the account list.
+   */
   private accountList: IAccount[] = [];
 
-
+  /**
+   * The list of account types to be displayed in the account type form.
+   */
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
 
   ngOnInit(): void {
     this.accountService.findAllSignal();
   }
-
 
   /**
    * Opens the account creation form.
@@ -85,7 +97,7 @@ export class AccountsComponent implements OnInit {
    * Displays error messages if there are any validation errors.
    * @param item - The account data to be submitted.
    */
-  onSubmitted(item: IAccount): void {
+  onCreated(item: IAccount): void {
     this.accountService.saveAccountSignal(item).subscribe({
       next: (response: any) => {
         this.isVisible = false;
@@ -98,6 +110,14 @@ export class AccountsComponent implements OnInit {
         });
       }
     });
+  }
+
+  /**
+   * Navigates to the account details page for a specific account.
+   * @param account The account object whose details page is to be navigated to.
+   */
+  viewAccountDetails(account: IAccount): void {
+    this.router.navigateByUrl('app/accounts/details/' + account.id);
   }
 }
 
