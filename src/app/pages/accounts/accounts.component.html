@@ -9,21 +9,17 @@
     </nz-space>
   </nz-page-header-extra>
   <nz-page-header-content>
-      <div nz-row nzJustify="center" class="main-container">
-          <div nz-col nzSpan="20">
-              <app-account-cards [accountsList]="accountService.accounts$()"></app-account-cards>
-          </div>
-      </div>
-      <div nz-row nzJustify="center" class="main-container">
-          <div nz-col nzSpan="20">
-              <nz-card>
-                  <app-account-list [accountsList]="accountService.accounts$()" (viewAccountDetails)="viewAccountDetails($event)"></app-account-list>
-              </nz-card>
-          </div>
-      </div>
+    <app-account-cards [accountsList]="accountService.accounts$()"> </app-account-cards>
+    <nz-divider></nz-divider>
+    <app-account-list 
+    [accountsList]="accountService.accounts$()" 
+    (viewAccountDetails)="viewAccountDetails($event)"
+      (deleteAccount)="deleteAccount($event)"
+      (editAccount)="editAccount($event)">
+    </app-account-list>
   </nz-page-header-content>
 </nz-page-header>
 
-<app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.create" [title]="'Crear cuenta'"
-  (onCanceled)="onCanceled()" (onSubmitted)="onCreated($event)">
+<app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.create" [title]="'Crear cuenta'" 
+[nameDefaultAccount]="getNameDefault()" (onCanceled)="onCanceled()" (onSubmitted)="onCreated($event)">
 </app-account-from>

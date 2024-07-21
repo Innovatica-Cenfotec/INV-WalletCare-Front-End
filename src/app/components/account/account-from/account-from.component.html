@@ -51,24 +51,26 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <!-- type | radio -->
-            <nz-form-item>
-                <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
-                <nz-form-control [nzErrorTip]="errorTpl">
-                    <nz-radio-group formControlName="type">
-                        <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
-                        <label nz-radio nzValue="{{IAccountType.shared}}">Compartida</label>
-                    </nz-radio-group>
-                    <ng-template #errorTpl let-control>
-                        @if (control.errors?.['maxlength']) {
-                        El nombre de la cuenta no puede tener más de 100 caracteres
-                        }
-                        @else {
-                        {{control.errors?.['message']}}
-                        }
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
+            @if (type === ITypeForm.create) {
+                <!-- type | radio -->
+                <nz-form-item>
+                    <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
+                    <nz-form-control [nzErrorTip]="errorTpl">
+                        <nz-radio-group formControlName="type">
+                            <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
+                            <label nz-radio nzValue="{{IAccountType.shared}}">Compartida</label>
+                        </nz-radio-group>
+                        <ng-template #errorTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            El nombre de la cuenta no puede tener más de 100 caracteres
+                            }
+                            @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            }
 
         </form>
     </div>
@@ -91,7 +93,7 @@
         </li>
         <li>
             Transferencia de gastos: Si decides eliminar esta cuenta, los gastos recurrentes, ahorros e ingresos
-            que hayas asignado aquí se moverán automáticamente a tu billetera personal "Mi billetera".
+            que hayas asignado aquí se moverán automáticamente a tu billetera personal "{{nameDefaultAccount}}".
         </li>
     </ul>
     <p>¿Estás de acuerdo con estos términos?</p>
