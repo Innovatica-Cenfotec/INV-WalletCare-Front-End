@@ -1,3 +1,4 @@
+import { filter } from 'rxjs';
 import { Component, Inject, inject, Input, OnChanges, OnInit, Signal, signal, SimpleChanges, ViewChild } from '@angular/core';
 
 // Importing Ng-Zorro modules
@@ -19,6 +20,9 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { Router } from "@angular/router";
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-accounts',
@@ -35,7 +39,9 @@ import { Router } from "@angular/router";
     NzStatisticModule,
     NzGridModule,
     NzCardModule,
-    NzIconModule
+    NzIconModule,
+    NzDividerModule,
+    NzModalModule
   ],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
@@ -43,7 +49,8 @@ import { Router } from "@angular/router";
 export class AccountsComponent implements OnInit {
   public accountService = inject(AccountService);
   public router = inject(Router);
-  private NzNotificationService = inject(NzNotificationService);
+  private nzNotificationService = inject(NzNotificationService);
+  private nzModalService = inject(NzModalService);
 
   /**
    * The visibility of the account creation form.
@@ -106,7 +113,7 @@ export class AccountsComponent implements OnInit {
     this.accountService.saveAccountSignal(item).subscribe({
       next: (response: any) => {
         this.isVisible = false;
-        this.NzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
+        this.nzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
         // Displaying the error message in the form
@@ -124,6 +131,69 @@ export class AccountsComponent implements OnInit {
   viewAccountDetails(account: IAccount): void {
     this.router.navigateByUrl('app/accounts/details/' + account.id);
   }
+
+  /**
+   * Gets the name of the default account
+   * @param account The account object
+   * @returns The name of the default account
+   */
+  getNameDefault(): string {
+    const accounts = this.accountService.accounts$();
+    if (!accounts || accounts.length === 0) {
+      return '';
+    }
+
+    return accounts.find((account) => account.default === true)?.name || '';
+  }
+
+  /**
+   * Deletes the account
+   */
+  deleteAccount(account: IAccount): void {  
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
+      nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.accountService.deleteAccountSignal(account.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+            this.router.navigateByUrl('app/accounts');
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Algo ha ido mal', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+  /**
+   * Edits the account
+   */
+  showEditAccountForm(account: IAccount): void {
+    //this.isVisible = true;
+    //this.form.item = account;
+    //this.title = 'Editar cuenta';   
+  }
+
+  /**
+   * Edits the account
+   */
+  editAccount(account: IAccount): void {
+    this.accountService.updateAccountSignal(account).subscribe({
+      next: (response: any) => {
+        this.isVisible = false;
+        this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
+      },
+      error: (error: any) => {
+        // Displaying the error message in the form
+        error.error.fieldErrors?.map((fieldError: any) => {
+          this.form.setControlError(fieldError.field, fieldError.message);
+        });
+      }
+    });
+  }
 }
-
-

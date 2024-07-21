@@ -8,6 +8,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @Component({
     selector: 'app-account-list',
@@ -20,7 +21,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
         NzButtonModule,
         NzCardModule,
         NzStatisticModule,
-        NzGridModule
+        NzGridModule,
+        NzSpaceModule
     ],
     templateUrl: './account-list.component.html',
     styleUrl: './account-list.component.scss',
@@ -33,16 +35,41 @@ export class AccountListComponent {
     @Input() accountsList: IAccount[] = [];
 
     /**
+     * Output event emitter to notify when an account needs to be deleted.
+     * Emits the account object that was selected.
+     */
+    @Output() deleteAccount = new EventEmitter<IAccount>();
+
+    /**
+     * Output event emitter to notify when an account needs to be edited.
+     * Emits the account object that was selected.
+     */
+    @Output() editAccount = new EventEmitter<IAccount>();
+
+    /**
      * Output event emitter to notify when details of a specific account need to be viewed.
      * Emits the account object that was selected.
      */
     @Output() viewAccountDetails = new EventEmitter<IAccount>();
 
+
     /**
-     * Emits an event to view the details of a specific account.
-     * @param account The account object whose details are to be viewed.
-     */
-    viewDetails(account: IAccount): void {
-        this.viewAccountDetails.emit(account);
+   * Gets the account type
+   * @param account The account
+   * @returns The account type
+   */
+  getAccountType(account: IAccount): string {
+    if (!account) {
+      return '';
     }
+
+    switch (account.type) {
+      case 'PERSONAL':
+        return 'Personal';
+      case 'SHARED':
+        return 'Compartida';
+      default:
+        return '';
+    }
+  }
 }
