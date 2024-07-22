@@ -15,7 +15,6 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 // Importing components
 import { HeaderComponent } from './header-default/header-default.component';
 import { ILayout } from '../../interfaces';
-import { LayoutService } from '../../services/layout.service';
 import { filter } from 'rxjs'
 
 @Component({

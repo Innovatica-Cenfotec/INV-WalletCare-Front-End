@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormsModule, FormBuilder,FormGroup,FormControl } from '@angular/forms';
-import { ReactiveFormsModule ,Validators } from '@angular/forms';
+import { FormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { ITypeForm } from "../../interfaces";
 
 // Importing Ng-Zorro modules
@@ -12,22 +12,22 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
-  selector: 'app-form-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    NzModalModule,
-    NzButtonComponent,
-    NzFormModule,
-    NzInputModule,
-    NzRadioModule,
-],
-  template: '',
+    selector: 'app-form-modal',
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        NzModalModule,
+        NzButtonComponent,
+        NzFormModule,
+        NzInputModule,
+        NzRadioModule,
+    ],
+    template: '',
 })
 export class FormModalComponent<T> implements OnChanges {
-    protected fb = inject(FormBuilder);    
+    protected fb = inject(FormBuilder);
     protected formGroup!: FormGroup;
     protected ITypeForm = ITypeForm;
 
@@ -35,8 +35,8 @@ export class FormModalComponent<T> implements OnChanges {
      * Indicates whether the form is loading or not.
      * @default false
      */
-    isLoading = false;
-    
+    @Input() isLoading = false;
+
     /**
      *  Indicates whether the modal is visible or not.
      * @default false
@@ -51,7 +51,7 @@ export class FormModalComponent<T> implements OnChanges {
     /**
      * The form item.
      */
-    @Input() item?: T;
+    @Input() item?: T = { id: 0  } as T;
 
     /**
      * The type of the form.
@@ -68,12 +68,19 @@ export class FormModalComponent<T> implements OnChanges {
      */
     @Output() onSubmitted = new EventEmitter<T>();
 
-    
+
     ngOnChanges(changes: SimpleChanges): void {
         // Reset the form when the modal is closed
         if (changes['isVisible'].currentValue === false) {
             this.isLoading = false;
             this.formGroup.reset();
+        }
+
+        // Patch the form values when the modal is opened and the item is set
+        if (changes['isVisible'].currentValue === true) {
+            if (this.item) {
+                this.formGroup.patchValue(this.item);
+            }
         }
     }
 
@@ -86,7 +93,8 @@ export class FormModalComponent<T> implements OnChanges {
         // If the form is valid
         if (this.formGroup.valid) {
             // Mapping the form values to the item
-            const item = this.formGroup.getRawValue() as T;
+            let item = this.formGroup.getRawValue() as T & { id: number };
+            item.id =  (this.item as { id?: number })?.id || 0;
             this.onSubmitted.emit(item);
         }
         else {

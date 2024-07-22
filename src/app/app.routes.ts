@@ -13,34 +13,22 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { DefaultLayoutComponent } from './components/default-layout/default-layout.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
+import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: DefaultLayoutComponent,
-    children:[
-      {
-        path: '',
-        component: LandingPageComponent,
-        canActivate: [GuestGuard],
-      },
-      {
-        path: 'access-denied',
-        component: AccessDeniedComponent,
-      }
-    ]
-  },
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [GuestGuard],
   },
   {
-    path:'forgot-password',
+    path: 'forgot-password',
     component: ForgotPasswordComponent,
   },
   {
-    path: 'forgot-password-reset',component:ForgotPasswordResetComponent
+    path: 'forgot-password-reset',
+    component: ForgotPasswordResetComponent
   },
   {
     path: 'signup',
@@ -81,6 +69,23 @@ export const routes: Routes = [
             name: 'Mis cuentas',
           },
         }
+      },
+      {
+        path: 'accounts/details/:id',        
+        component: AccountDetailComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          parent: 'accounts',
+          showInSidebar: false,
+          layout: <ILayout>{
+            icon: 'form',
+            breadcrumb: ['Cuenta', 'Detalle de cuenta'],
+            name: 'Detalle de cuenta',
+          },
+        },
       }, 
       {
         path: 'profile',
@@ -97,8 +102,26 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
+      }
+    ],
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: LandingPageComponent,
+        canActivate: [GuestGuard],
       },
-
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
+      },
+      {
+        path: '**',
+        component: NotFoundComponent,
+      }
     ],
   }
 ];
