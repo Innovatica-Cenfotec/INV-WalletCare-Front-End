@@ -92,3 +92,13 @@
 <app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.update" [title]="'Editar cuenta'"
     (onCanceled)="onCanceled()" (onSubmitted)="editAccount($event)" [item]="accountService.account$()" [isLoading]="isLoading" >
 </app-account-from>
+<nz-modal nzTitle="Invitar amigo" [nzVisible]="isVisibleInvite">
+    <div *nzModalContent>
+      <app-invite-account></app-invite-account>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="primary" (click)="closeInviteFriend()">
+        Cerrar
+      </button>
+    </div>
+  </nz-modal>

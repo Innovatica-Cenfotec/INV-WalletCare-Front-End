@@ -95,6 +95,10 @@ export interface IForgotResetPassword{
   newPassword:string;
   email:string;
 }
+export interface ISendInvite{
+  inviteToEmail:string,
+  accountId:number;
+}
 
 /**
  * Interface for account user

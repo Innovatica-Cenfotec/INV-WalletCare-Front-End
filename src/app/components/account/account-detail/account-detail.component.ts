@@ -22,6 +22,7 @@ import { AccountTabIncomesComponent } from "./account-tab-incomes/account-tab-in
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { AccountFromComponent } from "../account-from/account-from.component";
+import { InviteAccountComponent } from './invite-account/invite-account.component';
 
 @Component({
   selector: 'app-account-detail',
@@ -40,7 +41,8 @@ import { AccountFromComponent } from "../account-from/account-from.component";
     AccountTabExpenseComponent,
     AccountTabIncomesComponent,
     NzModalModule,
-    AccountFromComponent
+    AccountFromComponent,
+    InviteAccountComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-detail.component.html',
@@ -63,6 +65,7 @@ export class AccountDetailComponent implements OnInit {
   * The visibility of the account creation form.
   */
   public isVisible = false;
+  public isVisibleInvite=false;
 
   /**
    * Indicates whether the form is loading or not.
@@ -178,6 +181,10 @@ export class AccountDetailComponent implements OnInit {
    * Invites a friend to the account
    */
   inviteFriend(): void {
+    this.isVisibleInvite=true;
+  }
+  closeInviteFriend():void{
+    this.isVisibleInvite=false;
   }
 
   /**
@@ -260,7 +267,7 @@ export class AccountDetailComponent implements OnInit {
 
     // Check if the user is a member of the account
     if (this.isOwer()) {
-      return members.length;
+      return members.length+1;
     }
 
     return members.length
