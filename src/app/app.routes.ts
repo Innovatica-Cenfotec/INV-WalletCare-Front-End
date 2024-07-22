@@ -14,23 +14,9 @@ import { DefaultLayoutComponent } from './components/default-layout/default-layo
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
 import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: DefaultLayoutComponent,
-    children: [
-      {
-        path: '',
-        component: LandingPageComponent,
-        canActivate: [GuestGuard],
-      },
-      {
-        path: 'access-denied',
-        component: AccessDeniedComponent,
-      }
-    ]
-  },
   {
     path: 'login',
     component: LoginComponent,
@@ -116,6 +102,25 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
+      }
+    ],
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: LandingPageComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
+      },
+      {
+        path: '**',
+        component: NotFoundComponent,
       }
     ],
   }
