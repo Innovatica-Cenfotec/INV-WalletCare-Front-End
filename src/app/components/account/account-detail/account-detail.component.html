@@ -1,44 +1,8 @@
 <nz-page-header nzBackIcon [nzGhost]="false">
     <nz-page-header-title>{{accountService.account$()?.name}}</nz-page-header-title>
     <nz-page-header-extra>
-        <nz-space nzSize="middle" [nzWrap]="true">
-            <button class="btn" *nzSpaceItem nz-button nzType="default">
-                <i nz-icon nzType="plus"></i>
-                Agregar gastos
-            </button>
-            <button class="btn" *nzSpaceItem nz-button nzType="default">
-                <i nz-icon nzType="plus"></i>
-                Agregar ingresos
-            </button>
-            @if (isAccountShared() && isOwer()) {
-            <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="inviteFriend()">
-                <i nz-icon nzType="plus"></i>
-                Invitar a un amigo
-            </button>
-            }
-            @if (isAccountShared() && !isOwer() && isMember()) {
-            <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="leaveAccount()">
-                <i nz-icon nzType="minus"></i>
-                Salir de la cuenta
-            </button>
-            }
-            @if (isAccountShared() && !isOwer() && !isMember()) {
-            <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="joinAccount()">
-                <i nz-icon nzType="delete"></i>
-                Eliminar cuenta
-            </button>
-            }
-            <button class="btn" *nzSpaceItem nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menu">
-                Otras opciones
-                <i nz-icon nzType="down"></i>
-            </button>
-            <nz-dropdown-menu #menu="nzDropdownMenu">
-                <ul nz-menu>
-                    <li nz-menu-item (click)="showEditAccountForm()">Editar cuenta</li>
-                    <li nz-menu-item (click)="deleteAccount()">Eliminar cuenta</li>
-                </ul>
-            </nz-dropdown-menu>
-        </nz-space>
+        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()"
+            [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"></app-account-detail-header>
     </nz-page-header-extra>
     <nz-page-header-content>
         <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered
@@ -67,7 +31,7 @@
             <nz-descriptions-item nzTitle="Última actualización">
                 {{ getDate(accountService.account$()?.updatedAt) }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Descrpicón">{{accountService.account$()?.description ||
+            <nz-descriptions-item nzTitle="Descripción">{{accountService.account$()?.description ||
                 ""}}</nz-descriptions-item>
         </nz-descriptions>
         <nz-divider></nz-divider>
@@ -88,7 +52,3 @@
         </nz-tabset>
     </nz-page-header-content>
 </nz-page-header>
-
-<app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.update" [title]="'Editar cuenta'"
-    (onCanceled)="onCanceled()" (onSubmitted)="editAccount($event)" [item]="accountService.account$()" [isLoading]="isLoading" >
-</app-account-from>
