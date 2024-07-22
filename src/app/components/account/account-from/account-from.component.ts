@@ -59,7 +59,8 @@ export class AccountFromComponent extends FormModalComponent<IAccount> {
         for (const key in this.formGroup.controls) {
             this.formGroup.get(key)?.setValue(this.formGroup.get(key)?.value?.trim());
             if (this.formGroup.get(key)?.invalid) {
-                this.formGroup.get(key)?.markAsTouched();
+                this.formGroup.get(key)?.markAsDirty();
+                this.formGroup.get(key)?.updateValueAndValidity({ onlySelf: true });
             }
         }
 

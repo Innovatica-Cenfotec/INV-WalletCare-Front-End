@@ -51,27 +51,26 @@
                 </nz-form-control>
             </nz-form-item>
 
-            @if (type === ITypeForm.create) {
-                <!-- type | radio -->
-                <nz-form-item>
-                    <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
-                    <nz-form-control [nzErrorTip]="errorTpl">
-                        <nz-radio-group formControlName="type">
-                            <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
-                            <label nz-radio nzValue="{{IAccountType.shared}}">Compartida</label>
-                        </nz-radio-group>
-                        <ng-template #errorTpl let-control>
-                            @if (control.errors?.['maxlength']) {
-                            El nombre de la cuenta no puede tener más de 100 caracteres
-                            }
-                            @else {
-                            {{control.errors?.['message']}}
-                            }
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            }
-
+           @if (type == ITypeForm.create) {
+            <!-- type | radio -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorTypeTpl">
+                    <nz-radio-group formControlName="type">
+                        <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
+                        <label nz-radio nzValue="{{IAccountType.shared}}">Compartida</label>
+                    </nz-radio-group>
+                    <ng-template #errorTypeTpl let-control>
+                        @if (control.errors?.['required']) {
+                        Por favor seleccione el tipo de cuenta
+                        }
+                        @else {
+                        {{control.errors?.['message']}}
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        }
         </form>
     </div>
     <div *nzModalFooter>
