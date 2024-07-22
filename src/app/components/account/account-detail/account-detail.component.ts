@@ -21,6 +21,7 @@ import { AccountTabExpenseComponent } from "./account-tab-expense/account-tab-ex
 import { AccountTabIncomesComponent } from "./account-tab-incomes/account-tab-incomes.component";
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { AccountFromComponent } from "../account-from/account-from.component";
+import { InviteAccountComponent } from './invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from "./account-detail-header/account-detail-header.component";
 
 @Component({
@@ -41,6 +42,7 @@ import { AccountDetailHeaderComponent } from "./account-detail-header/account-de
     AccountTabIncomesComponent,
     NzModalModule,
     AccountFromComponent,
+    InviteAccountComponent,
     AccountDetailHeaderComponent
   ],
   providers: [DatePipe],
@@ -59,6 +61,7 @@ export class AccountDetailComponent implements OnInit {
   */
   public id: number = 0;
 
+  public isVisibleInvite=false;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -140,6 +143,10 @@ export class AccountDetailComponent implements OnInit {
    * Invites a friend to the account
    */
   inviteFriend(): void {
+    this.isVisibleInvite=true;
+  }
+  closeInviteFriend():void{
+    this.isVisibleInvite=false;
   }
 
   /**

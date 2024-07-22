@@ -14,6 +14,7 @@ import { DefaultLayoutComponent } from './components/default-layout/default-layo
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
 import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
+import { InviteAccountComponent } from './components/account/account-detail/invite-account/invite-account.component';
 
 export const routes: Routes = [
   {
@@ -84,6 +85,14 @@ export const routes: Routes = [
           },
         }
       },
+      {
+        path:'accounts/inviteToSharedAccount',
+        component:InviteAccountComponent
+
+
+      },
+
+
       {
         path: 'accounts/details/:id',        
         component: AccountDetailComponent,
