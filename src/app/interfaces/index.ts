@@ -95,6 +95,10 @@ export interface IForgotResetPassword{
   newPassword:string;
   email:string;
 }
+export interface ISendInvite{
+  inviteToEmail:string,
+  accountId:number;
+}
 
 /**
  * Interface for account user
@@ -110,4 +114,7 @@ export interface IAccountUser{
   leftAt?: Date;
   invitationStatus?: number;
   isDeleted?: boolean;
+}
+export interface IGenericResponse{
+  message?: String;
 }
