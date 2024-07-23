@@ -52,14 +52,24 @@ export class AccountInvitationComponent implements OnInit {
         });
     }
 
+    /**
+     * Set the invitation status to accepted
+     */
     acceptInvitation(): void {
         this.responsenInvitation(true);
     }
 
+    /**
+     * Set the invitation status to declined
+     */
     cancelInvitation() {
         this.responsenInvitation(false);
     }
 
+    /**
+     * saves the invitation status 
+     * @param value is the invitation status
+     */
     responsenInvitation(value: boolean): void {
         const payload: IAccountUser = {
             invitationStatus: value ? 2 : 3,

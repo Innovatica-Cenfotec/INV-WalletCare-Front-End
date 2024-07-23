@@ -139,6 +139,11 @@ export class AccountService extends BaseService<IAccount> {
         );
     }
 
+    /**
+     * Manages the status of a shared account invitation.
+     * @param accountUser The account user object containing the updated invitation status.
+     * @returns An Observable that emits the HTTP response data when the request is successful.
+     */
     manageSharedAccounInvitationtStatus(accountUser: IAccountUser): Observable<any> {
         return this.http.put(`${this.source}/invitation/${accountUser.account?.id}`, accountUser).pipe(
             tap((response:any)=>{
