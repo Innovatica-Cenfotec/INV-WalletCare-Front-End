@@ -15,6 +15,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
 import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
 import { InviteAccountComponent } from './components/account/account-detail/invite-account/invite-account.component';
+import { AccountInvitationComponent } from './pages/account-invitation/account-invitation.component';
 
 export const routes: Routes = [
   {
@@ -49,6 +50,10 @@ export const routes: Routes = [
     path: 'signup',
     component: SignupComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path:'invitation',
+    component: AccountInvitationComponent
   },
   {
     path: 'app',
@@ -86,15 +91,13 @@ export const routes: Routes = [
         }
       },
       {
-        path:'accounts/inviteToSharedAccount',
-        component:InviteAccountComponent
+        path: 'accounts/inviteToSharedAccount',
+        component: InviteAccountComponent
 
 
       },
-
-
       {
-        path: 'accounts/details/:id',        
+        path: 'accounts/details/:id',
         component: AccountDetailComponent,
         data: {
           authorities: [
@@ -109,7 +112,7 @@ export const routes: Routes = [
             name: 'Detalle de cuenta',
           },
         },
-      }, 
+      },
       {
         path: 'profile',
         component: ProfileComponent,

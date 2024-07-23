@@ -54,15 +54,15 @@ export class ForgotPasswordResetComponent implements OnInit {
   ngOnInit(): void {
     // Get email from query parameters
     this.route.queryParams.subscribe(params => {
-      this.email = params['email']; 
+      this.email = params['email'];
     });
   }
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      const forgotPasswordReset=this.validateForm.value as IForgotResetPassword;
-      forgotPasswordReset.email=this.email;
-      const {newPassword, confirmPassword } = this.validateForm.value;
+      const forgotPasswordReset = this.validateForm.value as IForgotResetPassword;
+      forgotPasswordReset.email = this.email;
+      const { newPassword, confirmPassword } = this.validateForm.value;
 
       if (newPassword !== confirmPassword) {
         this.message.error('Las contraseñas no coinciden');
@@ -75,10 +75,11 @@ export class ForgotPasswordResetComponent implements OnInit {
           this.message.success('Contraseña actualizada correctamente');
           this.router.navigate(['/login']); // Redirige al inicio de sesión
         },
-        
+
         error: (err) => {
           console.log('Error response:', err); // Depuración de error
-          this.message.error('Error al actualizar la contraseña, por favor intente más tarde')}
+          this.message.error('Error al actualizar la contraseña, por favor intente más tarde')
+        }
       });
     } else {
       Object.values(this.validateForm.controls).forEach(control => {

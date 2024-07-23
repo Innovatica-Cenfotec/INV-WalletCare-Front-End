@@ -18,6 +18,7 @@ import { IAccount, IAccountUser, ITypeForm } from '../../../../interfaces';
 import { AuthService } from '../../../../services/auth.service';
 import { AccountService } from '../../../../services/account.service';
 import { AccountFromComponent } from "../../account-from/account-from.component";
+import { InviteAccountComponent } from "../invite-account/invite-account.component";
 
 @Component({
     selector: 'app-account-detail-header',
@@ -32,7 +33,9 @@ import { AccountFromComponent } from "../../account-from/account-from.component"
         NzIconModule,
         NzTabsModule,
         NzDividerModule,
-        AccountFromComponent
+        NzModalModule,
+        AccountFromComponent,
+        InviteAccountComponent
     ],
     templateUrl: './account-detail-header.component.html',
     styleUrl: './account-detail-header.component.scss',
@@ -59,6 +62,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
     * The visibility of the account creation form.
     */
     public isVisible = false;
+
+    public isVisibleInvite = false;
 
     /**
      * Indicates whether the form is loading or not.
@@ -121,11 +126,6 @@ export class AccountDetailHeaderComponent implements OnChanges {
     leaveAccount() {
         throw new Error('Method not implemented.');
     }
-    inviteFriend() {
-        throw new Error('Method not implemented.');
-    }
-
-
 
     /**
     * Edits the account
@@ -151,6 +151,17 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     onCanceled(): void {
         this.isVisible = false;
+    }
+
+
+    /**
+     * Invites a friend to the account
+     */
+    inviteFriend(): void {
+        this.isVisibleInvite = true;
+    }
+    closeInviteFriend(): void {
+        this.isVisibleInvite = false;
     }
 
 }

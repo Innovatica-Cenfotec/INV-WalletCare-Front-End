@@ -61,7 +61,7 @@ export class AccountDetailComponent implements OnInit {
   */
   public id: number = 0;
 
-  public isVisibleInvite=false;
+
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -139,15 +139,6 @@ export class AccountDetailComponent implements OnInit {
     return account.owner?.id === this.authService.getUser()?.id;
   }
 
-  /**
-   * Invites a friend to the account
-   */
-  inviteFriend(): void {
-    this.isVisibleInvite=true;
-  }
-  closeInviteFriend():void{
-    this.isVisibleInvite=false;
-  }
 
   /**
    * deletes a friend from the account

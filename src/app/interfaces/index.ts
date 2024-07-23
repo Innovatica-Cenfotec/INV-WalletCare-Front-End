@@ -115,3 +115,6 @@ export interface IAccountUser{
   invitationStatus?: number;
   isDeleted?: boolean;
 }
+export interface IGenericResponse{
+  message?: String;
+}
