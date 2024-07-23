@@ -1,9 +1,20 @@
-.forgot-password-reset-container {
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh; // Altura completa de la ventana
   background-color: #f0f2f5; // Fondo claro para el contenedor
+  background-color: #FFFFFF;
+  background-image: url("https://res.cloudinary.com/dqryzh0n1/image/upload/v1720853172/walletcare-background_grdwao.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+
+  .title {
+    text-align: center;
+    color: var(--ant-primary-color);
+  }
 
   nz-card {
     width: 100%;
@@ -12,7 +23,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Sombra suave
     border-radius: 8px; // Bordes redondeados
 
-    .forgot-password-reset-header {
+    .header {
       text-align: center;
       margin-bottom: 24px;
 

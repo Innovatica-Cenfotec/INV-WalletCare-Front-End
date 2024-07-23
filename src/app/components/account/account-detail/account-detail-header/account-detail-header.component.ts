@@ -114,6 +114,13 @@ export class AccountDetailHeaderComponent implements OnChanges {
         });
     }
     /**
+     * Deletes the account if i leave it before 
+     */
+    deleteAccountUser(){
+
+    }
+
+    /**
      * Shows the account  form.
      * Sets the `isVisible` property to `true`.
      */

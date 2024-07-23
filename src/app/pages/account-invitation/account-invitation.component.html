@@ -1,18 +1,27 @@
-<nz-row class="forgot-password-reset-container" justify="center">
+<nz-row class="container" justify="center">
     <nz-card>
-        <div class="forgot-password-reset-header">
-            <h1>Invitación a cuenta compartida</h1>
-            <p>El usuario {{host}} te invitó a ser parte se su cuenta llamada {{accountName}} ¿que deseas hacer?</p>
-        </div>      
+        <div class="header">
+            <h1 class="title">Invitación a cuenta compartida</h1>
+            <p>El usuario <b>{{host}}</b> te invitó a ser parte se su cuenta llamada <b>{{accountName}}</b> ¿que deseas hacer?</p>
+        </div>
+        <div nz-row nzJustify="center" style="margin: 0 auto;">
+
             <nz-button-group>
                 <button nz-button nzType="primary" (click)="acceptInvitation()">
                     <span nz-icon nzType="check" nzTheme="outline"></span>
                     Sí, deseo unirme!
                 </button>
+                <nz-divider nzType="vertical"></nz-divider>
                 <button nz-button nzType="default" (click)="cancelInvitation()">
                     <span nz-icon nzType="close" nzTheme="outline"></span>
                     No, en otra ocasión!
                 </button>
             </nz-button-group>
+
+        </div>
+        <nz-divider></nz-divider>
+        <div nz-row nzJustify="start" style="margin: 0 auto;">
+            <button nz-button nzType="dashed"><a href="/">Volver al Inicio</a></button>
+        </div>
     </nz-card>
 </nz-row>
