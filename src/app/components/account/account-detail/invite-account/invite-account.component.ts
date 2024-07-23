@@ -42,7 +42,16 @@ export class InviteAccountComponent implements OnInit {
     public inviteForm!: FormGroup;
     private accountId: number | null = null;
     public isDisabled: boolean = false;
+
+    /**
+     * Indicates whether the form is visible or not.
+     */
     @Input() isVisible: boolean = true;
+
+    /**
+     * Emits an event when the form is closed.
+     * @type {EventEmitter<void>}
+     */
     @Output() onClose = new EventEmitter<void>();
 
     /**
