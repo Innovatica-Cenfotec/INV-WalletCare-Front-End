@@ -16,23 +16,9 @@ import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forg
 import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
 import { InviteAccountComponent } from './components/account/account-detail/invite-account/invite-account.component';
 import { AccountInvitationComponent } from './pages/account-invitation/account-invitation.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: DefaultLayoutComponent,
-    children: [
-      {
-        path: '',
-        component: LandingPageComponent,
-        canActivate: [GuestGuard],
-      },
-      {
-        path: 'access-denied',
-        component: AccessDeniedComponent,
-      }
-    ]
-  },
   {
     path: 'login',
     component: LoginComponent,
@@ -128,6 +114,25 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
+      }
+    ],
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: LandingPageComponent,
+        canActivate: [GuestGuard],
+      },
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
+      },
+      {
+        path: '**',
+        component: NotFoundComponent,
       }
     ],
   }

@@ -12,6 +12,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormItemComponent, NzFormModule } from 'ng-zorro-antd/form';
 import { IForgotResetPassword } from '../../interfaces';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 
 @Component({
@@ -26,7 +27,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzDividerModule,
     NzFormModule,
     NzFormItemComponent,
-    NzModalModule
+    NzModalModule,
+    NzIconModule
   ],
   templateUrl: './forgot-password-reset.component.html',
   styleUrls: ['./forgot-password-reset.component.scss']
@@ -34,6 +36,16 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 export class ForgotPasswordResetComponent implements OnInit {
   validateForm: FormGroup;
   email: string = ''; // Inicializado con valor por defecto
+
+  /**
+   * This is the visibility of the password
+   */
+  public passwordVisible = false;
+
+  /**
+   * This is the visibility of the confirm password
+   */
+  public confirmPasswordVisible = false;
 
   constructor(
     private fb: FormBuilder,
