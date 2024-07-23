@@ -6,7 +6,6 @@
             <th>Estado</th>
             <th>Balace</th>
             <th>Fecha de unión</th>
-            <th>Fecha de salida</th>
             <th *ngIf="isOwner" nzRight>Acciones</th>
         </tr>
     </thead>
@@ -17,7 +16,6 @@
             <td>{{ getStatus(data) }}</td>
             <td>{{ data.lastTransactionBalance }}</td>
             <td>{{ getDate(data.joinedAt) }}</td>
-            <td>{{ getDate(data.leftAt) }}</td>
             <td *ngIf="isOwner" nzRight>
                 <a nz-popconfirm nzTitle="¿Estás seguro de que deseas eliminar a este amigo?"
                     (nzOnConfirm)="deleteFriend.emit(data)" nzOkText="Sí" nzCancelText="No">

@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IAccountUser, IUser } from '../interfaces';
+import { IAccount, IAccountUser, IGenericResponse, IResponse, IUser } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
+import { error } from '@ant-design/icons-angular';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +12,7 @@ export class AccountService extends BaseService<IAccount> {
     private accountListSignal = signal<IAccount[]>([]);
     private accountSignal = signal<IAccount | undefined>(undefined);
     private membersAccountSignal = signal<IAccountUser[]>([]);
-
+    private responseSignal = signal<IGenericResponse>({});
     /*
     * Gets the accounts signal.
     */
@@ -126,10 +127,28 @@ export class AccountService extends BaseService<IAccount> {
         if (!id) {
             throw new Error('Invalid account ID');
         }
-        
+
         return this.del(id).pipe(
             tap((response: any) => {
                 this.accountListSignal.update(accounts => accounts.filter(a => a.id !== id));
+            }),
+            catchError(error => {
+                console.error('Error deleting account', error);
+                throw error;
+            })
+        );
+    }
+
+    /**
+     * Manages the status of a shared account invitation.
+     * @param accountUser The account user object containing the updated invitation status.
+     * @returns An Observable that emits the HTTP response data when the request is successful.
+     */
+    manageSharedAccounInvitationtStatus(accountUser: IAccountUser): Observable<any> {
+        return this.http.put(`${this.source}/invitation/${accountUser.account?.id}`, accountUser).pipe(
+            tap((response:any)=>{
+                
+                this.responseSignal.set({message: response.message});
             }),
             catchError(error => {
                 console.error('Error deleting account', error);
