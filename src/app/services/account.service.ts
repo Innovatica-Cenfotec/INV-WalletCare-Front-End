@@ -142,7 +142,8 @@ export class AccountService extends BaseService<IAccount> {
     manageSharedAccounInvitationtStatus(accountUser: IAccountUser): Observable<any> {
         return this.http.put(`${this.source}/invitation/${accountUser.account?.id}`, accountUser).pipe(
             tap((response:any)=>{
-                this.responseSignal.update(response);
+                
+                this.responseSignal.set({message: response.message});
             }),
             catchError(error => {
                 console.error('Error deleting account', error);

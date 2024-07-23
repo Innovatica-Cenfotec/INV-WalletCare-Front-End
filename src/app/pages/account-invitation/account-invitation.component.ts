@@ -36,11 +36,10 @@ import { error } from '@ant-design/icons-angular';
 export class AccountInvitationComponent implements OnInit {
     public host: string = 'jscruzgz@gmail.com';
     public accountName: string = 'Main';
-
+    private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private accountService: AccountService = inject(AccountService);
     private notificationService = inject(NzNotificationService);
-    private nzModalService = inject(NzModalService);
     private accountId: number = 0;
     private userId: number = 0;
 
@@ -53,8 +52,17 @@ export class AccountInvitationComponent implements OnInit {
         });
     }
 
-    acceptInvitation():void {
+    acceptInvitation(): void {
+        this.responsenInvitation(true);
+    }
+
+    cancelInvitation() {
+        this.responsenInvitation(false);
+    }
+
+    responsenInvitation(value: boolean): void {
         const payload: IAccountUser = {
+            invitationStatus: value ? 2 : 3,
             user: {
                 id: this.userId
             },
@@ -65,28 +73,13 @@ export class AccountInvitationComponent implements OnInit {
 
         this.accountService.manageSharedAccounInvitationtStatus(payload).subscribe({
             next: (response: any) => {
+                this.router.navigateByUrl('/app');
                 this.notificationService.success('Éxito', response.message);
-            }
-        })
-        catchError(error => {
-            this.notificationService.success('Éxito', error.message);
-            throw error;
-        })
-
-        //   this.nzModalService.confirm({
-        //     nzTitle:'',
-        //     nzContent:'',
-        //     nzOkText:'',
-        //     nzOkType: 'primary',
-        //     nzOnOk:()=>{
-
-        //     }
-        //   });
-
-
-    }
-
-    cancelInvitation() {
-        throw new Error('Method not implemented.');
+            },
+            error: (error => {
+                this.notificationService.error('Error', error.error.detail)
+                throw error;
+            })
+        });
     }
 }
