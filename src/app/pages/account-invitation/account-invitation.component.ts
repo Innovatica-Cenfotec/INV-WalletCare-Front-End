@@ -14,7 +14,7 @@ import { IAccountUser } from '../../interfaces';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { catchError } from 'rxjs';
 import { error } from '@ant-design/icons-angular';
-
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @Component({
     selector: 'app-account-invitation',
@@ -28,7 +28,8 @@ import { error } from '@ant-design/icons-angular';
         NzFormModule,
         NzFormItemComponent,
         NzModalModule,
-        NzIconModule
+        NzIconModule,
+        NzSpaceModule
     ],
     templateUrl: './account-invitation.component.html',
     styleUrl: './account-invitation.component.scss',
@@ -87,7 +88,7 @@ export class AccountInvitationComponent implements OnInit {
                 this.notificationService.success('Éxito', response.message);
             },
             error: (error => {
-                this.notificationService.error('Error', error.error.detail)
+                this.notificationService.error('Lo sentimos', error.error.detail);
                 throw error;
             })
         });

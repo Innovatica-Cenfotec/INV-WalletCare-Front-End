@@ -66,18 +66,23 @@ export class FormModalComponent<T> implements OnChanges {
     /**
      * The event emitter that emits when the form is submitted.
      */
-    @Output() onSubmitted = new EventEmitter<T>();
+    @Output() onCreated = new EventEmitter<T>();
+
+    /**
+     * Event emitter for when the component is updated.
+     */
+    @Output() onUpdated = new EventEmitter<T>();
 
 
     ngOnChanges(changes: SimpleChanges): void {
         // Reset the form when the modal is closed
-        if (changes['isVisible'].currentValue === false) {
+        if (changes['isVisible']?.currentValue === false) {
             this.isLoading = false;
             this.formGroup.reset();
         }
 
         // Patch the form values when the modal is opened and the item is set
-        if (changes['isVisible'].currentValue === true) {
+        if (changes['isVisible']?.currentValue === true) {
             if (this.item) {
                 this.formGroup.patchValue(this.item);
             }
@@ -95,7 +100,13 @@ export class FormModalComponent<T> implements OnChanges {
             // Mapping the form values to the item
             let item = this.formGroup.getRawValue() as T & { id: number };
             item.id =  (this.item as { id?: number })?.id || 0;
-            this.onSubmitted.emit(item);
+
+            if(this.type === ITypeForm.create) {
+                this.onCreated.emit(item);
+            }
+            else {
+                this.onUpdated.emit(item);
+            }
         }
         else {
             Object.values(this.formGroup.controls).forEach(control => {

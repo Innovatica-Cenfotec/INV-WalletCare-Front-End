@@ -13,10 +13,10 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { DefaultLayoutComponent } from './components/default-layout/default-layout.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
-import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
 import { InviteAccountComponent } from './components/account/account-detail/invite-account/invite-account.component';
 import { AccountInvitationComponent } from './pages/account-invitation/account-invitation.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
 
 export const routes: Routes = [
   {
