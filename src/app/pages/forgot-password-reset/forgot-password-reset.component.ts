@@ -12,6 +12,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormItemComponent, NzFormModule } from 'ng-zorro-antd/form';
 import { IForgotResetPassword } from '../../interfaces';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 
 @Component({
@@ -26,7 +27,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzDividerModule,
     NzFormModule,
     NzFormItemComponent,
-    NzModalModule
+    NzModalModule,
+    NzIconModule
   ],
   templateUrl: './forgot-password-reset.component.html',
   styleUrls: ['./forgot-password-reset.component.scss']
@@ -34,6 +36,16 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 export class ForgotPasswordResetComponent implements OnInit {
   validateForm: FormGroup;
   email: string = ''; // Inicializado con valor por defecto
+
+  /**
+   * This is the visibility of the password
+   */
+  public passwordVisible = false;
+
+  /**
+   * This is the visibility of the confirm password
+   */
+  public confirmPasswordVisible = false;
 
   constructor(
     private fb: FormBuilder,
@@ -54,15 +66,15 @@ export class ForgotPasswordResetComponent implements OnInit {
   ngOnInit(): void {
     // Get email from query parameters
     this.route.queryParams.subscribe(params => {
-      this.email = params['email']; 
+      this.email = params['email'];
     });
   }
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      const forgotPasswordReset=this.validateForm.value as IForgotResetPassword;
-      forgotPasswordReset.email=this.email;
-      const {newPassword, confirmPassword } = this.validateForm.value;
+      const forgotPasswordReset = this.validateForm.value as IForgotResetPassword;
+      forgotPasswordReset.email = this.email;
+      const { newPassword, confirmPassword } = this.validateForm.value;
 
       if (newPassword !== confirmPassword) {
         this.message.error('Las contraseñas no coinciden');
@@ -75,10 +87,11 @@ export class ForgotPasswordResetComponent implements OnInit {
           this.message.success('Contraseña actualizada correctamente');
           this.router.navigate(['/login']); // Redirige al inicio de sesión
         },
-        
+
         error: (err) => {
           console.log('Error response:', err); // Depuración de error
-          this.message.error('Error al actualizar la contraseña, por favor intente más tarde')}
+          this.message.error('Error al actualizar la contraseña, por favor intente más tarde')
+        }
       });
     } else {
       Object.values(this.validateForm.controls).forEach(control => {

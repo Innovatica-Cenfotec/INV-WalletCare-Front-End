@@ -1,0 +1,32 @@
+<nz-modal nzTitle="Invitar amigo" [nzVisible]="isVisible" (nzOnCancel)="closeModel()">
+  <div *nzModalContent>
+    <div>
+      <p> Ingresa tu correo electrónico para enviar una invitación.</p>
+    </div>
+    <form nz-form [formGroup]="inviteForm" (ngSubmit)="sendInvite()" [nzLayout]="'inline'">
+      <nz-form-item >
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group nzPrefixIcon="mail">
+            <input nz-input formControlName="email" placeholder="Correo electrónico" class="invite-account-input">
+            <ng-template #errorTpl let-control>
+              <div *ngIf="control.errors?.['required']">Por favor ingrese su correo electrónico</div>
+              <div *ngIf="control.errors?.['email']">El correo electrónico no es válido</div>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button [nzType]="'primary'" class="invite-account-button" [disabled]="isDisabled" [nzLoading]="isDisabled"
+          >Enviar Invitación</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+      <button nz-button nzType="primary" (click)="closeModel()" [disabled]="isDisabled">
+          Cerrar
+      </button>
+  </div>
+</nz-modal>
+

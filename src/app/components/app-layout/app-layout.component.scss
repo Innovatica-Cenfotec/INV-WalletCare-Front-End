@@ -7,12 +7,14 @@ nz-breadcrumb {
 }
 
 .inner-layout {
-  padding: 0 24px 24px;
+  padding: 0 15px 15px;
 }
 
 nz-content {
   background: #fff;
   min-height: 280px;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .sider-menu {

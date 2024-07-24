@@ -1,4 +1,5 @@
 import { Component, Inject, inject, Input, OnChanges, OnInit, Signal, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { Router } from "@angular/router";
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
@@ -9,14 +10,19 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 // Importing custom components and interfaces
 import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
 import { AccountListComponent } from '../../components/account/account-list/account-list.component'
-import { IAccount, IAccountType, ITypeForm, IUser } from '../../interfaces';
+import { IAccount, ITypeForm } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
+
 
 
 @Component({
@@ -24,58 +30,83 @@ import { AccountCardsComponent } from '../../components/account/account-cards/ac
   standalone: true,
   imports: [
     CommonModule,
-
-    //Custom modules
     AccountFromComponent,
     AccountListComponent,
     AccountCardsComponent,
-    //Ng-Zorro modules
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
     NzDescriptionsModule,
     NzStatisticModule,
     NzGridModule,
-    NzCardModule
+    NzCardModule,
+    NzIconModule,
+    NzDividerModule,
+    NzModalModule,
   ],
+  providers: [AccountService],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.scss'
 })
 export class AccountsComponent implements OnInit {
   public accountService = inject(AccountService);
-  private NzNotificationService = inject(NzNotificationService);
+  public router = inject(Router);
+  private nzNotificationService = inject(NzNotificationService);
+  private nzModalService = inject(NzModalService);
 
+  /**
+   * The visibility of the account creation form.
+   */
   public isVisible = false;
+
+  /**
+   * The title of the account creation form.
+   */
   public title = 'Crear cuenta';
-  public IITypeForm = ITypeForm;
 
-
-
-
-  private accountList: IAccount[] = [];
+  /**
+   * Represents the form.
+   */
+  public TypeForm: ITypeForm = ITypeForm.create;
 
 
   @ViewChild(AccountFromComponent) form!: AccountFromComponent;
 
+
+  /**
+   * This method is called once after the component's properties have been initialized and the component
+   * is ready
+   */
   ngOnInit(): void {
     this.accountService.findAllSignal();
   }
 
-
-  /**
-   * Opens the account creation form.
-   * Sets the `isVisible` property to `true`.
-   */
-  createAccount(): void {
-    this.isVisible = true;
-  }
-
-  /**
+   /**
    * Closes the account creation form.
    * Sets the `isVisible` property to `false`.
    */
   onCanceled(): void {
     this.isVisible = false;
+  }
+
+  /**
+   * Shows the modal to edit the account
+   */
+  showModalEdit(account: IAccount): void {    
+    this.title = 'Editar cuenta';
+    this.TypeForm = ITypeForm.update;
+    this.form.item = account;
+    this.isVisible = true;
+  }
+
+  /**
+   * Shows the modal to create the account
+   */
+  showModalCreate(): void {    
+    this.title = 'Crear cuenta';
+    this.TypeForm = ITypeForm.create;
+    this.form.item = undefined;
+    this.isVisible = true;
   }
 
   /**
@@ -85,11 +116,11 @@ export class AccountsComponent implements OnInit {
    * Displays error messages if there are any validation errors.
    * @param item - The account data to be submitted.
    */
-  onSubmitted(item: IAccount): void {
-    this.accountService.saveAccountSignal(item).subscribe({
+  createAccount(account: IAccount): void {
+    this.accountService.saveAccountSignal(account).subscribe({
       next: (response: any) => {
         this.isVisible = false;
-        this.NzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
+        this.nzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
         // Displaying the error message in the form
@@ -99,6 +130,65 @@ export class AccountsComponent implements OnInit {
       }
     });
   }
+
+  updateAccount(account: IAccount): void {
+    this.accountService.updateAccountSignal(account).subscribe({
+      next: (response: any) => {
+        this.isVisible = false;
+        this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
+      },
+      error: (error: any) => {
+        // Displaying the error message in the form
+        error.error.fieldErrors?.map((fieldError: any) => {
+          this.form.setControlError(fieldError.field, fieldError.message);
+        });
+      }
+    });
+  }
+
+  /**
+  * Deletes the account
+  */
+  deleteAccount(account: IAccount): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
+      nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.accountService.deleteAccountSignal(account.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+            this.router.navigateByUrl('app/accounts');
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+  /**
+   * Navigates to the account details page for a specific account.
+   * @param account The account object whose details page is to be navigated to.
+   */
+  viewAccountDetails(account: IAccount): void {
+    this.router.navigateByUrl('app/accounts/details/' + account.id);
+  }
+
+  /**
+   * Gets the name of the default account
+   * @param account The account object
+   * @returns The name of the default account
+   */
+  getNameDefault(): string {
+    const accounts = this.accountService.accounts$();
+    if (!accounts || accounts.length === 0) {
+      return '';
+    }
+
+    return accounts.find((account) => account.default === true)?.name || '';
+  }
 }
-
-

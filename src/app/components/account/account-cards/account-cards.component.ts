@@ -4,6 +4,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { IAccount, IBalance } from '../../../interfaces';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
     selector: 'app-account-cards',
@@ -12,7 +14,9 @@ import { IAccount, IBalance } from '../../../interfaces';
         CommonModule,
         NzGridModule,
         NzStatisticModule,
-        NzCardModule
+        NzCardModule,
+        NzSpaceModule,
+        NzDividerModule
     ],
     templateUrl: './account-cards.component.html',
     styleUrl: './account-cards.component.scss',
@@ -34,15 +38,24 @@ export class AccountCardsComponent implements OnChanges {
     public recurringSavingsColor = '';
 
 
+
+    /**
+     * Responds to changes in the input properties of the component.
+     * @param changes An object of type {@link SimpleChanges} that contains the current and previous values of the 
+     * changed input properties
+     */
     ngOnChanges(changes: SimpleChanges): void {
         if(changes['accountsList']){
+
+
+            //general balance calc
             let balance = 0;
             this.accountsList.forEach(element => {
                 if(element.balance !== undefined)
                 balance = balance + element.balance;
             });
 
-            //calc cards info
+            //set cards info
             this.generalBalance = balance;
             this.generalExpenses = -1000;
             this.generalSavings = 100;
@@ -75,8 +88,6 @@ export class AccountCardsComponent implements OnChanges {
             }else if(this.generalSavings == 0){
                 this.generalSavingsColor = IBalance.balance;
             }
-
-            
 
             //set colors to cards recurringExpenses
             if(this.recurringExpenses > 0){

@@ -1,80 +1,99 @@
-<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()" [nzCancelLoading]="isLoading">
-  <div *nzModalContent>
-    <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
+<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()"
+    [nzCancelLoading]="isLoading">
+    <div *nzModalContent>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
 
-      <!-- name -->
-      <nz-form-item>
-        <nz-form-label nzRequired nzFor="name">Nombre de la cuenta</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-input-group>
-            <input type="text" nz-input formControlName="name"> 
-            <ng-template #errorTpl let-control>                   
-              @if (control.errors?.['maxlength']) {
-                El nombre de la cuenta no puede tener más de 100 caracteres           
-              }
-              @else if (control.errors?.['minlength']) {
-                El nombre de la cuenta debe tener al menos 4 caracteres
-              }
-              @else if (control.errors?.['required']) {
-                Por favor ingrese el nombre de la cuenta
-              }
-              @else if(control.errors?.['duplicated']){
-                El nombre de la cuenta ya existe
-              }  
-              @else if (control.errors?.['pattern']) {
-                El nombre de la cuenta solo puede contener letras y números
-              }
-              @else {
-                {{control.errors?.['message']}}
-              }
-            </ng-template>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
+            <!-- name -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="name">Nombre de la cuenta</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorTpl">
+                    <nz-input-group>
+                        <input type="text" nz-input formControlName="name">
+                        <ng-template #errorTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            El nombre de la cuenta no puede tener más de 100 caracteres
+                            }
+                            @else if (control.errors?.['minlength']) {
+                            El nombre de la cuenta debe tener al menos 4 caracteres
+                            }
+                            @else if (control.errors?.['required']) {
+                            Por favor ingrese el nombre de la cuenta
+                            }
+                            @else if(control.errors?.['duplicated']){
+                            El nombre de la cuenta ya existe
+                            }
+                            @else if (control.errors?.['pattern']) {
+                            El nombre de la cuenta solo puede contener letras y números
+                            }
+                            @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
 
-      <!-- description -->
-      <nz-form-item>
-        <nz-form-label nzFor="description">Descripción</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-textarea-count [nzMaxCharacterCount]="200">
-            <textarea rows="3" formControlName="description" nz-input></textarea>
-            <ng-template #errorTpl let-control> 
-              @if (control.errors?.['maxlength']) {
-                El nombre de la cuenta no puede tener más de 100 caracteres           
-              }
-              @else {
-                {{control.errors?.['message']}}
-              }
-            </ng-template>            
-          </nz-textarea-count>
-        </nz-form-control>
-      </nz-form-item>
+            <!-- description -->
+            <nz-form-item>
+                <nz-form-label nzFor="description">Descripción</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorTpl">
+                    <nz-textarea-count [nzMaxCharacterCount]="200">
+                        <textarea rows="3" formControlName="description" nz-input></textarea>
+                        <ng-template #errorTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            El nombre de la cuenta no puede tener más de 100 caracteres
+                            }
+                            @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-textarea-count>
+                </nz-form-control>
+            </nz-form-item>
 
-      <!-- type | radio -->
-      <nz-form-item>
-        <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-radio-group formControlName="type">
-            <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
-            <label nz-radio nzValue="{{IAccountType.shared}}" nzDisabled="true">Compartida</label>
-          </nz-radio-group>          
-          <ng-template #errorTpl let-control> 
-            @if (control.errors?.['maxlength']) {
-              El nombre de la cuenta no puede tener más de 100 caracteres           
-            }
-            @else {
-              {{control.errors?.['message']}}
-            }
-          </ng-template> 
-        </nz-form-control>
-      </nz-form-item>
-
-    </form>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
-    <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmit()">
-      {{ type === ITypeForm.create ? 'Crear' : 'Actualizar' }}
-    </button>
-  </div>
+           @if (type == ITypeForm.create) {
+            <!-- type | radio -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="type">Tipo de cuenta</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorTypeTpl">
+                    <nz-radio-group formControlName="type">
+                        <label nz-radio nzValue="{{IAccountType.personal}}">Personal</label>
+                        <label nz-radio nzValue="{{IAccountType.shared}}">Compartida</label>
+                    </nz-radio-group>
+                    <ng-template #errorTypeTpl let-control>
+                        @if (control.errors?.['required']) {
+                        Por favor seleccione el tipo de cuenta
+                        }
+                        @else {
+                        {{control.errors?.['message']}}
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        }
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmit()">
+            {{ type === ITypeForm.create ? 'Crear' : 'Actualizar' }}
+        </button>
+    </div>
 </nz-modal>
+
+<ng-template #termsContent>
+    <ul class="terms-list">
+        <li>
+            Compartir gastos: Los gastos que asigne en esta cuenta se compartirán con los demás miembros.
+        </li>
+        <li>
+            Controlar tus gastos: Podrás ver los gastos de todos los miembros y realizar un seguimiento del
+            presupuesto del grupo.
+        </li>
+        <li>
+            Transferencia de gastos: Si decides eliminar esta cuenta, los gastos recurrentes, ahorros e ingresos
+            que hayas asignado aquí se moverán automáticamente a tu billetera personal "{{nameDefaultAccount}}".
+        </li>
+    </ul>
+    <p>¿Estás de acuerdo con estos términos?</p>
+</ng-template>

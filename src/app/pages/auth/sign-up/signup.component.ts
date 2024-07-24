@@ -35,7 +35,6 @@ import { IUser } from '../../../interfaces';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-
 export class SignupComponent {
   public validateForm: FormGroup<{
     name: FormControl<string>;
@@ -227,9 +226,8 @@ export class SignupComponent {
 
     this.authService.signup(user, accountName, accountDescription).subscribe({
       next: (response: any) => {
-        this.nzNotificationService.create("success", "Cuenta creada correctamente", 'Se redirigira al inicio de sesión en 5 segundos', { nzDuration: 5000 }).onClose!.subscribe(() => {
-          this.router.navigateByUrl('/app')
-        });
+        this.router.navigateByUrl('/app')
+        this.nzNotificationService.create("success", "Cuenta creada correctamente", "Ya puedes iniciar sesión en tu cuenta");
       },
       error: (error: any) => {
         this.isDisabled = false;
