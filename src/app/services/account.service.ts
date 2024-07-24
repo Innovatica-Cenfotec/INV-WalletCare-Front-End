@@ -156,4 +156,20 @@ export class AccountService extends BaseService<IAccount> {
             })
         );
     }
+
+    leaveSharedAccount(accountUser: IAccountUser): Observable<any> {
+
+        return this.http.put(`${this.source}/leave-account/${accountUser.account?.id}`, accountUser).pipe(
+            tap((response:any)=>{
+                
+                this.responseSignal.set({message: response.message});
+            }),
+            catchError(error => {
+                console.error('Error deleting account', error);
+                throw error;
+            })
+        );
+    }
+
+
 }

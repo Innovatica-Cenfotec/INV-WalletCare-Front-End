@@ -19,7 +19,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { AccountTabMembersComponent } from "./account-tab-members/account-tab-members.component";
 import { AccountTabExpenseComponent } from "./account-tab-expense/account-tab-expense.component";
 import { AccountTabIncomesComponent } from "./account-tab-incomes/account-tab-incomes.component";
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { AccountFromComponent } from "../account-from/account-from.component";
 import { InviteAccountComponent } from './invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from "./account-detail-header/account-detail-header.component";
@@ -55,6 +55,8 @@ export class AccountDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
   private authService = inject(AuthService);
+  private router = inject(Router);
+  private nzModalService = inject(NzModalService);
 
   /*
   * Id of the account
@@ -145,6 +147,36 @@ export class AccountDetailComponent implements OnInit {
    */
   deleteFriend(accountUser: IAccountUser): void {
 
+
+    this.nzModalService.confirm({
+      nzTitle: `¿Estás seguro de que quieres eliminar a ${accountUser.user?.nickname} (${accountUser.user?.email}) de la cuenta?`,
+      nzContent: 'Si lo eliminas, perderas su colaboración y tanto sus gastos, ingresos y ahorros se eliminaran de esta cuenta.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        const payload: IAccountUser = {
+          user: {
+            id: accountUser.user?.id
+          },
+          account: {
+            id: accountUser.account?.id
+          }
+        }
+        this.accountService.leaveSharedAccount(payload).subscribe({
+          next: (response: any) => {
+            this.router.navigateByUrl('/app/accounts');
+            this.nzNotificationService.success('Éxito', response.message);
+          },
+          error: (error => {
+            this.nzNotificationService.error('Error', error.error.detail)
+            throw error;
+          })
+        });
+      },
+      nzCancelText: 'No'
+    });
+
+    
   }
 
   countMembers(): number {
