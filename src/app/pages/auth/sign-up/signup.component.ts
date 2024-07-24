@@ -35,7 +35,6 @@ import { IUser } from '../../../interfaces';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-
 export class SignupComponent {
   public validateForm: FormGroup<{
     name: FormControl<string>;

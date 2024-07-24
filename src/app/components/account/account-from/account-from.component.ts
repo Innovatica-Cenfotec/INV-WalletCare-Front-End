@@ -69,7 +69,7 @@ export class AccountFromComponent extends FormModalComponent<IAccount> {
         }
 
         // if type account shared, show terms and conditions
-        if (this.formGroup.get('type')?.value == IAccountType.shared) {
+        if (this.type == ITypeForm.create && this.formGroup.get('type')?.value == IAccountType.shared) {
             this.modalService.confirm({
                 nzTitle: "Al crear una cuenta compartida, estás accediendo a:",
                 nzContent: this.termsContent,

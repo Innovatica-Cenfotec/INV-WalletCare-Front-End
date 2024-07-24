@@ -62,8 +62,8 @@ export enum ITypeForm {
  * Interface for account type
  */
 export enum IAccountType {
-  personal = 0,
-  shared = 1,
+  personal = "PERSONAL",
+  shared = "SHARED"
 }
 
 /**
@@ -74,7 +74,7 @@ export interface IAccount {
   name?: string;
   description?: string;
   owner?: IUser;
-  type?: IAccountType | string;
+  type?: IAccountType;
   balance?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -84,26 +84,26 @@ export interface IAccount {
 /**
  * Interface for balance colors
  */
-export enum IBalance{
+export enum IBalance {
   surplus = '#3E7422',
   deficit = '#D23537',
   balance = '#B17A0C'
 }
 
-export interface IForgotResetPassword{
-  otp:string;
-  newPassword:string;
-  email:string;
+export interface IForgotResetPassword {
+  otp: string;
+  newPassword: string;
+  email: string;
 }
-export interface ISendInvite{
-  inviteToEmail:string,
-  accountId:number;
+export interface ISendInvite {
+  inviteToEmail: string,
+  accountId: number;
 }
 
 /**
  * Interface for account user
- */ 
-export interface IAccountUser{
+ */
+export interface IAccountUser {
   id?: number;
   account?: IAccount;
   user?: IUser;
@@ -115,6 +115,6 @@ export interface IAccountUser{
   invitationStatus?: number;
   isDeleted?: boolean;
 }
-export interface IGenericResponse{
+export interface IGenericResponse {
   message?: String;
 }
