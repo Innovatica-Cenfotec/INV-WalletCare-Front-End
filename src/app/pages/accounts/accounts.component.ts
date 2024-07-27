@@ -16,21 +16,19 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 // Importing custom components and interfaces
-import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
+import { AccountFormComponent } from '../../components/account/account-form/account-form.component';
 import { AccountListComponent } from '../../components/account/account-list/account-list.component'
 import { IAccount, ITypeForm } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 
-
-
 @Component({
   selector: 'app-accounts',
   standalone: true,
   imports: [
     CommonModule,
-    AccountFromComponent,
+    AccountFormComponent,
     AccountListComponent,
     AccountCardsComponent,
     NzPageHeaderModule,
@@ -57,7 +55,17 @@ export class AccountsComponent implements OnInit {
   /**
    * The visibility of the account creation form.
    */
-  public isVisible = false;
+  public isVisible = signal(false);
+
+  /**
+   * The account to be edited.
+   */
+  public account = signal<IAccount | undefined>(undefined);
+
+  /**
+   * The loading state of the account form.
+   */
+  public isLoading = signal(false);
 
   /**
    * The title of the account creation form.
@@ -69,9 +77,7 @@ export class AccountsComponent implements OnInit {
    */
   public TypeForm: ITypeForm = ITypeForm.create;
 
-
-  @ViewChild(AccountFromComponent) form!: AccountFromComponent;
-
+  @ViewChild(AccountFormComponent) form!: AccountFormComponent;
 
   /**
    * This method is called once after the component's properties have been initialized and the component
@@ -81,32 +87,33 @@ export class AccountsComponent implements OnInit {
     this.accountService.findAllSignal();
   }
 
-   /**
-   * Closes the account creation form.
-   * Sets the `isVisible` property to `false`.
-   */
+  /**
+  * Closes the account creation form.
+  * Sets the `isVisible` property to `false`.
+  */
   onCanceled(): void {
-    this.isVisible = false;
+    this.isVisible.set(false);
+    this.isLoading.set(false);
   }
 
   /**
    * Shows the modal to edit the account
    */
-  showModalEdit(account: IAccount): void {    
+  showModalEdit(account: IAccount): void {
     this.title = 'Editar cuenta';
     this.TypeForm = ITypeForm.update;
     this.form.item = account;
-    this.isVisible = true;
+    this.isVisible.set(true);
   }
 
   /**
    * Shows the modal to create the account
    */
-  showModalCreate(): void {    
+  showModalCreate(): void {
     this.title = 'Crear cuenta';
     this.TypeForm = ITypeForm.create;
-    this.form.item = undefined;
-    this.isVisible = true;
+    this.account.set(undefined);
+    this.isVisible.set(true);
   }
 
   /**
@@ -119,14 +126,20 @@ export class AccountsComponent implements OnInit {
   createAccount(account: IAccount): void {
     this.accountService.saveAccountSignal(account).subscribe({
       next: (response: any) => {
-        this.isVisible = false;
+        this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
+        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
         });
+
+        // show other errors
+        if (error.error.fieldErrors === undefined) {
+          this.nzNotificationService.error('Lo sentimos', error.error.detail);
+        }
       }
     });
   }
@@ -134,14 +147,20 @@ export class AccountsComponent implements OnInit {
   updateAccount(account: IAccount): void {
     this.accountService.updateAccountSignal(account).subscribe({
       next: (response: any) => {
-        this.isVisible = false;
+        this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
+        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
         });
+
+        // show other errors
+        if (error.error.fieldErrors === undefined) {
+          this.nzNotificationService.error('Lo sentimos', error.error.detail);
+        }
       }
     });
   }

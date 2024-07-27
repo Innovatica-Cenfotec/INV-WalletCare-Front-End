@@ -41,9 +41,9 @@
 </nz-space>
 
 
-<app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.update" [title]="'Editar cuenta'"
+<app-account-form #form [isVisible]="isVisible()" [type]="IITypeForm.update" [title]="'Editar cuenta'"
     (onCanceled)="onCanceled()" (onUpdated)="editAccount($event)" [item]="accountService.account$()"
-    [isLoading]="isLoading">
-</app-account-from>
+    [isLoading]="isLoading()">
+</app-account-form>
 
 <app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
