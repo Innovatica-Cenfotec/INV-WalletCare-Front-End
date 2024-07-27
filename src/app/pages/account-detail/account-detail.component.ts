@@ -1,8 +1,16 @@
 import { inject, TemplateRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import { IAccount, IAccountUser, ITransaction, ITypeForm } from '../../../interfaces';
-import { AccountService } from '../../../services/account.service';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
+import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
+import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
+import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
+import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
+import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
+import { TransactionService } from '../../services/transaction.service';
+import { AccountService } from '../../services/account.service';
+import { AuthService } from '../../services/auth.service';
+import { IAccount, IAccountType, IAccountUser, ITransaction } from '../../interfaces';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -15,16 +23,9 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { CommonModule, DatePipe } from '@angular/common';
-import { AccountTabMembersComponent } from "./account-tab-members/account-tab-members.component";
-import { AccountTabExpenseComponent } from "./account-tab-expense/account-tab-expense.component";
-import { AccountTabIncomesComponent } from "./account-tab-incomes/account-tab-incomes.component";
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { AccountFromComponent } from "../account-from/account-from.component";
-import { InviteAccountComponent } from './invite-account/invite-account.component';
-import { AccountDetailHeaderComponent } from "./account-detail-header/account-detail-header.component";
-import { AccountTabTransactionsComponent } from './account-tab-transactions/account-tab-transactions.component';
-import { TransactionService } from '../../../services/transaction.service';
+
+
 
 @Component({
   selector: 'app-account-detail',
@@ -44,7 +45,6 @@ import { TransactionService } from '../../../services/transaction.service';
     AccountTabIncomesComponent,
     AccountTabTransactionsComponent,
     NzModalModule,
-    AccountFromComponent,
     InviteAccountComponent,
     AccountDetailHeaderComponent
   ],
@@ -92,9 +92,9 @@ export class AccountDetailComponent implements OnInit {
     }
 
     switch (account.type) {
-      case 'PERSONAL':
+      case IAccountType.personal:
         return 'Personal';
-      case 'SHARED':
+      case IAccountType.shared:
         return 'Compartida';
       default:
         return '';
@@ -123,7 +123,6 @@ export class AccountDetailComponent implements OnInit {
 
     return account.owner?.id === this.authService.getUser()?.id;
   }
-
 
   /**
    * deletes a friend from the account
@@ -159,9 +158,13 @@ export class AccountDetailComponent implements OnInit {
       nzCancelText: 'No'
     });
 
-    
+
   }
 
+  /**
+   * Returns the count of members in the account.
+   * @returns The count of members in the account.
+   */
   countMembers(): number {
     const members = this.accountService.membersAccount$();
     if (!members) {
@@ -180,7 +183,7 @@ export class AccountDetailComponent implements OnInit {
    * Handles the rollback for the transaction
    * @param transaction 
    */
-  rollbackTransaction(transaction: ITransaction){
+  rollbackTransaction(transaction: ITransaction) {
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
       nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
@@ -198,7 +201,7 @@ export class AccountDetailComponent implements OnInit {
             throw error;
           })
         }
-      );
+        );
       },
       nzCancelText: 'No'
     });
@@ -207,7 +210,7 @@ export class AccountDetailComponent implements OnInit {
   /**
    * Makes the load of all the data in the view 
    */
-  loadData(){
+  loadData() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
 

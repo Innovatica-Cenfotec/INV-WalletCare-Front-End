@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 export interface ILoginResponse {
   accessToken: string;
   expiresIn: number
@@ -62,8 +63,8 @@ export enum ITypeForm {
  * Interface for account type
  */
 export enum IAccountType {
-  personal = 0,
-  shared = 1,
+  personal = "PERSONAL",
+  shared = "SHARED"
 }
 
 /**
@@ -74,7 +75,7 @@ export interface IAccount {
   name?: string;
   description?: string;
   owner?: IUser;
-  type?: IAccountType | string;
+  type?: IAccountType;
   balance?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -116,7 +117,6 @@ export interface IAccountUser {
   isDeleted?: boolean;
 }
 
-
 export interface IGenericResponse {
   message?: String;
 }
@@ -140,4 +140,87 @@ export interface ITransaction {
   createdAt?: Date;
   deletedAt?: Date;
   deleted?: boolean;
+}
+/*
+* Interface for allocation
+*/
+export interface IAllocation {
+  id: number;
+  name: string;
+  amount: FormControl<number>;
+  percentage: FormControl<number>;
+  controlInstance: string;
+}
+
+/**
+ * Enum that represents the type of income or expense.
+ */
+export enum IIncomeExpenceType {
+  unique = "UNIQUE",
+  recurrence = "RECURRENCE"
+}
+
+/**
+ * Enumerates the possible types of frequency.
+ */
+export enum IFrequencyType {
+  daily = "DAILY",
+  monthly = "MONTHLY",
+  annual = "ANNUAL",
+  biweekly = "BIWEEKLY",
+  weekly = "WEEKLY",
+  other = "OTHER"
+}
+
+/**
+ * Enumerates the possible types amount.
+ */
+export enum IAmountType {
+  net = "NET",
+  gross = "GROSS"
+}
+
+/**
+ * Interface for tax
+ */
+export interface Itax {
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  percentage?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+
+export interface IIncomeAllocation {
+  id?: number;
+  user?: IUser;
+  income?: IIncome;
+  account?: IAccount;
+  percentage?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+/**
+ * Interface for income
+ */
+export interface IIncome {
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  isTemplate?: boolean;
+  type?: IIncomeExpenceType;
+  amount?: 0 | string;
+  amountType?: IAmountType;
+  scheduledDay?: number;
+  isTaxRelated?: boolean;
+  frequency?: IFrequencyType;
+  tax?: Itax;
+  createdAt?: Date;
+  updatedAt?: Date;
+  listIncomeAllocation?: IIncomeAllocation[];
 }

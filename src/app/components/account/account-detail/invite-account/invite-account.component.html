@@ -1,13 +1,13 @@
-<nz-row class="invite-account-container" justify="center">
-  <nz-card>
-    <div class="invite-account-header">
-      <p class="invite-account-description">Ingresa tu correo electrónico para enviar una invitación.</p>
+<nz-modal nzTitle="Invitar amigo" [nzVisible]="isVisible" (nzOnCancel)="closeModel()">
+  <div *nzModalContent>
+    <div>
+      <p> Ingresa tu correo electrónico para enviar una invitación.</p>
     </div>
-    <form nz-form [formGroup]="inviteForm" (ngSubmit)="sendInvite()" class="invite-account-form">
-      <nz-form-item>
+    <form nz-form [formGroup]="inviteForm" (ngSubmit)="sendInvite()" [nzLayout]="'inline'">
+      <nz-form-item >
         <nz-form-control [nzErrorTip]="errorTpl">
           <nz-input-group nzPrefixIcon="mail">
-            <input nz-input formControlName="email" placeholder="Correo electrónico" />
+            <input nz-input formControlName="email" placeholder="Correo electrónico" class="invite-account-input">
             <ng-template #errorTpl let-control>
               <div *ngIf="control.errors?.['required']">Por favor ingrese su correo electrónico</div>
               <div *ngIf="control.errors?.['email']">El correo electrónico no es válido</div>
@@ -17,16 +17,16 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button [nzType]="'primary'" class="invite-account-button">Enviar Invitación</button>
+          <button nz-button [nzType]="'primary'" class="invite-account-button" [disabled]="isDisabled" [nzLoading]="isDisabled"
+          >Enviar Invitación</button>
         </nz-form-control>
       </nz-form-item>
-      <nz-divider></nz-divider>
-      <div class="d-flex justify-content-center align-items-center">
-        <p class="pb-0" *ngIf="feedbackMessage.message" [ngClass]="{
-          'text-danger': feedbackMessage.type == 'ERROR',
-          'text-success': feedbackMessage.type == 'SUCCESS'
-        }">{{ feedbackMessage.message }}</p>
-      </div>
     </form>
-  </nz-card>
-</nz-row>
+  </div>
+  <div *nzModalFooter>
+      <button nz-button nzType="primary" (click)="closeModel()" [disabled]="isDisabled">
+          Cerrar
+      </button>
+  </div>
+</nz-modal>
+

@@ -13,10 +13,11 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { DefaultLayoutComponent } from './components/default-layout/default-layout.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './pages/forgot-password-reset/forgot-password-reset.component';
-import { AccountDetailComponent } from "./components/account/account-detail/account-detail.component";
 import { InviteAccountComponent } from './components/account/account-detail/invite-account/invite-account.component';
 import { AccountInvitationComponent } from './pages/account-invitation/account-invitation.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
+import { IncomeComponent } from './pages/income/income.component';
 
 export const routes: Routes = [
   {
@@ -77,12 +78,6 @@ export const routes: Routes = [
         }
       },
       {
-        path: 'accounts/inviteToSharedAccount',
-        component: InviteAccountComponent
-
-
-      },
-      {
         path: 'accounts/details/:id',
         component: AccountDetailComponent,
         data: {
@@ -114,7 +109,23 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
-      }
+      },
+      {
+        path: 'income',
+        component: IncomeComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'bank',
+            breadcrumb: ['Ingresos'],
+            name: 'Ingresos',
+          },
+        }
+      },
     ],
   },
   {

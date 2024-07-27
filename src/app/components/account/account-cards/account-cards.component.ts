@@ -4,6 +4,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { IAccount, IBalance } from '../../../interfaces';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
     selector: 'app-account-cards',
@@ -12,7 +14,9 @@ import { IAccount, IBalance } from '../../../interfaces';
         CommonModule,
         NzGridModule,
         NzStatisticModule,
-        NzCardModule
+        NzCardModule,
+        NzSpaceModule,
+        NzDividerModule
     ],
     templateUrl: './account-cards.component.html',
     styleUrl: './account-cards.component.scss',
