@@ -51,14 +51,13 @@ export class AccountService extends BaseService<IAccount> {
         );
     }
 
-
     /**
      * Get all accounts by owner
      * @returns An signal with all accounts by owner
     */
     findAllSignal() {
         return this.findAll().subscribe({
-            next: (response: any) => {
+            next: (response: any) => {                
                 this.accountListSignal.set(response);
             }, error: (error: any) => {
                 console.error('Error  fectching accounts', error);
@@ -68,7 +67,7 @@ export class AccountService extends BaseService<IAccount> {
     }
 
     /**
-     * Get all members of an account
+     * Get an account
      * @param id - The ID of the account
      * @returns An Observable that emits an array of users.
      */
@@ -146,8 +145,7 @@ export class AccountService extends BaseService<IAccount> {
      */
     manageSharedAccounInvitationtStatus(accountUser: IAccountUser): Observable<any> {
         return this.http.put(`${this.source}/invitation/${accountUser.account?.id}`, accountUser).pipe(
-            tap((response:any)=>{
-                
+            tap((response:any)=>{                
                 this.responseSignal.set({message: response.message});
             }),
             catchError(error => {
@@ -156,4 +154,28 @@ export class AccountService extends BaseService<IAccount> {
             })
         );
     }
+
+    /**
+     * Sends an invitation to a user to join a shared account.
+     * @param email The email of the user to be invited.
+     */
+    sendInvite(email: string, accountId: number): Observable<any> {
+        const payload: IAccountUser={
+          user:{
+            email:email
+          },
+          account:{
+            id:accountId
+          }
+        }
+        
+        return this.http.post('accounts/inviteToSharedAccount', payload).pipe(
+          tap((response: any) => {
+            this.membersAccountSignal.update(members => [...members, response]);
+          }),
+          catchError((error: any) => {
+             throw error;
+          })
+        );
+      }
 }

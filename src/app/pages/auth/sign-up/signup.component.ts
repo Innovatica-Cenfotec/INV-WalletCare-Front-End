@@ -35,7 +35,6 @@ import { IUser } from '../../../interfaces';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-
 export class SignupComponent {
   public validateForm: FormGroup<{
     name: FormControl<string>;
@@ -49,15 +48,15 @@ export class SignupComponent {
     accountName: FormControl<string>;
     accountDescription: FormControl<string>;
   }> = this.form.group({
-    name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
-    lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(3), Validators.maxLength(50)]],
+    name: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(3), Validators.maxLength(50)]],
+    lastname: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(3), Validators.maxLength(50)]],
     nickname: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]*'), Validators.minLength(2), Validators.maxLength(10)]],
     email: ['', [Validators.required, Validators.email]],
     identificationNumber: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
     address: ['', [Validators.maxLength(225)]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+-={};':"|,.<>\/?]).{8,}$`)]],
     confirmPassword: ['', [Validators.required]],
-    accountName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
+    accountName: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
     accountDescription: ['', [Validators.maxLength(200)]]
   });
 

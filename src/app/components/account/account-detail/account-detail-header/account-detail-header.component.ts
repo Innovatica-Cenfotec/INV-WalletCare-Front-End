@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, signal, SimpleChanges, ViewChild } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -13,12 +13,11 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { IAccount, IAccountUser, ITypeForm } from '../../../../interfaces';
 import { AuthService } from '../../../../services/auth.service';
 import { AccountService } from '../../../../services/account.service';
-import { AccountFromComponent } from "../../account-from/account-from.component";
 import { InviteAccountComponent } from "../invite-account/invite-account.component";
+import { AccountFormComponent } from '../../account-form/account-form.component';
 
 @Component({
     selector: 'app-account-detail-header',
@@ -33,49 +32,65 @@ import { InviteAccountComponent } from "../invite-account/invite-account.compone
         NzIconModule,
         NzTabsModule,
         NzDividerModule,
-        NzModalModule,
-        AccountFromComponent,
+        AccountFormComponent,
         InviteAccountComponent
     ],
     templateUrl: './account-detail-header.component.html',
     styleUrl: './account-detail-header.component.scss',
 })
 export class AccountDetailHeaderComponent implements OnChanges {
-
-
-    @ViewChild(AccountFromComponent) form!: AccountFromComponent;
-
-    @Input() id: number = 0;
-    @Input() AccountsMembers: IAccountUser[] = [];
-    @Input() isAccountShared: boolean = false;
-    @Input() isOwner: boolean = false;
-
-    public isMember: boolean = false;
     public accountService = inject(AccountService);
-
     private authService = inject(AuthService);
     private nzModalService = inject(NzModalService);
     private nzNotificationService = inject(NzNotificationService);
     private router = inject(Router);
 
-    /**
-    * The visibility of the account creation form.
+    /*
+    * The account id.
     */
-    public isVisible = false;
+    @Input() id: number = 0;
+    
+    /**
+     * Represents the list of account users.
+     */
+    @Input() AccountsMembers: IAccountUser[] = [];
+    
+    /**
+     * Indicates whether the account is shared or not.
+     */
+    @Input() isAccountShared: boolean = false;
 
+    /**
+     * Indicates whether the user is the owner of the account.
+     */
+    @Input() isOwner: boolean = false;
+    
+    /**
+     * Indicates whether the user is a member of the account.
+     */
+    public isMember: boolean = false;
+
+    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
+    
+    /**
+    * The visibility of the account edit form.
+    */
+    public isVisible = signal(false);
+
+    /**
+     * The visibility of the invite friend form.
+     */
     public isVisibleInvite = false;
 
     /**
      * Indicates whether the form is loading or not.
      */
-    public isLoading = false;
+    public isLoading = signal(false);
 
     /**
      * The list of account types to be displayed in the account type form.
      */
     public IITypeForm = ITypeForm;
-
-
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['AccountsMembers']) {
@@ -93,6 +108,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
         }
     }
 
+    /**
+     * Deletes the account.
+     * Displays a confirmation modal and deletes the account if the user confirms.
+     */
     deleteAccount() {
         this.nzModalService.confirm({
             nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
@@ -106,13 +125,14 @@ export class AccountDetailHeaderComponent implements OnChanges {
                         this.router.navigateByUrl('app/accounts');
                     },
                     error: (error: any) => {
-                        this.nzNotificationService.error('Algo ha ido mal', error.error.detail);
+                        this.nzNotificationService.error('Lo sentimos', error.error.detail);
                     }
                 });
             },
             nzCancelText: 'No'
         });
     }
+
     /**
      * Deletes the account if i leave it before 
      */
@@ -122,16 +142,22 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
     /**
      * Shows the account  form.
-     * Sets the `isVisible` property to `true`.
      */
     showEditAccountForm(): void {
-        this.isVisible = true;
+        this.isVisible.set(true);
     }
+
+    /**
+     * Joins the account.
+     */
     joinAccount() {
         throw new Error('Method not implemented.');
     }
+
+    /**
+     * Leaves the account.
+     */
     leaveAccount() {
-        throw new Error('Method not implemented.');
     }
 
     /**
@@ -140,11 +166,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
     editAccount(account: IAccount): void {
         this.accountService.updateAccountSignal(account).subscribe({
             next: (response: any) => {
-                this.isVisible = false;
+                this.isVisible.set(false);
                 this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
             },
             error: (error: any) => {
-                this.isLoading = false;
+                this.isLoading.set(false);
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
                     this.form.setControlError(fieldError.field, fieldError.message);
@@ -152,14 +178,14 @@ export class AccountDetailHeaderComponent implements OnChanges {
             }
         });
     }
+
     /**
-     * Closes the account creation form.
-     * Sets the `isVisible` property to `false`.
+     * Closes the form.
      */
     onCanceled(): void {
-        this.isVisible = false;
+        this.isVisible.set(false);
+        this.isLoading.set(false);
     }
-
 
     /**
      * Invites a friend to the account
@@ -167,8 +193,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
     inviteFriend(): void {
         this.isVisibleInvite = true;
     }
+
+    /**
+     * Closes the invite friend form..
+     */
     closeInviteFriend(): void {
         this.isVisibleInvite = false;
     }
-
 }
