@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnChanges, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, signal } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -39,11 +39,8 @@ import { AccountFormComponent } from '../../account-form/account-form.component'
     styleUrl: './account-detail-header.component.scss',
 })
 export class AccountDetailHeaderComponent implements OnChanges {
-    public accountService = inject(AccountService);
-    private authService = inject(AuthService);
-    private nzModalService = inject(NzModalService);
-    private nzNotificationService = inject(NzNotificationService);
-    private router = inject(Router);
+
+    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
 
     /*
     * The account id.
@@ -69,8 +66,6 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Indicates whether the user is a member of the account.
      */
     public isMember: boolean = false;
-
-    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
     
     /**
     * The visibility of the account edit form.
@@ -92,9 +87,19 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     public IITypeForm = ITypeForm;
 
+        
+    public accountService = inject(AccountService);
+    private authService = inject(AuthService);
+    private nzModalService = inject(NzModalService);
+    private nzNotificationService = inject(NzNotificationService);
+    private router = inject(Router);
+    private member: IAccountUser | undefined = {};
+
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['AccountsMembers']) {
             let accountUser = this.AccountsMembers.find((accountUser) => accountUser.id === this.authService.getUser()?.id);
+
             if (!accountUser) {
                 this.isMember = false;
             }
@@ -105,6 +110,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
             }
 
             this.isMember = true;
+        }
+
+        if (changes['id']) {
+            this.accountService.getMembersSignal(this.id);
+            this.member = this.accountService.membersAccount$().find((accountUser) => accountUser.id === this.authService.getUser()?.id);
         }
     }
 
@@ -136,7 +146,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     /**
      * Deletes the account if i leave it before 
      */
-    deleteAccountUser(){
+    deleteAccountUser() {
 
     }
 
@@ -158,6 +168,36 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Leaves the account.
      */
     leaveAccount() {
+
+        this.nzModalService.confirm({
+            nzTitle:  `¿Estás seguro de que quieres saliste de la la cuenta? `,
+            nzContent: 'Si sales la cuenta, perderás los gastos, ingresos y ahorros que tus amigos compartían contigo.',
+            nzOkText: 'Sí',
+            nzOkType: 'primary',
+            nzOnOk: () => {
+                const payload: IAccountUser = {
+                    user: {
+                        id: this.authService.getUser()?.id
+                    },
+                    account: {
+                        id: this.accountService.account$()?.id
+                    }
+                }
+        
+                this.accountService.leaveSharedAccount(payload).subscribe({
+                    next: (response: any) => {
+                        this.router.navigateByUrl('/app/accounts');
+                        this.nzNotificationService.success('Éxito', response.message);
+                    },
+                    error: (error => {
+                        this.nzNotificationService.error('Error', error.error.detail)
+                        throw error;
+                    })
+                });
+            },
+            nzCancelText: 'No'
+        });
+
     }
 
     /**

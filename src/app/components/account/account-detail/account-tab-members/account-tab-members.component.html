@@ -17,10 +17,9 @@
             <td>{{ data.lastTransactionBalance }}</td>
             <td>{{ getDate(data.joinedAt) }}</td>
             <td *ngIf="isOwner" nzRight>
-                <a nz-popconfirm nzTitle="¿Estás seguro de que deseas eliminar a este amigo?"
-                    (nzOnConfirm)="deleteFriend.emit(data)" nzOkText="Sí" nzCancelText="No">
-                    <i nz-icon nzType="delete" nzTheme="outline"></i>
-                </a>
+                <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteFriend.emit(data)">
+                    <span nz-icon nzType="delete"></span>
+                </button>
             </td>
         </tr>
     </tbody>

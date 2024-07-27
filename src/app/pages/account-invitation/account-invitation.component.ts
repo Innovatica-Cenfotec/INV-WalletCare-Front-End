@@ -35,8 +35,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     styleUrl: './account-invitation.component.scss',
 })
 export class AccountInvitationComponent implements OnInit {
-    public host: string = 'jscruzgz@gmail.com';
-    public accountName: string = 'Main';
+    public host: string = '';
+    public accountName: string = '';
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private accountService: AccountService = inject(AccountService);
