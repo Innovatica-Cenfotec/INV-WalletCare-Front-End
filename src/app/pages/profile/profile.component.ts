@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { IUser } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
     NzButtonModule,
     NzIconModule,
     NzFormModule,
-    FormsModule
+    FormsModule,
+    NzPageHeaderModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -75,9 +77,4 @@ export class ProfileComponent implements OnInit {
   editProfile(): void {
     this.isEditing = true;
   }
-
-  /**
-   * Placeholder method for deleting the user's account.
-   */
-  deleteAccount(): void {}
 }

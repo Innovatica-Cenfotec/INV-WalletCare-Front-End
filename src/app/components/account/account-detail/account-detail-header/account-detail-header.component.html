@@ -20,7 +20,7 @@
     </button>
     }
     @if (isAccountShared && !isOwner && !isMember) {
-    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="joinAccount()">
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="deleteAccountUser()">
         <i nz-icon nzType="delete"></i>
         Eliminar cuenta
     </button>
@@ -39,7 +39,11 @@
     }
 
 </nz-space>
-<app-account-from #form [isVisible]="isVisible" [type]="IITypeForm.update" [title]="'Editar cuenta'"
-    (onCanceled)="onCanceled()" (onSubmitted)="editAccount($event)" [item]="accountService.account$()"
-    [isLoading]="isLoading">
-</app-account-from>
+
+
+<app-account-form #form [isVisible]="isVisible()" [type]="IITypeForm.update" [title]="'Editar cuenta'"
+    (onCanceled)="onCanceled()" (onUpdated)="editAccount($event)" [item]="accountService.account$()"
+    [isLoading]="isLoading()">
+</app-account-form>
+
+<app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>

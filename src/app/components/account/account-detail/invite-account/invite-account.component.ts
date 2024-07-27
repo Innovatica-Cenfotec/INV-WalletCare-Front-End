@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ISendInvite } from './../../../../interfaces/index';
+import { error } from '@ant-design/icons-angular';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { SendInviteService } from '../../../../services/send-invitation.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommonModule } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -11,7 +11,10 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IFeedBackMessage, IFeedbackStatus } from '../../../../interfaces';
-import { error } from '@ant-design/icons-angular';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzSpaceComponent } from 'ng-zorro-antd/space';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
     selector: 'app-invite-account',
@@ -25,18 +28,32 @@ import { error } from '@ant-design/icons-angular';
         NzCardModule,
         NzAlertModule,
         NzDividerModule,
+        NzSpaceComponent,
+        NzModalModule
     ],
     templateUrl: './invite-account.component.html',
     styleUrl: './invite-account.component.scss',
 })
 export class InviteAccountComponent implements OnInit {
     private fb = inject(FormBuilder);
-    private message = inject(NzMessageService);
+    private message = inject(NzNotificationService);
     private route = inject(ActivatedRoute);
-    public inviteService = inject(SendInviteService);
+    private accountService = inject(AccountService);    
     public inviteForm!: FormGroup;
-    feedbackMessage: IFeedBackMessage = { type: IFeedbackStatus.default, message: '' };
     private accountId: number | null = null;
+    public isDisabled: boolean = false;
+
+    /**
+     * Indicates whether the form is visible or not.
+     */
+    @Input() isVisible: boolean = true;
+
+    /**
+     * Emits an event when the form is closed.
+     * @type {EventEmitter<void>}
+     */
+    @Output() onClose = new EventEmitter<void>();
+
     /**
      * Initializes the component, sets up the invite form and retrieves the account ID from the URL.
      */
@@ -44,7 +61,6 @@ export class InviteAccountComponent implements OnInit {
         this.inviteForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
         });
-
         // Get the account ID from the URL
         this.route.paramMap.subscribe(params => {
             const id = params.get('id');
@@ -52,15 +68,26 @@ export class InviteAccountComponent implements OnInit {
             console.log('ID de cuenta extraído de la URL:', this.accountId);  // Debug message
         });
     }
+
     /**
      * Sends the invitation if the form is valid and the account ID is available.
      */
     sendInvite(): void {
         if (this.inviteForm.valid && this.accountId !== null) {
+            this.isDisabled = true;
+            this.inviteForm.disable();
+
             const { email } = this.inviteForm.value;
-            this.inviteService.sendInvite(email, this.accountId).subscribe({
-                next: () => this.message.success('Invitación enviada correctamente'),
-                error: () => this.message.error('Hubo un error con la invitación, verifique que el usuario ya esté registrado y no sea un miembro activo de la cuenta')
+            this.accountService.sendInvite(email, this.accountId).subscribe({
+                next: () => {
+                    this.closeModel();
+                    this.message.success('Invitación enviada correctamente', 'El usuario recibirá un correo con la invitación a la cuenta')
+                },
+                error: (error) => {
+                    this.inviteForm.enable();
+                    this.isDisabled = false;
+                    this.message.error('Lo sentimos', error.error.detail);
+                }
             });
         } else {
             Object.values(this.inviteForm.controls).forEach(control => {
@@ -70,5 +97,16 @@ export class InviteAccountComponent implements OnInit {
                 }
             });
         }
+    }
+
+    /**
+     * Closes the modal.
+     */
+    closeModel(): void {
+        this.inviteForm.reset();
+        this.inviteForm.enable();
+        this.isDisabled = false;
+        this.isVisible = false;
+        this.onClose.emit();
     }
 }
