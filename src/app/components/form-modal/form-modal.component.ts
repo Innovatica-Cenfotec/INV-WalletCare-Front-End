@@ -1,32 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup} from '@angular/forms';
 import { ITypeForm } from "../../interfaces";
-
-// Importing Ng-Zorro modules
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
     selector: 'app-form-modal',
     standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        NzModalModule,
-        NzButtonComponent,
-        NzFormModule,
-        NzInputModule,
-        NzRadioModule,
-    ],
+    imports: [],
     template: '',
 })
-export class FormModalComponent<T> implements OnChanges {
+export class FormModalComponent<T> {
     protected fb = inject(FormBuilder);
     protected formGroup!: FormGroup;
     protected ITypeForm = ITypeForm;
@@ -35,13 +17,13 @@ export class FormModalComponent<T> implements OnChanges {
      * Indicates whether the form is loading or not.
      * @default false
      */
-    @Input() isLoading = false;
+    @Input() isLoading?: boolean;
 
     /**
      *  Indicates whether the modal is visible or not.
      * @default false
      */
-    @Input() isVisible = false;
+    @Input() isVisible?: boolean;
 
     /**
      * The title of the modal.
@@ -51,7 +33,7 @@ export class FormModalComponent<T> implements OnChanges {
     /**
      * The form item.
      */
-    @Input() item?: T = { id: 0  } as T;
+    @Input() item?: T = { id: 0 } as T;
 
     /**
      * The type of the form.
@@ -87,6 +69,10 @@ export class FormModalComponent<T> implements OnChanges {
                 this.formGroup.patchValue(this.item);
             }
         }
+
+        if (changes['isLoading']?.currentValue === false) {
+            console.log('isLoading', this.isLoading);
+        }
     }
 
     /**
@@ -99,9 +85,9 @@ export class FormModalComponent<T> implements OnChanges {
         if (this.formGroup.valid) {
             // Mapping the form values to the item
             let item = this.formGroup.getRawValue() as T & { id: number };
-            item.id =  (this.item as { id?: number })?.id || 0;
+            item.id = (this.item as { id?: number })?.id || 0;
 
-            if(this.type === ITypeForm.create) {
+            if (this.type === ITypeForm.create) {
                 this.onCreated.emit(item);
             }
             else {

@@ -20,6 +20,6 @@
   </nz-page-header-content>
 </nz-page-header>
 
-<app-account-from #form [isVisible]="isVisible" [type]="TypeForm" [title]="title"
+<app-account-form #form [isVisible]="isVisible()" [type]="TypeForm" [title]="title" [isLoading]="isLoading()"
 [nameDefaultAccount]="getNameDefault()" (onCanceled)="onCanceled()"  (onCreated)="createAccount($event)"  (onUpdated)="updateAccount($event)">
-</app-account-from>
+</app-account-form>

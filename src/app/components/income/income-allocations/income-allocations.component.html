@@ -1,0 +1,48 @@
+<p>Esto es solo para probar el compomente</p>
+<div class="btn-wrappers" nz-flex [nzJustify]="'space-between'" [nzAlign]="'center'">
+  <h2>Asignación de Ingresos</h2>
+
+  <input nz-input [(ngModel)]="selectedAccount" placeholder="Seleccione una cuenta"/>
+  <nz-autocomplete #auto>
+    <nz-auto-option *ngFor="let option of listAccount" [nzValue]="option">
+      {{ option.name }}
+    </nz-auto-option>
+  </nz-autocomplete>
+
+  <button nz-button nzType="dashed" (click)="addField($event)">
+    <span nz-icon nzType="plus"></span>
+    Agregar cuenta
+  </button>
+</div>
+
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  @for (control of listOfControl; track control; let i = $index) {
+  <nz-form-item>
+    
+    <nz-form-label [nzXs]="24" [nzSm]="4" [nzFor]="control.controlInstance">{{ control.name }}</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzSm]="20" nzErrorTip="Please input passenger's name or delete this field.">
+
+      <nz-space nzSize="middle">
+        <nz-input-number *nzSpaceItem [nzMin]="1"  [formControl]="control.amount"
+        [nzMax]="amount" [nzStep]="1" [nzFormatter]="formatterConlon"
+          [nzParser]="parserConlon"></nz-input-number>
+
+        <nz-input-number *nzSpaceItem [nzMin]="1" [nzMax]="100" [nzStep]="1" [formControl]="control.percentage"
+          [nzParser]="parserPercent"></nz-input-number>
+
+        @if (i !== 0) {
+        <span *nzSpaceItem nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+          (click)="removeField(control, $event)"></span>
+        }
+
+      </nz-space>
+    </nz-form-control>
+  </nz-form-item>
+  }
+
+  <nz-form-item>
+    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
+      <button nz-button nzType="primary">Submit</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

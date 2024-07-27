@@ -14,10 +14,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 // Importing custom components and interfaces
 import { IAccount, IAccountType, ITypeForm } from '../../../interfaces';
 import { FormModalComponent } from '../../form-modal/form-modal.component';
-import { id_ID } from 'ng-zorro-antd/i18n';
 
 @Component({
-    selector: 'app-account-from',
+    selector: 'app-account-form',
     standalone: true,
     imports: [
         CommonModule,
@@ -29,10 +28,10 @@ import { id_ID } from 'ng-zorro-antd/i18n';
         NzInputModule,
         NzRadioModule
     ],
-    templateUrl: './account-from.component.html',
-    styleUrl: './account-from.component.scss'
+    templateUrl: './account-form.component.html',
+    styleUrl: './account-form.component.scss'
 })
-export class AccountFromComponent extends FormModalComponent<IAccount> {
+export class AccountFormComponent extends FormModalComponent<IAccount> {
     private modalService = inject(NzModalService);
     @Input() nameDefaultAccount: string = '';
     @ViewChild('termsContent') termsContent !: TemplateRef<any>;
@@ -46,7 +45,7 @@ export class AccountFromComponent extends FormModalComponent<IAccount> {
      * Get the form group
      */
     override formGroup = this.fb.group({
-        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(100)]],
+        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
         description: [this.item?.description, [Validators.maxLength(200)]],
         type: [this.item?.type, [Validators.required, Validators.min(0), Validators.max(1)]]
     });

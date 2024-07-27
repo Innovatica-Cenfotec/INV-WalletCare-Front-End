@@ -67,7 +67,7 @@ export class AccountService extends BaseService<IAccount> {
     }
 
     /**
-     * Get all members of an account
+     * Get an account
      * @param id - The ID of the account
      * @returns An Observable that emits an array of users.
      */

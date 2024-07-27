@@ -17,10 +17,8 @@ import { AccountTabMembersComponent } from '../../components/account/account-det
 import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
 import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
 import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
-
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
 import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
@@ -42,7 +40,6 @@ import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
     AccountTabExpenseComponent,
     AccountTabIncomesComponent,
     NzModalModule,
-    AccountFromComponent,
     InviteAccountComponent,
     AccountDetailHeaderComponent
   ],
