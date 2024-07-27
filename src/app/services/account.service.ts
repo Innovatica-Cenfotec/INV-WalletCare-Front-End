@@ -157,6 +157,12 @@ export class AccountService extends BaseService<IAccount> {
         );
     }
 
+
+    /**
+     * Is for leave or remove someone from the shared accoount
+     * @param accountUser is the shared account
+     * @returns a message with the status 
+     */
     leaveSharedAccount(accountUser: IAccountUser): Observable<any> {
 
         return this.http.put(`${this.source}/leave-account/${accountUser.account?.id}`, accountUser).pipe(

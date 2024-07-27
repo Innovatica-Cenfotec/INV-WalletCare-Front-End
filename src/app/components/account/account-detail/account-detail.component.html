@@ -36,7 +36,10 @@
         </nz-descriptions>
         <nz-divider></nz-divider>
         <nz-tabset>
-            <nz-tab nzTitle="Transacciones">Lista de transacciones</nz-tab>
+            <nz-tab nzTitle="Transacciones">
+                <app-account-tab-transactions [transactions]="transactionService.transactions$()"
+                (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
+            </nz-tab>
             <nz-tab nzTitle="Gastos recurrentes">
                 <app-account-tab-expense></app-account-tab-expense>
             </nz-tab>

@@ -84,26 +84,26 @@ export interface IAccount {
 /**
  * Interface for balance colors
  */
-export enum IBalance{
+export enum IBalance {
   surplus = '#3E7422',
   deficit = '#D23537',
   balance = '#B17A0C'
 }
 
-export interface IForgotResetPassword{
-  otp:string;
-  newPassword:string;
-  email:string;
+export interface IForgotResetPassword {
+  otp: string;
+  newPassword: string;
+  email: string;
 }
-export interface ISendInvite{
-  inviteToEmail:string,
-  accountId:number;
+export interface ISendInvite {
+  inviteToEmail: string,
+  accountId: number;
 }
 
 /**
  * Interface for account user
- */ 
-export interface IAccountUser{
+ */
+export interface IAccountUser {
   id?: number;
   account?: IAccount;
   user?: IUser;
@@ -115,6 +115,29 @@ export interface IAccountUser{
   invitationStatus?: number;
   isDeleted?: boolean;
 }
-export interface IGenericResponse{
+
+
+export interface IGenericResponse {
   message?: String;
+}
+
+export enum ITransactionType {
+  INCOME = 'Income',
+  EXPENSE = 'Expense',
+  SAVING = 'Saving'
+}
+
+export interface ITransaction {
+  id?: number;
+  owner?: IUser;
+  account?: IAccount;
+  type?: ITransactionType;
+  incomeAllocation?: string;
+  expenseAccount?: string;
+  amount?: number;
+  previousBalance?: number;
+  description?: string;
+  createdAt?: Date;
+  deletedAt?: Date;
+  deleted?: boolean;
 }
