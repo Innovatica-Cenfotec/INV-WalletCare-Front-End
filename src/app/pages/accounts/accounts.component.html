@@ -9,7 +9,8 @@
     </nz-space>
   </nz-page-header-extra>
   <nz-page-header-content>
-    <app-account-cards [accountsList]="accountService.accounts$()"> </app-account-cards>
+    <app-account-cards [accountsList]="accountService.accounts$()"
+    [transactions]="transactionService.transactions$()"> </app-account-cards>
     <nz-divider></nz-divider>
     <app-account-list 
     [accountsList]="accountService.accounts$()" 

@@ -14,7 +14,7 @@
         <tr *ngFor="let data of fixedTable.data">
             <td> {{data.id}}</td>
             <td >{{formatSavingType(data.type)}}</td>
-            <td [style]="formatAmount(data.amount)"> ₡ {{ data.amount | currency:'':'symbol':'1.2-2'}}</td>
+            <td [style]="formatAmount(data.amount)"> ₡ {{ data.amount | currency:'':'':'1.2-2'}}</td>
             <td>{{data.description}}</td>
             <td>{{data.owner?.nickname}}</td>
             <td >{{ getDate(data.createdAt) }}</td>

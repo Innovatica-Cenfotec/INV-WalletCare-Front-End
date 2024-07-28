@@ -1,4 +1,4 @@
-import { inject, TemplateRef, ViewChild } from '@angular/core';
+import { inject, OnChanges, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
@@ -10,7 +10,7 @@ import { AccountTabTransactionsComponent } from '../../components/account/accoun
 import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, ITransaction } from '../../interfaces';
+import { IAccount, IAccountType, IAccountUser, IBalance, ITransaction } from '../../interfaces';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -52,9 +52,19 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
   templateUrl: './account-detail.component.html',
   styleUrl: './account-detail.component.scss'
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnChanges {
+
+
   public accountService = inject(AccountService);
   public transactionService = inject(TransactionService);
+
+  public generalBalance: number | undefined;
+  public generalExpenses = 0;
+  public monthExpenses = 0;
+  public monthIncomes = 0;
+  public recurringExpenses = 0;
+  public recurringIncomes = 0;
+
   private nzNotificationService = inject(NzNotificationService);
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
@@ -70,6 +80,23 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
   }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    let monthExp: number;
+    if (changes['generalBalance']) {
+      this.transactionService.transactions$().forEach(element => {
+        if (element.createdAt?.getMonth == new Date().getMonth) {
+          if (element.amount !== undefined) {
+            monthExp = monthExp + element.amount;
+          }
+        }
+      });
+
+
+    }
+  }
+
 
   /**
    * Shows the date in the format dd/MM/yyyy HH:mm
@@ -128,7 +155,6 @@ export class AccountDetailComponent implements OnInit {
    * deletes a friend from the account
    */
   deleteFriend(accountUser: IAccountUser): void {
-
 
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres eliminar a ${accountUser.user?.nickname} (${accountUser.user?.email}) de la cuenta?`,
@@ -207,6 +233,7 @@ export class AccountDetailComponent implements OnInit {
     });
   }
 
+
   /**
    * Makes the load of all the data in the view 
    */
@@ -222,6 +249,8 @@ export class AccountDetailComponent implements OnInit {
       this.id = Number(id);
       this.accountService.getAccountSignal(this.id).subscribe({
         next: (response: IAccount) => {
+          this.generalBalance = response.balance;
+
           if (this.isAccountShared()) {
             this.accountService.getMembersSignal(this.id);
           }
@@ -232,7 +261,14 @@ export class AccountDetailComponent implements OnInit {
       })
 
       this.transactionService.getAllSignal(this.id);
+      this.transactionService.getBalances(this.id).subscribe({
+        next: (response: any) =>{
+          this.monthExpenses = response.monthlyExpenseBalance;
+          this.recurringExpenses = response.recurrentExpensesBalance;
+          this.monthIncomes = response.monthlyIncomeBalance;
+          this.recurringIncomes = response.recurrentIncomesBalance;
+        }
+      });
     });
   }
-
 }

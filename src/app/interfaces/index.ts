@@ -133,7 +133,7 @@ export interface ITransaction {
   account?: IAccount;
   type?: ITransactionType;
   incomeAllocation?: string;
-  expenseAccount?: string;
+  expense?: IExpense;
   amount?: number;
   previousBalance?: number;
   description?: string;
@@ -241,4 +241,12 @@ export interface IExpense {
   createdAt?: Date;
   updatedAt?: Date;
   account?: IAccount;
+}
+
+
+export interface IBalanceDTO {
+  monthlyExpenseBalance?: number;
+  recurrentExpensesBalance?: number;
+  monthlyIncomeBalance?: number;
+  recurrentIncomesBalance?: number;
 }
