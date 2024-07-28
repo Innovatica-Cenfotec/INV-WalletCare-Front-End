@@ -57,7 +57,7 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
 
     @Input() taxList: any[] = [];
     @Input() incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
-
+    
     /**
      * Get the form group
      */

@@ -1,9 +1,9 @@
 <nz-space nzSize="middle" [nzWrap]="true">
-    <button class="btn" *nzSpaceItem nz-button nzType="default">
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('expense')">
         <i nz-icon nzType="plus"></i>
         Agregar gastos
     </button>
-    <button class="btn" *nzSpaceItem nz-button nzType="default">
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('income')">
         <i nz-icon nzType="plus"></i>
         Agregar ingresos
     </button>
@@ -47,3 +47,8 @@
 </app-account-form>
 
 <app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
+
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" 
+[type]="TransactionFormType" [listIncome]="incomeService.incomes$()"
+    (onCancel)="onCanceledTransaction()" (onConfirm)="addTransaction($event)">
+</app-transaction-form>
