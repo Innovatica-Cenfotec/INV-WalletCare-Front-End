@@ -1,5 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject} from '@angular/core';
+import { FormsModule } from '@angular/forms'; 
 
 // Importing Ng-Zorro modules
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -14,13 +15,13 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 // Custom elements
 import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
-import { DashOutline } from '@ant-design/icons-angular/icons';
 
 @Component({
   selector: 'app-expense-list',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     NzTableModule,
     NzDividerModule,
     NzIconModule,
@@ -41,6 +42,15 @@ export class ExpenseListComponent {
   @Input() showAccount: boolean = false;
   @Input() showOwner: boolean = false;
   sortedExpenses: IExpense[] = [];
+  filteredExpenses: IExpense[] = [];
+
+  filters = {
+    name: '',
+    amount: '',
+    type: '',
+    user: '',
+    date: ''
+  };
 
   @Output() deleteExpense = new EventEmitter<IExpense>();
   @Output() editExpense = new EventEmitter<IExpense>();
@@ -50,6 +60,7 @@ export class ExpenseListComponent {
 
   ngOnChanges() {
     this.sortedExpenses = [...this.expensesList];
+    this.applyFilters();
   }
 
   getExpenseType(expense: IExpense): string {
@@ -129,5 +140,16 @@ export class ExpenseListComponent {
 
   sortByDate(a: IExpense, b: IExpense): number {
     return new Date(a.updatedAt ?? new Date).getTime() - new Date(b.updatedAt ?? new Date).getTime();
+  }
+
+  // Filter
+  applyFilters(): void {
+    this.filteredExpenses = this.sortedExpenses.filter(expense => {
+      return (!this.filters.name || expense.name?.toLowerCase().includes(this.filters.name.toLowerCase())) &&
+             (!this.filters.amount || expense.amount?.toString().includes(this.filters.amount)) &&
+             (!this.filters.type || this.getExpenseType(expense).toLowerCase().includes(this.filters.type.toLowerCase())) &&
+             (!this.filters.user || (expense.user?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
+             (!this.filters.date || this.getDate(expense.updatedAt).includes(this.filters.date));
+    });
   }
 }
