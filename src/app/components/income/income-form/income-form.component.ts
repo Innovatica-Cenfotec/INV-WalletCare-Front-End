@@ -1,7 +1,7 @@
 import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAmountType, IFrequencyType, IIncome, IIncomeExpenceType, Itax, ITypeForm } from '../../../interfaces';
+import { IAmountType, IFrequencyType, IIncome, IIncomeExpenseType, Itax, ITypeForm } from '../../../interfaces';
 
 // Importing Ng-Zorro modules
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -47,7 +47,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 export class IncomeFormComponent extends FormModalComponent<IIncome> {
 
     IAmountType = IAmountType;
-    IIncomeExpenceType = IIncomeExpenceType;
+    IIncomeExpenceType = IIncomeExpenseType;
     IFrequencyType = IFrequencyType;
     TaxSelected: Itax | undefined;
     scheduledDayVisible = false;
@@ -56,8 +56,8 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
 
 
     @Input() taxList: any[] = [];
-    @Input() incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
-    
+    @Input() incomeType: IIncomeExpenseType = IIncomeExpenseType.unique;
+
     /**
      * Get the form group
      */
@@ -94,7 +94,7 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
             }
         }
 
-        if (this.incomeType === IIncomeExpenceType.recurrence) {
+        if (this.incomeType === IIncomeExpenseType.recurrence) {
             const frequency = this.formGroup.get('frequency')?.value;
             // If the frequency is null, mark it as dirty
             if (frequency === null) {

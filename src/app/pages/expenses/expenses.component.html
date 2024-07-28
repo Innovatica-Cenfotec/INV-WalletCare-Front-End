@@ -8,10 +8,10 @@
             </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.unique)">
+                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenseType.unique)">
                         <a>Gasto único</a>
                     </li>
-                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.recurrence)">
+                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenseType.recurrence)">
                         <a>Gasto recurrente</a>
                     </li>
                 </ul>
@@ -19,7 +19,7 @@
         </nz-space>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <app-expense-list [expensesList]="expenseService.expenses$()"></app-expense-list>
+        <app-expense-list [expensesList]="expenseService.expenses$()" (deleteExpense)="deleteExpense($event)"></app-expense-list>
     </nz-page-header-content>
 </nz-page-header>
 

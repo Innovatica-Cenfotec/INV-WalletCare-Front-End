@@ -17,7 +17,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { IncomeService } from '../../services/imcome.service';
-import { IIncome, IIncomeExpenceType, ITypeForm } from '../../interfaces';
+import { IIncome, IIncomeExpenseType, ITypeForm } from '../../interfaces';
 import { AccountListComponent } from "../../components/account/account-list/account-list.component";
 import { AccountCardsComponent } from "../../components/account/account-cards/account-cards.component";
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
@@ -57,7 +57,7 @@ export class IncomeComponent {
   private nzNotificationService = inject(NzNotificationService);
   public acccountService = inject(AccountService);
   public taxService = inject(TaxService);
-  public IIncomeExpenceType = IIncomeExpenceType;
+  public IIncomeExpenseType = IIncomeExpenseType;
 
   @ViewChild(IncomeFormComponent) form!: IncomeFormComponent;
 
@@ -79,7 +79,7 @@ export class IncomeComponent {
   /*
   * Income type
   */
-  public incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  public incomeType: IIncomeExpenseType = IIncomeExpenseType.unique;
 
   /*
   * Title of the modal
@@ -119,8 +119,8 @@ export class IncomeComponent {
   /**
    * Show modal to create income 
    */
-  showModalCreate(IncomeType: IIncomeExpenceType): void {
-    this.title = IncomeType === IIncomeExpenceType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
+  showModalCreate(IncomeType: IIncomeExpenseType): void {
+    this.title = IncomeType === IIncomeExpenseType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
     this.incomeType = IncomeType;
     this.TypeForm = ITypeForm.create;
     this.income.set({ amount: 0 });

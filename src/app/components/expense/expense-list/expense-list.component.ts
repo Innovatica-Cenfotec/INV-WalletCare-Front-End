@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { IExpense, IIncomeExpenceType, IFrequencyType } from '../../../interfaces';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -68,9 +68,9 @@ export class ExpenseListComponent {
     }
 
     switch (expense.type) {
-      case IIncomeExpenceType.recurrence:
+      case IIncomeExpenseType.recurrence:
         return 'Recurrente';
-      case IIncomeExpenceType.unique:
+      case IIncomeExpenseType.unique:
         return 'Unico';
       default:
         return '';

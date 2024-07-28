@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { IExpense, IIncomeExpenceType, IFrequencyType } from '../../../../interfaces/index';
+import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../../interfaces/index';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -103,9 +103,9 @@ export class AccountTabExpenseComponent implements OnInit {
     }
 
     switch (expense.type) {
-      case IIncomeExpenceType.recurrence:
+      case IIncomeExpenseType.recurrence:
         return 'Recurrente';
-      case IIncomeExpenceType.unique:
+      case IIncomeExpenseType.unique:
         return 'Unico';
       default:
         return '';
