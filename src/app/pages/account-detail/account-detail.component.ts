@@ -146,7 +146,7 @@ export class AccountDetailComponent implements OnInit {
         }
         this.accountService.leaveSharedAccount(payload).subscribe({
           next: (response: any) => {
-            this.router.navigateByUrl('/app/accounts');
+            this.loadData();
             this.nzNotificationService.success('Éxito', response.message);
           },
           error: (error => {

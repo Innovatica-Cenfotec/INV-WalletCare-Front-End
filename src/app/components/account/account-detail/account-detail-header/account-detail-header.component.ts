@@ -170,7 +170,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     leaveAccount() {
 
         this.nzModalService.confirm({
-            nzTitle:  `¿Estás seguro de que quieres saliste de la la cuenta? `,
+            nzTitle:  `¿Estás seguro de que quieres salirte de la la cuenta? `,
             nzContent: 'Si sales la cuenta, perderás los gastos, ingresos y ahorros que tus amigos compartían contigo.',
             nzOkText: 'Sí',
             nzOkType: 'primary',
