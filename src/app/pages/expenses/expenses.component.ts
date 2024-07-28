@@ -69,7 +69,6 @@ export class ExpensesComponent {
 
   ngOnInit(): void {
     this.expenseService.findAllSignal();
-    this.expenseService.findAllSignal();
     this.taxService.findAllSignal();
   }
 

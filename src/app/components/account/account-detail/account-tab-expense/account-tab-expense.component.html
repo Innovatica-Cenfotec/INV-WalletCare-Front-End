@@ -1,4 +1,4 @@
-<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '120px']">
+<nz-table #fixedTable [nzData]="expenseService.expenses$()" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '120px']">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -17,7 +17,7 @@
             <td>{{ data.amount }}</td>
             <td>{{ getExpenseFrecuency(data) }}</td>
             <td>{{ getExpenseOwner(data) }}</td>
-            <td>{{ data.updatedAt }}</td>
+            <td>{{ getDate(data.updatedAt) }}</td>
             <td nzRight>
                 <nz-space>
                     <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)">
