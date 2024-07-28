@@ -77,7 +77,7 @@ export class IncomeService extends BaseService<IIncome> {
 
     /**
      * Updates an income signal.
-     * @param account - The income signal to be updated.
+     * @param income - The income signal to be updated.
      * @returns An Observable that emits the updated income signal.
      */
     updateIncomeSignal(income: IIncome): Observable<any> {

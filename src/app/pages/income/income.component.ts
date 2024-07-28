@@ -109,6 +109,7 @@ export class IncomeComponent {
    */
   showModalEdit(income: IIncome): void {
     this.title = 'Editar ingreso';
+    this.incomeType=income.type||IIncomeExpenceType.recurrence;
     this.TypeForm = ITypeForm.update;
     this.income.set(income);
     this.isVisible.set(true);

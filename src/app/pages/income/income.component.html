@@ -22,7 +22,10 @@
     
     <nz-divider></nz-divider>
     <app-income-list 
-    [incomeList]="incomeService.incomes$()">
+    [incomeList]="incomeService.incomes$()"
+    (viewIncomeDetails)="viewIncomeDetails($event)"
+    (deleteIncome)="deleteIncome($event)"
+    (editIncome)="showModalEdit($event)">
     </app-income-list>
    
 
