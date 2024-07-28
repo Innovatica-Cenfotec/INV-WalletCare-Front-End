@@ -2,7 +2,8 @@
     <nz-page-header-title>{{accountService.account$()?.name}}</nz-page-header-title>
     <nz-page-header-extra>
         <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()"
-            [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"></app-account-detail-header>
+            [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"
+            (loadData)="loadData()"></app-account-detail-header>
     </nz-page-header-extra>
     <nz-page-header-content>
         <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered
@@ -35,7 +36,10 @@
         </nz-descriptions>
         <nz-divider></nz-divider>
         <nz-tabset>
-            <nz-tab nzTitle="Transacciones">Lista de transacciones</nz-tab>
+            <nz-tab nzTitle="Transacciones">
+                <app-account-tab-transactions [transactions]="transactionService.transactions$()"
+                (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
+            </nz-tab>
             <nz-tab nzTitle="Gastos recurrentes">
                 <app-account-tab-expense></app-account-tab-expense>
             </nz-tab>

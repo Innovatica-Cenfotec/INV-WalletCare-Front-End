@@ -116,10 +116,31 @@ export interface IAccountUser {
   invitationStatus?: number;
   isDeleted?: boolean;
 }
+
 export interface IGenericResponse {
   message?: String;
 }
 
+export enum ITransactionType {
+  INCOME = 'Income',
+  EXPENSE = 'Expense',
+  SAVING = 'Saving'
+}
+
+export interface ITransaction {
+  id?: number;
+  owner?: IUser;
+  account?: IAccount;
+  type?: ITransactionType;
+  incomeAllocation?: string;
+  expenseAccount?: string;
+  amount?: number;
+  previousBalance?: number;
+  description?: string;
+  createdAt?: Date;
+  deletedAt?: Date;
+  deleted?: boolean;
+}
 /*
 * Interface for allocation
 */

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, signal, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -45,14 +45,11 @@ import { ExpenseFormComponent } from '../../../expense/expense-form/expense-form
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDetailHeaderComponent implements OnChanges {
-    public accountService = inject(AccountService);
-    public expenseService = inject(ExpenseService);
-    public taxService = inject(TaxService);
-    public IIncomeExpenceType = IIncomeExpenceType;
-    private authService = inject(AuthService);
-    private nzModalService = inject(NzModalService);
-    private nzNotificationService = inject(NzNotificationService);
-    private router = inject(Router);
+
+
+    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
+
+    @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
     /*
     * The account id.
@@ -74,14 +71,13 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     @Input() isOwner: boolean = false;
 
+    @Output() loadData = new EventEmitter<void>();
+
+
     /**
      * Indicates whether the user is a member of the account.
      */
     public isMember: boolean = false;
-
-    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
-
-    @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
     public expense = signal<IExpense>({ amount: 0 });
 
@@ -95,6 +91,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     * The visibility of the account edit form.
     */
     public isVisible = signal(false);
+    public isVisibleExpense = signal(false);
 
     /**
      * The visibility of the invite friend form.
@@ -111,15 +108,27 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     public IITypeForm = ITypeForm;
 
+
+    public accountService = inject(AccountService);
+    public expenseService = inject(ExpenseService);
+    public taxService = inject(TaxService);
+    public IIncomeExpenceType = IIncomeExpenceType;
+    private authService = inject(AuthService);
+    private nzModalService = inject(NzModalService);
+    private nzNotificationService = inject(NzNotificationService);
+    private router = inject(Router);
+    private member: IAccountUser | undefined = {};
+
     ngOnInit(): void {
         this.expenseService.findAllSignal();
         this.accountService.findAllSignal();
         this.taxService.findAllSignal();
-      }
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['AccountsMembers']) {
             let accountUser = this.AccountsMembers.find((accountUser) => accountUser.id === this.authService.getUser()?.id);
+
             if (!accountUser) {
                 this.isMember = false;
             }
@@ -130,6 +139,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
             }
 
             this.isMember = true;
+        }
+
+        if (changes['id']) {
+            this.accountService.getMembersSignal(this.id);
+            this.member = this.accountService.membersAccount$().find((accountUser) => accountUser.id === this.authService.getUser()?.id);
         }
     }
 
@@ -183,6 +197,36 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Leaves the account.
      */
     leaveAccount() {
+
+        this.nzModalService.confirm({
+            nzTitle: `¿Estás seguro de que quieres salirte de la la cuenta? `,
+            nzContent: 'Si sales la cuenta, perderás los gastos, ingresos y ahorros que tus amigos compartían contigo.',
+            nzOkText: 'Sí',
+            nzOkType: 'primary',
+            nzOnOk: () => {
+                const payload: IAccountUser = {
+                    user: {
+                        id: this.authService.getUser()?.id
+                    },
+                    account: {
+                        id: this.accountService.account$()?.id
+                    }
+                }
+
+                this.accountService.leaveSharedAccount(payload).subscribe({
+                    next: (response: any) => {
+                        this.router.navigateByUrl('/app/accounts');
+                        this.nzNotificationService.success('Éxito', response.message);
+                    },
+                    error: (error => {
+                        this.nzNotificationService.error('Error', error.error.detail)
+                        throw error;
+                    })
+                });
+            },
+            nzCancelText: 'No'
+        });
+
     }
 
     /**
@@ -226,43 +270,50 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.isVisibleInvite = false;
     }
 
-    showModalCreate(ExpenseType: IIncomeExpenceType): void {
+
+    showModalCreateExpense(ExpenseType: IIncomeExpenceType): void {
         this.title = ExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
-        this.expense.set({amount: 0});
-        this.isVisible.set(true);
-      }
-    
-      createExpense(expense: IExpense): void {
+        this.expense.set({ amount: 0 });
+        this.isVisibleExpense.set(true);
+    }
+
+    closeModalCreateExpense() {
+        this.isVisibleExpense.set(false);
+        this.isLoading.set(false);
+    }
+
+    createExpense(expense: IExpense): void {
         const payload: IAccount = {
             id: this.id
         }
 
         if (expense.tax) {
-          expense.tax = {id: expense.tax.id};
+            expense.tax = { id: expense.tax.id };
         }
 
         expense.account = payload;
 
         this.expenseService.saveExpenseSignal(expense).subscribe({
-          next: (response: any) => {
-            this.isVisible.set(false);
-            this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', {nzDuration: 5000});
-          },
-          error: (error: any) => {
-            this.isLoading.set(false);
-            error.error.fieldErrors?.map((fieldError: any) => {
-              this.form.setControlError(fieldError.field, fieldError.message);
-            });
-            if (error.error.fieldErrors === undefined) {
-              this.nzNotificationService.error('Lo sentimos', error.error.detail);
+            next: (response: any) => {
+                this.isVisibleExpense.set(false);
+                this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', { nzDuration: 5000 });
+                this.loadData.emit();
+            },
+            error: (error: any) => {
+                this.isLoading.set(false);
+                error.error.fieldErrors?.map((fieldError: any) => {
+                    this.form.setControlError(fieldError.field, fieldError.message);
+                });
+                if (error.error.fieldErrors === undefined) {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
             }
-          }
         });
-      }
-    
-      updateIncome(expense: IExpense): void {}
-    
-      deleteIncome(expense: IExpense): void {}
+    }
+
+    updateIncome(expense: IExpense): void { }
+
+    deleteIncome(expense: IExpense): void { }
 }
