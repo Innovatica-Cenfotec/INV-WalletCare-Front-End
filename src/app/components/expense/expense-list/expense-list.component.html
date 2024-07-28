@@ -4,8 +4,8 @@
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Monto</th>
-            <th *ngIf="!showAccount && !showOwner">Tipo</th>
-            <th>Frecuencia</th>
+            <th>Tipo</th>
+            <th *ngIf="!showAccount && !showOwner">Frecuencia</th>
             <th *ngIf="showAccount">Cuenta</th>
             <th *ngIf="showOwner">Autor</th>
             <th>Fecha</th>
@@ -17,8 +17,8 @@
             <td>{{ data.name }}</td>
             <td>{{ data.description }}</td>
             <td>{{ data.amount }}</td>
-            <td *ngIf="!showAccount && !showOwner">{{ getExpenseType(data) }}</td>
-            <td>{{ getExpenseFrecuency(data) }}</td>
+            <td>{{ getExpenseType(data) }}</td>
+            <td *ngIf="!showAccount && !showOwner">{{ getExpenseFrecuency(data) }}</td>
             <td *ngIf="showAccount">{{ getExpenseAccount(data) }}</td>
             <td *ngIf="showOwner">{{ getExpenseOwner(data) }}</td>
             <td>{{ getDate(data.updatedAt) }}</td>

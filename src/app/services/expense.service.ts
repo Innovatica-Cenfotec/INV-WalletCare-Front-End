@@ -79,7 +79,7 @@ export class ExpenseService extends BaseService<IExpense>{
               this.expenseSignal.set(response);
           }),
           catchError(error => {
-              console.error('Error updating account', error);
+              console.error('Error updating expense', error);
               throw error;
           })
       );
