@@ -153,14 +153,14 @@ export class ExpensesComponent implements OnInit {
   */
   deleteExpense(expense: IExpense): void {
     this.nzModalService.confirm({
-      nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
-      nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
+      nzTitle: '¿Estás seguro de que quieres eliminar el gasto?',
+      nzContent: 'Si eliminas el gasto, se eliminarán todos los datos relacionados al mismo.',
       nzOkText: 'Sí',
       nzOkType: 'primary',
       nzOnOk: () => {
         this.expenseService.deleteExpenseSignal(expense.id).subscribe({
           next: () => {
-            this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+            this.nzNotificationService.success('Éxito', 'El gasto se ha eliminado correctamente');
           },
           error: (error: any) => {
             this.nzNotificationService.error('Lo sentimos', error.error.detail);
