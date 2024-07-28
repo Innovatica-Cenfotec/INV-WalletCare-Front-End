@@ -1,7 +1,7 @@
 <nz-page-header nzBackIcon [nzGhost]="false">
     <nz-page-header-title>{{accountService.account$()?.name}}</nz-page-header-title>
     <nz-page-header-extra>
-        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()" [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id" (loadData)="loadData()"></app-account-detail-header>
+        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()" [isAccountShared]="isAccountShared()" [isOwner]="isOwner()" [id]="id" (loadData)="loadData()"></app-account-detail-header>
     </nz-page-header-extra>
     <nz-page-header-content>
         <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered nzSize="small">
@@ -34,7 +34,7 @@
             <nz-tab nzTitle="Transacciones">
                 <app-account-tab-transactions [transactions]="transactionService.transactions$()" (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
             </nz-tab>
-            <nz-tab nzTitle="Gastos">
+            <nz-tab nzTitle="Gastos registrados">
                 <app-expense-list [expensesList]="expenseService.expenses$()" [showOwner]="true" (editExpense)="showModalEditExpense($event)" (deleteExpense)="deleteExpense($event)">
                 </app-expense-list>
             </nz-tab>

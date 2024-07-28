@@ -249,83 +249,83 @@ export class AccountDetailComponent implements OnInit {
     return members.length + 1;
   }
 
-  /**
+    /**
    * Handles the rollback for the transaction
    * @param transaction 
    */
-  rollbackTransaction(transaction: ITransaction) {
-    this.nzModalService.confirm({
-      nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
-      nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
-      nzOkText: 'Sí',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.transactionService.rollbackTransaction(transaction).subscribe({
-          next: (response: any) => {
-            //this.router.navigateByUrl('/app/accounts');
-            this.nzNotificationService.success('Éxito', 'Transacción reversada');
-            this.loadData();
-          },
-          error: ((error: { error: { detail: string | TemplateRef<void>; }; }) => {
-            this.nzNotificationService.error('Error', error.error.detail)
-            throw error;
-          })
-        }
-        );
-      },
-      nzCancelText: 'No'
-    });
-  }
-
-  /**
-   * Makes the load of all the data in the view 
-   */
-  loadData() {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-
-      // Validate if the id is not null or number
-      if (!id || isNaN(+id)) {
-        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
-        return;
-      }
-      this.id = Number(id);
-      this.accountService.getAccountSignal(this.id).subscribe({
-        next: (response: IAccount) => {
-          if (this.isAccountShared()) {
-            this.accountService.getMembersSignal(this.id);
+    rollbackTransaction(transaction: ITransaction) {
+      this.nzModalService.confirm({
+        nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
+        nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
+        nzOkText: 'Sí',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.transactionService.rollbackTransaction(transaction).subscribe({
+            next: (response: any) => {
+              //this.router.navigateByUrl('/app/accounts');
+              this.nzNotificationService.success('Éxito', 'Transacción reversada');
+              this.loadData();
+            },
+            error: ((error: { error: { detail: string | TemplateRef<void>; }; }) => {
+              this.nzNotificationService.error('Error', error.error.detail)
+              throw error;
+            })
           }
+          );
         },
-        error: (error: any) => {
-          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+        nzCancelText: 'No'
+      });
+    }
+  
+    /**
+     * Makes the load of all the data in the view 
+     */
+    loadData() {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+  
+        // Validate if the id is not null or number
+        if (!id || isNaN(+id)) {
+          this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
+          return;
         }
-      })
-
-      this.transactionService.getAllSignal(this.id);
-    });
-  }
-
-     
-  /**
-  * Deletes the expense
-  */
-  deleteExpense(expense: IExpense): void {
-    this.nzModalService.confirm({
-      nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
-      nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
-      nzOkText: 'Sí',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.expenseService.deleteExpenseSignal(expense.id).subscribe({
-          next: () => {
-            this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+        this.id = Number(id);
+        this.accountService.getAccountSignal(this.id).subscribe({
+          next: (response: IAccount) => {
+            if (this.isAccountShared()) {
+              this.accountService.getMembersSignal(this.id);
+            }
           },
           error: (error: any) => {
-            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+            this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
           }
-        });
-      },
-      nzCancelText: 'No'
-    });
-  }
+        })
+  
+        this.transactionService.getAllSignal(this.id);
+      });
+    }
+  
+       
+    /**
+    * Deletes the expense
+    */
+    deleteExpense(expense: IExpense): void {
+      this.nzModalService.confirm({
+        nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
+        nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
+        nzOkText: 'Sí',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.expenseService.deleteExpenseSignal(expense.id).subscribe({
+            next: () => {
+              this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+            },
+            error: (error: any) => {
+              this.nzNotificationService.error('Lo sentimos', error.error.detail);
+            }
+          });
+        },
+        nzCancelText: 'No'
+      });
+    }
 }
