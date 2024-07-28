@@ -1,26 +1,28 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
+// Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CommonModule} from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
-import { ExpenseListComponent } from "../../components/expense/expense-list/expense-list.component";
-import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
+// Custom elements
+import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
 import { ExpenseService } from '../../services/expense.service';
 import { TaxService } from '../../services/tax.service';
-import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
+import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
+import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 
 
 @Component({
@@ -38,9 +40,9 @@ import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index'
     NzIconModule,
     NzDividerModule,
     NzModalModule,
-    ExpenseListComponent,
     NzButtonModule,
     NzDropDownModule,
+    ExpenseListComponent,
     ExpenseFormComponent
   ],
   templateUrl: './expenses.component.html',
@@ -48,25 +50,22 @@ import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpensesComponent implements OnInit {
-  public expenseService = inject(ExpenseService);
+
   public router = inject(Router);
-  private nzNotificationService = inject(NzNotificationService);
-  public taxService = inject(TaxService);
   public IIncomeExpenseType = IIncomeExpenseType;
+  // Services
+  private nzNotificationService = inject(NzNotificationService);
   private nzModalService = inject(NzModalService);
+  public expenseService = inject(ExpenseService);
+  public taxService = inject(TaxService);
 
   @ViewChild(ExpenseFormComponent) form!: ExpenseFormComponent;
 
   public isVisible = signal(false);
-
   public isLoading = signal(false);
-
   public expense = signal<IExpense>({amount: 0});
-
   public expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
-
   public title: string = '';
-
   public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
@@ -79,6 +78,9 @@ export class ExpensesComponent implements OnInit {
     this.isLoading.set(false);
   }
 
+  /**
+   * Shows the modal to create the expense
+   */
   showModalCreate(ExpenseType: IIncomeExpenseType): void {
     this.title = ExpenseType === IIncomeExpenseType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
     this.expenseType = ExpenseType;
@@ -97,6 +99,9 @@ export class ExpensesComponent implements OnInit {
     this.isVisible.set(true);
   }
 
+  /**
+  * Create the expense
+  */
   createExpense(expense: IExpense): void {
     if (expense.tax) {
       expense.tax = {id: expense.tax.id};
@@ -117,7 +122,10 @@ export class ExpensesComponent implements OnInit {
       }
     });
   }
-
+  
+  /**
+  * Edit the expense
+  */
   updateExpense(expense: IExpense): void {
     this.expenseService.updateExpenseSignal(expense).subscribe({
       next: (response: any) => {
@@ -140,7 +148,7 @@ export class ExpensesComponent implements OnInit {
   }
   
   /**
-  * Deletes the expense
+  * Delete the expense
   */
   deleteExpense(expense: IExpense): void {
     this.nzModalService.confirm({

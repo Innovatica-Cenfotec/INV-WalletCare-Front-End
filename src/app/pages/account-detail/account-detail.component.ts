@@ -15,12 +15,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 // Custom elements
+import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
 import { ExpenseService } from '../../services/expense.service';
 import { IAccount, IAccountType, IAccountUser, IExpense, IIncomeExpenseType, ITypeForm, ITransaction } from '../../interfaces/index';
 import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
-import { AuthService } from '../../services/auth.service';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
 import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
@@ -39,6 +39,7 @@ import { TransactionService } from '../../services/transaction.service';
     NzButtonComponent,
     NzDropDownModule,
     NzIconModule,
+    NzModalModule,
     NzTabsModule,
     NzDividerModule,
     AccountTabMembersComponent,
@@ -46,7 +47,6 @@ import { TransactionService } from '../../services/transaction.service';
     AccountTabTransactionsComponent,
     ExpenseListComponent,
     ExpenseFormComponent,
-    NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent
   ],
@@ -60,15 +60,11 @@ export class AccountDetailComponent implements OnInit {
   private datePipe = inject(DatePipe);
   public router = inject(Router);
   // Services
-  private authService = inject(AuthService);
   private nzModalService = inject(NzModalService);
+  private nzNotificationService = inject(NzNotificationService);
+  private authService = inject(AuthService);
   public accountService = inject(AccountService);
   public expenseService = inject(ExpenseService);
-  private nzNotificationService = inject(NzNotificationService);
-
-  @ViewChild(ExpenseFormComponent) formExpense: ExpenseFormComponent = new ExpenseFormComponent;
-  public title: string = '';
-  public TypeForm: ITypeForm = ITypeForm.create;
 
   /*
   * Id of the account
@@ -84,6 +80,13 @@ export class AccountDetailComponent implements OnInit {
    * The loading state of the account form.
    */
   public isLoading = signal(false);
+
+  // Expenses modal
+  @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
+  public expense = signal<IExpense>({amount: 0});
+  public expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
+  public title: string = '';
+  public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
     this.loadData();

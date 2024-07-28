@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject} from '@angular/core';
-import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
+
+// Importing Ng-Zorro modules
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -10,6 +11,9 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
+// Custom elements
+import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
 
 @Component({
   selector: 'app-expense-list',
@@ -81,6 +85,7 @@ export class ExpenseListComponent {
   }
 
   getExpenseOwner(expense: IExpense): string {
+    console.log("User of this account: " + expense.user);
     return expense.user?.nickname ?? "-";
   }
 
