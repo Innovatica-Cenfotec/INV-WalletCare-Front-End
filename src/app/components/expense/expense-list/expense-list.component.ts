@@ -14,6 +14,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 // Custom elements
 import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
+import { DashOutline } from '@ant-design/icons-angular/icons';
 
 @Component({
   selector: 'app-expense-list',
@@ -39,12 +40,17 @@ export class ExpenseListComponent {
   @Input() expensesList: IExpense[] = [];
   @Input() showAccount: boolean = false;
   @Input() showOwner: boolean = false;
+  sortedExpenses: IExpense[] = [];
 
   @Output() deleteExpense = new EventEmitter<IExpense>();
   @Output() editExpense = new EventEmitter<IExpense>();
   @Output() viewExpenseDetails = new EventEmitter<IExpense>();
 
   private datePipe = inject(DatePipe);
+
+  ngOnChanges() {
+    this.sortedExpenses = [...this.expensesList];
+  }
 
   getExpenseType(expense: IExpense): string {
     if (!expense) {
@@ -90,6 +96,35 @@ export class ExpenseListComponent {
   }
 
   getDate(date: Date | undefined): string {
-    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
+    return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
+  }
+
+  // Sort by attribute
+  sortByName(a: IExpense, b: IExpense): number {
+    return (a.name ?? '').localeCompare(b.name ?? '');
+  }
+
+  sortByDescription(a: IExpense, b: IExpense): number {
+    return (a.description ?? '').localeCompare(b.description ?? '');
+  }
+
+  sortByAmount(a: IExpense, b: IExpense): number {
+    return (a.amount?.toString() ?? '').localeCompare(b.amount?.toString() ?? '');
+  }
+
+  sortByType(a: IExpense, b: IExpense): number {
+    return (a.type?.toString() ?? '').localeCompare(b.type?.toString() ?? '') ;
+  }
+
+  sortByAccount(a: IExpense, b: IExpense): number {
+    return (a.account?.name ?? '').localeCompare(b.account?.name ?? '');
+  }
+
+  sortByUser(a: IExpense, b: IExpense): number {
+    return (a.user?.nickname ?? '').localeCompare(b.user?.nickname ?? '');
+  }
+
+  sortByDate(a: IExpense, b: IExpense): number {
+    return new Date(a.updatedAt ?? new Date).getTime() - new Date(b.updatedAt ?? new Date).getTime();
   }
 }

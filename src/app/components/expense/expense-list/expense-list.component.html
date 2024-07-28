@@ -1,14 +1,14 @@
-<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '120px']">
+<nz-table #fixedTable [nzData]="sortedExpenses" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '100px']">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>Tipo</th>
+            <th nzColumnKey="name" [nzSortFn]="sortByName">Nombre</th>
+            <th nzColumnKey="'description" [nzSortFn]="sortByDescription">Descripción</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortByAmount">Monto</th>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th *ngIf="!showAccount && !showOwner">Frecuencia</th>
-            <th *ngIf="showAccount">Cuenta</th>
-            <th *ngIf="showOwner">Autor</th>
-            <th>Fecha</th>
+            <th nzColumnKey="account" [nzSortFn]="sortByAccount" *ngIf="showAccount">Cuenta</th>
+            <th nzColumnKey="user" [nzSortFn]="sortByUser" *ngIf="showOwner">Autor</th>
+            <th nzColumnKey="date" [nzSortFn]="sortByDate">Fecha</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
