@@ -134,7 +134,7 @@ export interface IAllocation {
 /**
  * Enum that represents the type of income or expense.
  */
-export enum IIncomeExpenceType {
+export enum IIncomeExpenseType {
   unique = "UNIQUE",
   recurrence = "RECURRENCE"
 }
@@ -192,7 +192,7 @@ export interface IIncome {
   name?: string;
   description?: string;
   isTemplate?: boolean;
-  type?: IIncomeExpenceType;
+  type?: IIncomeExpenseType;
   amount?: 0 | string;
   amountType?: IAmountType;
   scheduledDay?: number;
@@ -211,7 +211,7 @@ export interface IExpense {
   name?: string;
   description?: string;
   isTemplate?: boolean;
-  type?: IIncomeExpenceType;
+  type?: IIncomeExpenseType;
   amount?: 0 | string;
   amountType?: IAmountType;
   scheduledDay?: number;

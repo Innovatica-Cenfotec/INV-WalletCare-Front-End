@@ -66,4 +66,25 @@ export class ExpenseService extends BaseService<IExpense>{
       })
     );
   }
+
+  /**
+   * Deletes an expense signal.
+   * @param expense - The expense to be deleted.
+   * @returns An Observable that emits the deleted expense.
+   */
+  deleteExpenseSignal(id: number | undefined): Observable<any> {
+    if (!id) {
+        throw new Error('Invalid expense ID');
+    }
+
+    return this.del(id).pipe(
+        tap((response: any) => {
+            this.expenseListSignal.update(expenses => expenses.filter(a => a.id !== id));
+        }),
+        catchError(error => {
+            console.error('Error deleting expense', error);
+            throw error;
+        })
+    );
+  }
 }
