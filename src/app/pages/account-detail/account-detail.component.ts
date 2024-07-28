@@ -14,20 +14,22 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CommonModule, DatePipe } from '@angular/common';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
+// Custom elements
+import { AccountService } from '../../services/account.service';
+import { ExpenseService } from '../../services/expense.service';
+import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
+import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
+import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
+import { AuthService } from '../../services/auth.service';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
 import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
 import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
-import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
-import { AccountService } from '../../services/account.service';
-import { AuthService } from '../../services/auth.service';
 import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
-import { ExpenseService } from '../../services/expense.service';
-import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
 
 @Component({
   selector: 'app-account-detail',
@@ -56,14 +58,19 @@ import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index'
   styleUrl: './account-detail.component.scss'
 })
 export class AccountDetailComponent implements OnInit {
-  public accountService = inject(AccountService);
-  private nzNotificationService = inject(NzNotificationService);
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
+  public router = inject(Router);
+  // Services
   private authService = inject(AuthService);
   private nzModalService = inject(NzModalService);
+  public accountService = inject(AccountService);
   public expenseService = inject(ExpenseService);
-  public router = inject(Router);
+  private nzNotificationService = inject(NzNotificationService);
+
+  @ViewChild(ExpenseFormComponent) formExpense: ExpenseFormComponent = new ExpenseFormComponent;
+  public title: string = '';
+  public TypeForm: ITypeForm = ITypeForm.create;
 
   /*
   * Id of the account
@@ -79,12 +86,6 @@ export class AccountDetailComponent implements OnInit {
    * The loading state of the account form.
    */
   public isLoading = signal(false);
-
-  public title: string = '';
-
-  public TypeForm: ITypeForm = ITypeForm.create;
-  
-  @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -109,6 +110,12 @@ export class AccountDetailComponent implements OnInit {
         }
       })
     });
+    
+    this.route.params.subscribe(params => {
+      this.id = +params['id']; // '+' is used to convert the string to a number
+      // Fetch account details and expenses based on the id
+      this.expenseService.filterByAccountSignal(this.id);
+    });
   }
   
   /**
@@ -126,7 +133,9 @@ export class AccountDetailComponent implements OnInit {
   showModalEditExpense(expense: IExpense): void {
     this.title = 'Editar gasto';
     this.TypeForm = ITypeForm.update;
+    console.log(this.formExpense); // Log the value
     this.formExpense.item = expense;
+    console.log("Item property works perfectly."); // print if actual modal display
     this.isVisible.set(true);
   }
 
@@ -174,7 +183,7 @@ export class AccountDetailComponent implements OnInit {
    * @param account The account object
    * @returns True if the current user is the owner, false otherwise
    */
-  isOwer(): boolean {
+  isOwner(): boolean {
     const account = this.accountService.account$();
     if (!account) {
       return false;
@@ -201,7 +210,7 @@ export class AccountDetailComponent implements OnInit {
     }
 
     // Check if the user is a member of the account
-    if (this.isOwer()) {
+    if (this.isOwner()) {
       return members.length + 1;
     }
 
