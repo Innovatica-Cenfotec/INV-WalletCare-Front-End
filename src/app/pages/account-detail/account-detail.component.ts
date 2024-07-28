@@ -1,16 +1,5 @@
 import { inject, TemplateRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
-import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
-import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
-import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
-import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
-import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
-import { TransactionService } from '../../services/transaction.service';
-import { AccountService } from '../../services/account.service';
-import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, ITransaction } from '../../interfaces';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -23,8 +12,21 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
+import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
+import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
+import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
+import { AccountService } from '../../services/account.service';
+import { AuthService } from '../../services/auth.service';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
+import { ExpenseService } from '../../services/expense.service';
+import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
+import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
+import { TransactionService } from '../../services/transaction.service';
+import { IAccount, IAccountType, IAccountUser, ITransaction } from '../../interfaces';
 
 @Component({
   selector: 'app-account-detail',
@@ -59,8 +61,9 @@ export class AccountDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
   private authService = inject(AuthService);
-  private router = inject(Router);
   private nzModalService = inject(NzModalService);
+  public expenseService = inject(ExpenseService);
+  public router = inject(Router);
 
   /*
   * Id of the account
@@ -235,4 +238,27 @@ export class AccountDetailComponent implements OnInit {
     });
   }
 
+     
+  /**
+  * Deletes the expense
+  */
+  deleteExpense(expense: IExpense): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
+      nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.expenseService.deleteExpenseSignal(expense.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
+    });
+  }
 }

@@ -123,7 +123,6 @@ export class ExpensesComponent implements OnInit {
         this.expenseService.deleteExpenseSignal(expense.id).subscribe({
           next: () => {
             this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
-            this.router.navigateByUrl('app/expenses');
           },
           error: (error: any) => {
             this.nzNotificationService.error('Lo sentimos', error.error.detail);
@@ -133,5 +132,4 @@ export class ExpensesComponent implements OnInit {
       nzCancelText: 'No'
     });
   }
-
 }
