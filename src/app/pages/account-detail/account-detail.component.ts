@@ -24,8 +24,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-
-
+import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
 
 @Component({
   selector: 'app-account-detail',
@@ -44,6 +43,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
     AccountTabExpenseComponent,
     AccountTabIncomesComponent,
     AccountTabTransactionsComponent,
+    ExpenseListComponent,
     NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent

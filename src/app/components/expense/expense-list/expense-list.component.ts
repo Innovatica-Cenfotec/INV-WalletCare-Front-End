@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { IExpense, IIncomeExpenceType, IFrequencyType } from '../../../interfaces';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -10,6 +10,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import {DatePipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-expense-list',
@@ -26,6 +27,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzSpaceModule,
     NzToolTipModule
   ],
+  providers: [DatePipe],
   templateUrl: './expense-list.component.html',
   styleUrl: './expense-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -98,5 +100,16 @@ export class ExpenseListComponent {
 
   getExpenseAccount(expense: IExpense): string {
     return expense.account?.name ?? "-";
+  }
+
+  private datePipe = inject(DatePipe);
+
+  /**
+   * Shows the date in the format dd/MM/yyyy HH:mm
+   * @param date The date to format
+   * @returns The date in the format dd/MM/yyyy HH:mm
+   */
+  getDate(date: Date | undefined): string {
+    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
   }
 }
