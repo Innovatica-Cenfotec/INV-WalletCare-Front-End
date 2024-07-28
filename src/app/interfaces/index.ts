@@ -224,3 +224,21 @@ export interface IIncome {
   updatedAt?: Date;
   listIncomeAllocation?: IIncomeAllocation[];
 }
+
+export interface IExpense {
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  isTemplate?: boolean;
+  type?: IIncomeExpenceType;
+  amount?: 0 | string;
+  amountType?: IAmountType;
+  scheduledDay?: number;
+  isTaxRelated?: boolean;
+  frequency?: IFrequencyType;
+  tax?: Itax;
+  createdAt?: Date;
+  updatedAt?: Date;
+  account?: IAccount;
+}
