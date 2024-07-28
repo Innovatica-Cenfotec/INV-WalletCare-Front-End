@@ -219,4 +219,5 @@ export interface IExpense {
   tax?: Itax;
   createdAt?: Date;
   updatedAt?: Date;
+  account?: IAccount;
 }

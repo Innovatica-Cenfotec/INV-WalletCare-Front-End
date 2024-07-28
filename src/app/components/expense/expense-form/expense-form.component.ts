@@ -54,6 +54,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
 
   @Input() taxList: any[] = [];
   @Input() expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  @Input() id: number = 0;
 
   override formGroup = this.fb.group({
     name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],

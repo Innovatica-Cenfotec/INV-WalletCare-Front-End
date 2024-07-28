@@ -1,8 +1,18 @@
-<nz-space nzSize="middle" [nzWrap]="true">
-    <button class="btn" *nzSpaceItem nz-button nzType="default">
+<nz-space [nzWrap]="true" nzSize="middle" [nzWrap]="true">
+    <button class="btn" *nzSpaceItem nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
         <i nz-icon nzType="plus"></i>
         Agregar gastos
     </button>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.unique)">
+            <a>Gasto único</a>
+          </li>
+          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.recurrence)">
+            <a>Gasto recurrente</a>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     <button class="btn" *nzSpaceItem nz-button nzType="default">
         <i nz-icon nzType="plus"></i>
         Agregar ingresos
@@ -47,3 +57,15 @@
 </app-account-form>
 
 <app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
+
+<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()"
+[type]="TypeForm"
+[title]="title"
+[expenseType]="expenseType"
+[taxList]="taxService.taxes$()"
+(onCanceled)="onCanceled()" 
+(onCreated)="createExpense($event)"
+(onUpdated)="updateIncome($event)"
+[id]="id"
+>
+</app-expense-form>
