@@ -87,6 +87,16 @@ export class ExpensesComponent implements OnInit {
     this.isVisible.set(true);
   }
 
+  /**
+   * Shows the modal to edit the expense
+   */
+  showModalEdit(expense: IExpense): void {
+    this.title = 'Editar gasto';
+    this.TypeForm = ITypeForm.update;
+    this.form.item = expense;
+    this.isVisible.set(true);
+  }
+
   createExpense(expense: IExpense): void {
     if (expense.tax) {
       expense.tax = {id: expense.tax.id};
@@ -108,7 +118,26 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
-  updateIncome(expense: IExpense): void {}
+  updateExpense(expense: IExpense): void {
+    this.expenseService.updateExpenseSignal(expense).subscribe({
+      next: (response: any) => {
+        this.isVisible.set(false);
+        this.nzNotificationService.create("success", "", 'Gasto editada exitosamente', { nzDuration: 5000 });
+      },
+      error: (error: any) => {
+        this.isLoading.set(false);
+        // Displaying the error message in the form
+        error.error.fieldErrors?.map((fieldError: any) => {
+          this.form.setControlError(fieldError.field, fieldError.message);
+        });
+
+        // show other errors
+        if (error.error.fieldErrors === undefined) {
+          this.nzNotificationService.error('Lo sentimos', error.error.detail);
+        }
+      }
+    });
+  }
   
   /**
   * Deletes the expense

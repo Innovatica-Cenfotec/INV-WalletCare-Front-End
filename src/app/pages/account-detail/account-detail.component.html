@@ -37,7 +37,7 @@
                 <app-account-tab-transactions [transactions]="transactionService.transactions$()" (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
             </nz-tab>
             <nz-tab nzTitle="Gastos">
-                <app-account-tab-expense [expensesList]="expenseService.expenses$()" (deleteExpense)="deleteExpense($event)"></app-account-tab-expense>
+                <app-account-tab-expense [expensesList]="expenseService.expenses$()" (editExpense)="showModalEditExpense($event)" (deleteExpense)="deleteExpense($event)"></app-account-tab-expense>
             </nz-tab>
             <nz-tab nzTitle="Ingresos recurrentes">
                 <app-account-tab-incomes></app-account-tab-incomes>

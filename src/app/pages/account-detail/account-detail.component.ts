@@ -1,5 +1,5 @@
-import { inject, TemplateRef, ViewChild } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, TemplateRef, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -10,7 +10,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
@@ -22,6 +21,7 @@ import { AccountDetailHeaderComponent } from '../../components/account/account-d
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
+import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { ExpenseService } from '../../services/expense.service';
 import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
 import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
@@ -46,6 +46,7 @@ import { IAccount, IAccountType, IAccountUser, ITransaction } from '../../interf
     AccountTabIncomesComponent,
     AccountTabTransactionsComponent,
     ExpenseListComponent,
+    ExpenseFormComponent,
     NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent
@@ -69,9 +70,66 @@ export class AccountDetailComponent implements OnInit {
   * Id of the account
   */
   public id: number = 0;
+  
+  /**
+   * The visibility of the account creation form.
+   */
+  public isVisible = signal(false);
+
+  /**
+   * The loading state of the account form.
+   */
+  public isLoading = signal(false);
+
+  public title: string = '';
+
+  public TypeForm: ITypeForm = ITypeForm.create;
+  
+  @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
   ngOnInit(): void {
     this.loadData();
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      // Validate if the id is not null or number
+      if (!id || isNaN(+id)) {
+        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
+        return;
+      }
+
+      this.id = Number(id);
+      // Get the account by id and get the members if the account is shared
+      this.accountService.getAccountSignal(this.id).subscribe({
+        next: (response: IAccount) => {
+          if (this.isAccountShared()) {
+            this.accountService.getMembersSignal(this.id);
+          }
+        },
+        error: (error: any) => {
+          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+        }
+      })
+    });
+  }
+  
+  /**
+  * Closes the expense creation form.
+  * Sets the `isVisible` property to `false`.
+  */
+  onCanceled(): void {
+    this.isVisible.set(false);
+    this.isLoading.set(false);
+  }
+  
+  /**
+   * Shows the modal to edit the expense
+   */
+  showModalEditExpense(expense: IExpense): void {
+    this.title = 'Editar gasto';
+    this.TypeForm = ITypeForm.update;
+    this.formExpense.item = expense;
+    this.isVisible.set(true);
   }
 
   /**
