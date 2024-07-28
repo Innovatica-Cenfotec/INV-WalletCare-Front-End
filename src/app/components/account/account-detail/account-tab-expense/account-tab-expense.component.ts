@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { IExpense, IIncomeExpenceType, IFrequencyType } from '../../../../interfaces/index';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -9,12 +9,16 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { ActivatedRoute } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {DatePipe, NgIf} from "@angular/common";
 import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
+
+import {ExpenseListComponent} from '../../../expense/expense-list/expense-list.component';
+import { ExpenseService } from '../../../../services/expense.service';
 
 @Component({
   selector: 'app-account-tab-expense',
@@ -33,14 +37,27 @@ import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
     NzStatisticModule,
     NzGridModule,
     NzSpaceModule,
-    NzToolTipModule
+    NzToolTipModule,
+    ExpenseListComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-tab-expense.component.html',
   styleUrl: './account-tab-expense.component.scss'
 })
-export class AccountTabExpenseComponent {
+export class AccountTabExpenseComponent implements OnInit {
+  public expenseService = inject(ExpenseService);
   private datePipe = inject(DatePipe);
+  private route = inject(ActivatedRoute);
+
+  // Get the account id
+  private accountId: number = 0;
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.accountId = +params['id']; // '+' is used to convert the string to a number
+    });
+    
+    this.expenseService.filterByAccountSignal(this.accountId);
+  }
 
   /**
    * Shows the date in the format dd/MM/yyyy HH:mm

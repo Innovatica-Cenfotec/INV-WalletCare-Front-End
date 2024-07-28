@@ -42,6 +42,19 @@ export class ExpenseService extends BaseService<IExpense>{
     });
   }
 
+  filterByAccountSignal(id: number) {
+    let params = { account: id };
+
+    return this.filter(params).subscribe({
+      next: (response: any) => {
+        this.expenseListSignal.set(response);
+      }, error: (error: any) => {
+        console.error('Error fetching expenses', error);
+        throw error;
+      }
+    });
+  }
+
   getExpenseSignal(id: number): Observable<IExpense> {
     return this.find(id).pipe(
       tap((response: any) => {
