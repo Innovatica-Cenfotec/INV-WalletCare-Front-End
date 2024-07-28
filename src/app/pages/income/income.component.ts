@@ -18,12 +18,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { IncomeService } from '../../services/imcome.service';
 import { IIncome, IIncomeExpenceType, ITypeForm } from '../../interfaces';
-import { AccountListComponent } from "../../components/account/account-list/account-list.component";
-import { AccountCardsComponent } from "../../components/account/account-cards/account-cards.component";
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
 import { AccountService } from '../../services/account.service';
 import { TaxService } from '../../services/tax.service';
+import { IncomeListComponent } from '../../components/income/income-list/income-list.component';
 
 @Component({
   selector: 'app-income',
@@ -40,8 +39,7 @@ import { TaxService } from '../../services/tax.service';
     NzIconModule,
     NzDividerModule,
     NzModalModule,
-    AccountListComponent,
-    AccountCardsComponent,
+    IncomeListComponent,
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
@@ -189,7 +187,7 @@ export class IncomeComponent {
    * View account details
    * @param income income to view
    */
-  viewAccountDetails(income: IIncome): void {
+  viewIncomeDetails(income: IIncome): void {
     this.router.navigateByUrl('app/incomes/details/' + income.id);
   }
 }

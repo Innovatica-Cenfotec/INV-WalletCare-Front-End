@@ -21,6 +21,10 @@
   <nz-page-header-content>
     
     <nz-divider></nz-divider>
+    <app-income-list 
+    [incomeList]="incomeService.incomes$()">
+    </app-income-list>
+   
 
   </nz-page-header-content>
 </nz-page-header>
