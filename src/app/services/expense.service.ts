@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IExpense } from '../interfaces';
+import { IExpense } from '../interfaces';
 import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -8,8 +8,8 @@ import { catchError, Observable, tap } from 'rxjs';
 })
 export class ExpenseService extends BaseService<IExpense>{
   protected override source: string = 'expenses';
-  private expenseListSignal = signal<IAccount[]>([]);
-  private expenseSignal = signal<IAccount | undefined>(undefined);
+  private expenseListSignal = signal<IExpense[]>([]);
+  private expenseSignal = signal<IExpense | undefined>(undefined);
 
   get expenses$() {
     return this.expenseListSignal;
