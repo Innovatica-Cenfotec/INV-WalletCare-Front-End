@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
@@ -25,6 +25,7 @@ import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
 import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
+import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { ExpenseService } from '../../services/expense.service';
 import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index';
 
@@ -45,6 +46,7 @@ import { IExpense, IIncomeExpenseType, ITypeForm } from '../../interfaces/index'
     AccountTabExpenseComponent,
     AccountTabIncomesComponent,
     ExpenseListComponent,
+    ExpenseFormComponent,
     NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent
@@ -67,7 +69,22 @@ export class AccountDetailComponent implements OnInit {
   * Id of the account
   */
   public id: number = 0;
+  
+  /**
+   * The visibility of the account creation form.
+   */
+  public isVisible = signal(false);
 
+  /**
+   * The loading state of the account form.
+   */
+  public isLoading = signal(false);
+
+  public title: string = '';
+
+  public TypeForm: ITypeForm = ITypeForm.create;
+  
+  @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -92,6 +109,25 @@ export class AccountDetailComponent implements OnInit {
         }
       })
     });
+  }
+  
+  /**
+  * Closes the expense creation form.
+  * Sets the `isVisible` property to `false`.
+  */
+  onCanceled(): void {
+    this.isVisible.set(false);
+    this.isLoading.set(false);
+  }
+  
+  /**
+   * Shows the modal to edit the expense
+   */
+  showModalEditExpense(expense: IExpense): void {
+    this.title = 'Editar gasto';
+    this.TypeForm = ITypeForm.update;
+    this.formExpense.item = expense;
+    this.isVisible.set(true);
   }
 
   /**

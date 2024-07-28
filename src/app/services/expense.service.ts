@@ -68,6 +68,24 @@ export class ExpenseService extends BaseService<IExpense>{
   }
 
   /**
+   * Updates an expense signal.
+   * @param expense - The expense to be updated.
+   * @returns An Observable that emits the updated expense.
+   */
+  updateExpenseSignal(expense: IExpense): Observable<any> {
+      return this.edit(expense.id, expense).pipe(
+          tap((response: any) => {
+              this.expenseListSignal.update(accounts => accounts.map(a => a.id === response.id ? response : a));
+              this.expenseSignal.set(response);
+          }),
+          catchError(error => {
+              console.error('Error updating account', error);
+              throw error;
+          })
+      );
+  }
+
+  /**
    * Deletes an expense signal.
    * @param expense - The expense to be deleted.
    * @returns An Observable that emits the deleted expense.
