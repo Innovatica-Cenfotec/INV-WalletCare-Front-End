@@ -19,7 +19,7 @@
             <td>{{ getExpenseType(data) }}</td>
             <td>{{ getExpenseFrecuency(data) }}</td>
             <td>{{ getExpenseAccount(data) }}</td>
-            <td>{{ data.updatedAt }}</td>
+            <td>{{ getDate(data.updatedAt) }}</td>
             <td nzRight>
                 <nz-space>
                     <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)">

@@ -1,12 +1,10 @@
 <nz-page-header nzBackIcon [nzGhost]="false">
     <nz-page-header-title>{{accountService.account$()?.name}}</nz-page-header-title>
     <nz-page-header-extra>
-        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()"
-            [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"></app-account-detail-header>
+        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()" [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"></app-account-detail-header>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered
-            nzSize="small">
+        <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered nzSize="small">
             <nz-descriptions-item nzTitle="Balance general">
                 ₡ {{accountService.account$()?.balance}}
             </nz-descriptions-item>
@@ -30,8 +28,8 @@
             <nz-descriptions-item nzTitle="Última actualización">
                 {{ getDate(accountService.account$()?.updatedAt) }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Descripción">{{accountService.account$()?.description ||
-                ""}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Descripción">{{accountService.account$()?.description || ""}}
+            </nz-descriptions-item>
         </nz-descriptions>
         <nz-divider></nz-divider>
         <nz-tabset>
@@ -43,9 +41,7 @@
                 <app-account-tab-incomes></app-account-tab-incomes>
             </nz-tab>
             <nz-tab nzTitle="Mis amigos" *ngIf="isAccountShared()">
-                <app-account-tab-members [account]="accountService.account$()"
-                    [accountUsers]="accountService.membersAccount$()" [isOwner]="isOwer()"
-                    (deleteFriend)="deleteFriend($event)">
+                <app-account-tab-members [account]="accountService.account$()" [accountUsers]="accountService.membersAccount$()" [isOwner]="isOwer()" (deleteFriend)="deleteFriend($event)">
                 </app-account-tab-members>
             </nz-tab>
         </nz-tabset>

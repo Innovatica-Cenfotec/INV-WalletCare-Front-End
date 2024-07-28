@@ -22,6 +22,7 @@ import { AccountDetailHeaderComponent } from '../../components/account/account-d
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
 import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
+import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
 
 @Component({
   selector: 'app-account-detail',
@@ -39,6 +40,7 @@ import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
     AccountTabMembersComponent,
     AccountTabExpenseComponent,
     AccountTabIncomesComponent,
+    ExpenseListComponent,
     NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent
