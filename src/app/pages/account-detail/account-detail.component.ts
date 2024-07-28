@@ -25,7 +25,6 @@ import { InviteAccountComponent } from '../../components/account/account-detail/
 import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
 import { AuthService } from '../../services/auth.service';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
-import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
 import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
 import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
@@ -45,7 +44,6 @@ import { ExpenseFormComponent } from '../../components/expense/expense-form/expe
     NzTabsModule,
     NzDividerModule,
     AccountTabMembersComponent,
-    AccountTabExpenseComponent,
     AccountTabIncomesComponent,
     ExpenseListComponent,
     ExpenseFormComponent,
