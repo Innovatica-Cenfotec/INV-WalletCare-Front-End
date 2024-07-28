@@ -1,4 +1,4 @@
-<nz-space [nzWrap]="true" nzSize="middle" [nzWrap]="true">
+<nz-space nzSize="middle" [nzWrap]="true">
     <button class="btn" *nzSpaceItem nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
         <i nz-icon nzType="plus"></i>
         Agregar gastos
@@ -12,8 +12,13 @@
             <a>Gasto recurrente</a>
           </li>
         </ul>
-      </nz-dropdown-menu>
-    <button class="btn" *nzSpaceItem nz-button nzType="default">
+     </nz-dropdown-menu>
+ 
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('expense')">
+        <i nz-icon nzType="plus"></i>
+        Agregar gastos
+    </button>
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('income')">
         <i nz-icon nzType="plus"></i>
         Agregar ingresos
     </button>
@@ -66,6 +71,10 @@
 (onCanceled)="closeModalCreateExpense()" 
 (onCreated)="createExpense($event)"
 (onUpdated)="updateIncome($event)"
-[id]="id"
->
+[id]="id">
 </app-expense-form>
+
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" 
+[type]="TransactionFormType" [listIncome]="incomeService.incomes$()"
+    (onCancel)="onCanceledTransaction()" (onConfirm)="addTransaction($event)">
+</app-transaction-form>

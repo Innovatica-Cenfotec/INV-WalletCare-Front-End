@@ -1,3 +1,4 @@
+import { TransactionFormComponent } from './../../../transaction-form/transaction-form.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, signal, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
@@ -21,6 +22,7 @@ import { AccountFormComponent } from '../../account-form/account-form.component'
 import { ExpenseService } from '../../../../services/expense.service';
 import { TaxService } from '../../../../services/tax.service';
 import { ExpenseFormComponent } from '../../../expense/expense-form/expense-form.component';
+import { IncomeService } from '../../../../services/imcome.service';
 
 @Component({
     selector: 'app-account-detail-header',
@@ -39,16 +41,15 @@ import { ExpenseFormComponent } from '../../../expense/expense-form/expense-form
         InviteAccountComponent,
         NzDropDownModule,
         ExpenseFormComponent
+        TransactionFormComponent
     ],
     templateUrl: './account-detail-header.component.html',
     styleUrl: './account-detail-header.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDetailHeaderComponent implements OnChanges {
-
-
     @ViewChild(AccountFormComponent) form!: AccountFormComponent;
-
+    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
     @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
     /*
@@ -108,7 +109,22 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     public IITypeForm = ITypeForm;
 
+    /**
+     * The transaction form type.
+     */
+    public TransactionFormType: 'income' | 'expense' = 'income';
 
+    /**
+     * The visibility of the transaction form.
+     */
+    public isVisibleTransaction = false;
+
+    /**
+     * Indicates whether the transaction form is loading or not.
+     */
+    public isLoadingTransaction = false;
+
+    public incomeService = inject(IncomeService);
     public accountService = inject(AccountService);
     public expenseService = inject(ExpenseService);
     public taxService = inject(TaxService);
@@ -123,6 +139,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.expenseService.findAllSignal();
         this.accountService.findAllSignal();
         this.taxService.findAllSignal();
+        this.incomeService.findAllSignal();        
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -141,7 +158,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
             this.isMember = true;
         }
 
-        if (changes['id']) {
+        if (changes['id'] && this.isAccountShared) {
             this.accountService.getMembersSignal(this.id);
             this.member = this.accountService.membersAccount$().find((accountUser) => accountUser.id === this.authService.getUser()?.id);
         }
@@ -270,7 +287,6 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.isVisibleInvite = false;
     }
 
-
     showModalCreateExpense(ExpenseType: IIncomeExpenceType): void {
         this.title = ExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
@@ -316,4 +332,27 @@ export class AccountDetailHeaderComponent implements OnChanges {
     updateIncome(expense: IExpense): void { }
 
     deleteIncome(expense: IExpense): void { }
+
+    /**
+    * Invites a friend to the account
+    */
+    onCanceledTransaction(): void {
+        this.isVisibleTransaction = false;
+        this.isLoadingTransaction = false;
+    }
+
+    /**
+     * Shows the transaction form.
+     */
+    addTransaction(item: any): void {
+        this.isVisibleTransaction = true;
+    }
+
+    /**
+     * Shows the transaction form.
+     */
+    showTransactionForm(type: 'income' | 'expense'): void {   
+        this.isVisibleTransaction = true; 
+        this.TransactionFormType = type;        
+    }
 }
