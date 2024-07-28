@@ -101,14 +101,17 @@ export class ExpenseListComponent {
 
   // Sort by attribute
   sortByName(a: IExpense, b: IExpense): number {
-    return (a.name ?? '').localeCompare(b.name ?? '');
+    return (a.name?.toLowerCase() ?? '').localeCompare(b.name?.toLowerCase() ?? '');
   }
 
   sortByDescription(a: IExpense, b: IExpense): number {
-    return (a.description ?? '').localeCompare(b.description ?? '');
+    return (a.description?.toLowerCase() ?? '').localeCompare(b.description?.toLowerCase() ?? '');
   }
 
   sortByAmount(a: IExpense, b: IExpense): number {
+    //if (parseInt(b.amount) > parseInt(a.amount)) return 1;
+    //else if (parseInt(b.amount) < parseInt(a.amount)) return -1;
+    //else return 0;
     return (a.amount?.toString() ?? '').localeCompare(b.amount?.toString() ?? '');
   }
 
