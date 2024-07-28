@@ -1,0 +1,34 @@
+<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '200px', '110px']">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+            <th>Tipo</th>
+            <th>Frecuencia</th>
+            <th>Fecha</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.description }}</td>
+            <td>{{ data.amount }}</td>
+            <td>{{ getExpenseType(data) }}</td>
+            <td>{{ getExpenseFrecuency(data) }}</td>
+            <td>{{ data.updatedAt }}</td>
+            <td nzRight>
+                <nz-space>
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)">
+                        <span nz-icon nzType="edit"></span>
+                    </button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteExpense.emit(data)">
+                        <span nz-icon nzType="delete"></span>
+                    </button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

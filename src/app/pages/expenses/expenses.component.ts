@@ -15,11 +15,9 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
-import { AccountListComponent } from "../../components/account/account-list/account-list.component";
-import { AccountCardsComponent } from "../../components/account/account-cards/account-cards.component";
+import { ExpenseListComponent } from "../../components/expense/expense-list/expense-list.component";
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { ExpenseService } from '../../services/expense.service';
-import { AccountService } from '../../services/account.service';
 import { TaxService } from '../../services/tax.service';
 import { IExpense, IIncomeExpenceType, ITypeForm } from '../../interfaces/index';
 
@@ -39,8 +37,7 @@ import { IExpense, IIncomeExpenceType, ITypeForm } from '../../interfaces/index'
     NzIconModule,
     NzDividerModule,
     NzModalModule,
-    AccountListComponent,
-    AccountCardsComponent,
+    ExpenseListComponent,
     NzButtonModule,
     NzDropDownModule,
     ExpenseFormComponent
@@ -53,7 +50,6 @@ export class ExpensesComponent {
   public expenseService = inject(ExpenseService);
   public router = inject(Router);
   private nzNotificationService = inject(NzNotificationService);
-  public accountService = inject(AccountService);
   public taxService = inject(TaxService);
   public IIncomeExpenceType = IIncomeExpenceType;
 
@@ -73,7 +69,7 @@ export class ExpensesComponent {
 
   ngOnInit(): void {
     this.expenseService.findAllSignal();
-    this.accountService.findAllSignal();
+    this.expenseService.findAllSignal();
     this.taxService.findAllSignal();
   }
 
