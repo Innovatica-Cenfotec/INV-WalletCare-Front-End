@@ -9,7 +9,7 @@
         <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered
             nzSize="small">
             <nz-descriptions-item nzTitle="Balance general">
-                ₡ {{accountService.account$()?.balance}}
+                ₡ {{generalBalance | currency:'':'':'1.2-2'}}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Tipo de cuenta" nzSpan="2">{{getAccountType()}}
             </nz-descriptions-item>
@@ -19,10 +19,10 @@
             <nz-descriptions-item *ngIf="isAccountShared()" nzTitle="Miembros">
                 {{countMembers()}}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Gastos del mes">₡ -</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Gastos recurrentes">-</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Ingresos del mes">₡ -</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Ingresos recurrentes">-</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Gastos del mes">₡ {{monthExpenses | currency:'':'':'1.2-2'}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Gastos recurrentes">₡ {{recurringExpenses | currency:'':'':'1.2-2'}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ingresos del mes">₡ {{monthIncomes | currency:'':'':'1.2-2'}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ingresos recurrentes">₡ {{recurringIncomes | currency:'':'':'1.2-2'}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Ahorros del mes">₡ -</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Ahorros recurrentes">-</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Fecha de creación">

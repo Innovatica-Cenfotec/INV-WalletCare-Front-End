@@ -22,6 +22,7 @@ import { IAccount, ITypeForm } from '../../interfaces';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
+import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-accounts',
@@ -48,6 +49,7 @@ import { AccountCardsComponent } from '../../components/account/account-cards/ac
 })
 export class AccountsComponent implements OnInit {
   public accountService = inject(AccountService);
+  public transactionService = inject(TransactionService);
   public router = inject(Router);
   private nzNotificationService = inject(NzNotificationService);
   private nzModalService = inject(NzModalService);
@@ -85,6 +87,7 @@ export class AccountsComponent implements OnInit {
    */
   ngOnInit(): void {
     this.accountService.findAllSignal();
+    this.transactionService.getAllByOwnerSignal();
   }
 
   /**
