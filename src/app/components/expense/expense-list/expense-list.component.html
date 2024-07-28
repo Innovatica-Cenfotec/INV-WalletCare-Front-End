@@ -1,4 +1,4 @@
-<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '200px', '110px']">
+<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '100px', '120px']">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -6,6 +6,7 @@
             <th>Monto</th>
             <th>Tipo</th>
             <th>Frecuencia</th>
+            <th>Cuenta</th>
             <th>Fecha</th>
             <th nzRight>Acciones</th>
         </tr>
@@ -17,6 +18,7 @@
             <td>{{ data.amount }}</td>
             <td>{{ getExpenseType(data) }}</td>
             <td>{{ getExpenseFrecuency(data) }}</td>
+            <td>{{ getExpenseAccount(data) }}</td>
             <td>{{ data.updatedAt }}</td>
             <td nzRight>
                 <nz-space>

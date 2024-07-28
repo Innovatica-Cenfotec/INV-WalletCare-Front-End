@@ -95,4 +95,8 @@ export class ExpenseListComponent {
         return '-';
     }
   }
+
+  getExpenseAccount(expense: IExpense): string {
+    return expense.account?.name ?? "-";
+  }
 }

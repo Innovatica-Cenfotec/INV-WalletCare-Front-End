@@ -228,6 +228,7 @@ export interface IIncome {
 export interface IExpense {
   id?: number;
   user?: IUser;
+  account?: IAccount;
   name?: string;
   description?: string;
   isTemplate?: boolean;
