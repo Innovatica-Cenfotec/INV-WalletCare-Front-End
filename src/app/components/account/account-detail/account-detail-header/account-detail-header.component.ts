@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, signal, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -71,6 +71,9 @@ export class AccountDetailHeaderComponent implements OnChanges {
      */
     @Input() isOwner: boolean = false;
 
+    @Output() loadData = new EventEmitter<void>();
+
+
     /**
      * Indicates whether the user is a member of the account.
      */
@@ -88,6 +91,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     * The visibility of the account edit form.
     */
     public isVisible = signal(false);
+    public isVisibleExpense = signal(false);
 
     /**
      * The visibility of the invite friend form.
@@ -266,12 +270,18 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.isVisibleInvite = false;
     }
 
-    showModalCreate(ExpenseType: IIncomeExpenceType): void {
+
+    showModalCreateExpense(ExpenseType: IIncomeExpenceType): void {
         this.title = ExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
         this.expense.set({ amount: 0 });
-        this.isVisible.set(true);
+        this.isVisibleExpense.set(true);
+    }
+
+    closeModalCreateExpense() {
+        this.isVisibleExpense.set(false);
+        this.isLoading.set(false);
     }
 
     createExpense(expense: IExpense): void {
@@ -287,8 +297,9 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
         this.expenseService.saveExpenseSignal(expense).subscribe({
             next: (response: any) => {
-                this.isVisible.set(false);
+                this.isVisibleExpense.set(false);
                 this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', { nzDuration: 5000 });
+                this.loadData.emit();
             },
             error: (error: any) => {
                 this.isLoading.set(false);

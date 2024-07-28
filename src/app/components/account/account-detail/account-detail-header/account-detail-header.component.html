@@ -5,10 +5,10 @@
     </button>
     <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.unique)">
+          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.unique)">
             <a>Gasto único</a>
           </li>
-          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.recurrence)">
+          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.recurrence)">
             <a>Gasto recurrente</a>
           </li>
         </ul>
@@ -58,12 +58,12 @@
 
 <app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
 
-<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()"
+<app-expense-form #form [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [item]="expense()"
 [type]="TypeForm"
 [title]="title"
 [expenseType]="expenseType"
 [taxList]="taxService.taxes$()"
-(onCanceled)="onCanceled()" 
+(onCanceled)="closeModalCreateExpense()" 
 (onCreated)="createExpense($event)"
 (onUpdated)="updateIncome($event)"
 [id]="id"
