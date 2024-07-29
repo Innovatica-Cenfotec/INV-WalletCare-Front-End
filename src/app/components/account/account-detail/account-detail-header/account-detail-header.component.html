@@ -5,15 +5,15 @@
     </button>
     <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.unique)">
-            <a>Gasto único</a>
-          </li>
-          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.recurrence)">
-            <a>Gasto recurrente</a>
-          </li>
+            <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenseType.unique)">
+                <a>Gasto único</a>
+            </li>
+            <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenseType.recurrence)">
+                <a>Gasto recurrente</a>
+            </li>
         </ul>
-     </nz-dropdown-menu>
- 
+    </nz-dropdown-menu>
+
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('expense')">
         <i nz-icon nzType="plus"></i>
         Agregar gastos
@@ -21,26 +21,19 @@
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('income')">
         <i nz-icon nzType="plus"></i>
         Agregar ingresos
-    </button>
-    @if (isAccountShared && isOwner) {
+    </button> @if (isAccountShared && isOwner) {
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="inviteFriend()">
         <i nz-icon nzType="plus"></i>
         Invitar a un amigo
-    </button>
-    }
-    @if (isAccountShared && !isOwner && isMember) {
+    </button> } @if (isAccountShared && !isOwner && isMember) {
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="leaveAccount()">
         <i nz-icon nzType="minus"></i>
         Salir de la cuenta
-    </button>
-    }
-    @if (isAccountShared && !isOwner && !isMember) {
+    </button> } @if (isAccountShared && !isOwner && !isMember) {
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="deleteAccountUser()">
         <i nz-icon nzType="delete"></i>
         Eliminar cuenta
-    </button>
-    }
-    @if(isOwner){
+    </button> } @if(isOwner){
     <button class="btn" *nzSpaceItem nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menu">
         Otras opciones
         <i nz-icon nzType="down"></i>
@@ -56,25 +49,14 @@
 </nz-space>
 
 
-<app-account-form #form [isVisible]="isVisible()" [type]="IITypeForm.update" [title]="'Editar cuenta'"
-    (onCanceled)="onCanceled()" (onUpdated)="editAccount($event)" [item]="accountService.account$()"
-    [isLoading]="isLoading()">
+<app-account-form #form [isVisible]="isVisible()" [type]="IITypeForm.update" [title]="'Editar cuenta'" (onCanceled)="onCanceled()" (onUpdated)="editAccount($event)" [item]="accountService.account$()" [isLoading]="isLoading()">
 </app-account-form>
 
 <app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
 
-<app-expense-form #form [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [item]="expense()"
-[type]="TypeForm"
-[title]="title"
-[expenseType]="expenseType"
-[taxList]="taxService.taxes$()"
-(onCanceled)="closeModalCreateExpense()" 
-(onCreated)="createExpense($event)"
-(onUpdated)="updateIncome($event)"
-[id]="id">
+<app-expense-form #form [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalCreateExpense()" (onCreated)="createExpense($event)"
+    (onUpdated)="updateIncome($event)" [id]="id">
 </app-expense-form>
 
-<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" 
-[type]="TransactionFormType" [listIncome]="incomeService.incomes$()"
-    (onCancel)="onCanceledTransaction()" (onConfirm)="addTransaction($event)">
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType" [listIncome]="incomeService.incomes$()" (onCancel)="onCanceledTransaction()" (onConfirm)="addTransaction($event)">
 </app-transaction-form>

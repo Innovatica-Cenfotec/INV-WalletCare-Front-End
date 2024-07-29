@@ -14,7 +14,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { IAccount, IAccountUser, IExpense, IIncomeExpenceType, ITypeForm } from '../../../../interfaces';
+import { IAccount, IAccountUser, IExpense, IIncomeExpenseType, ITypeForm } from '../../../../interfaces';
 import { AuthService } from '../../../../services/auth.service';
 import { AccountService } from '../../../../services/account.service';
 import { InviteAccountComponent } from "../invite-account/invite-account.component";
@@ -40,7 +40,7 @@ import { IncomeService } from '../../../../services/imcome.service';
         AccountFormComponent,
         InviteAccountComponent,
         NzDropDownModule,
-        ExpenseFormComponent
+        ExpenseFormComponent,
         TransactionFormComponent
     ],
     templateUrl: './account-detail-header.component.html',
@@ -48,7 +48,6 @@ import { IncomeService } from '../../../../services/imcome.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDetailHeaderComponent implements OnChanges {
-    @ViewChild(AccountFormComponent) form!: AccountFormComponent;
     @ViewChild(AccountFormComponent) form!: AccountFormComponent;
     @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
 
@@ -82,7 +81,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
     public expense = signal<IExpense>({ amount: 0 });
 
-    public expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+    public expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
 
     public title: string = '';
 
@@ -128,7 +127,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     public accountService = inject(AccountService);
     public expenseService = inject(ExpenseService);
     public taxService = inject(TaxService);
-    public IIncomeExpenceType = IIncomeExpenceType;
+    public IIncomeExpenseType = IIncomeExpenseType;
     private authService = inject(AuthService);
     private nzModalService = inject(NzModalService);
     private nzNotificationService = inject(NzNotificationService);
@@ -287,8 +286,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.isVisibleInvite = false;
     }
 
-    showModalCreateExpense(ExpenseType: IIncomeExpenceType): void {
-        this.title = ExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
+    showModalCreateExpense(ExpenseType: IIncomeExpenseType): void {
+        this.title = ExpenseType === IIncomeExpenseType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
         this.expense.set({ amount: 0 });

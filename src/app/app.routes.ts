@@ -127,22 +127,22 @@ export const routes: Routes = [
           },
         }
       },
-      // {
-      //   path: 'expense',
-      //   component: ExpensesComponent,
-      //   data: {
-      //     authorities: [
-      //       IRole.admin,
-      //       IRole.user
-      //     ],
-      //     showInSidebar: true,
-      //     layout: <ILayout>{
-      //       icon: 'fall',
-      //       breadcrumb: ['Gastos'],
-      //       name: 'Gastos',
-      //     },
-      //   }
-      // },
+      {
+        path: 'expense',
+        component: ExpensesComponent,
+       data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'fall',
+            breadcrumb: ['Gastos'],
+            name: 'Gastos',
+          },
+        }
+      },
     ],
   },
   {
