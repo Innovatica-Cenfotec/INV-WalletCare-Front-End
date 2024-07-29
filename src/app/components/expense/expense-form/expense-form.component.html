@@ -39,7 +39,7 @@
                         <nz-form-label nzRequired nzFor="amount">Monto</nz-form-label>
                         <nz-form-control [nzErrorTip]="errorAmountTpl">
                             <nz-input-group>
-                                <nz-input-number class="input-number" [nzMin]="0" formControlName="amount"
+                                <nz-input-number class="input-number" [nzMin]="1" formControlName="amount"
                                     [nzFormatter]="formatterConlon" [nzParser]="parserConlon">
                             </nz-input-number>
                                 <ng-template #errorAmountTpl let-control>
@@ -47,7 +47,7 @@
                                     Por favor ingrese el monto
                                     }
                                     @else if (control.errors?.['min']) {
-                                    El monto dede se 0 o mayor
+                                    El monto dede ser mayor a 0
                                     }
                                     @else {
                                     {{control.errors?.['message']}}

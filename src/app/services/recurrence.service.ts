@@ -24,8 +24,8 @@ export class RecurrenceService extends BaseService<IAccount> {
      * Get all recurrences
      * @returns An signal with all recurrences
      */
-    findAllSignal() {
-        return this.findAll().subscribe({
+    findAllSignal(id: number) {
+        return this.http.get(`${this.source}/${id}`).subscribe({
             next: (response: any) => {
                 const recurrencesIncome = response.filter((recurrence: IRecurrence) => recurrence.expense === null);
                 this.accountListIncomeSignal.set(recurrencesIncome);

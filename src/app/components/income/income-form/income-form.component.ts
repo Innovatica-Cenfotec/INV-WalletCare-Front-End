@@ -65,7 +65,7 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
     override formGroup = this.fb.group({
         name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
         description: [this.item?.description, [Validators.maxLength(200)]],
-        amount: [this.item?.amount, [Validators.required]],
+        amount: [this.item?.amount, [Validators.required, Validators.min(1)] ],
         amountType: [this.item?.amountType, [Validators.required]],
         scheduledDay: [this.item?.scheduledDay],
         tax: [this.item?.tax],

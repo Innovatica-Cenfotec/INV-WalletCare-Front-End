@@ -17,6 +17,9 @@ export class TransactionService extends BaseService<ITransaction> {
     return this.transactionListSignal;
   }
 
+  get balances$(){
+    return this.balancesSignal;
+  }
 
   /**
    * Retreives all the transactions for the account
@@ -68,8 +71,8 @@ export class TransactionService extends BaseService<ITransaction> {
 
   }
 
-  getBalances(id: number){
-    return this.http.get(`${this.source}/balances/${id}`).pipe(
+  getBalancesByAccount(id: number){
+    return this.http.get(`${this.source}/balances-account/${id}`).pipe(
 
       tap((response: any) => {
         this.balancesSignal.set(response);
@@ -79,6 +82,18 @@ export class TransactionService extends BaseService<ITransaction> {
         throw error;
       })
     );
+  }
 
+  getBalancesByOwner(){
+    return this.http.get(`${this.source}/balances-user`).pipe(
+
+      tap((response: any) => {
+        this.balancesSignal.set(response);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
   }
 }

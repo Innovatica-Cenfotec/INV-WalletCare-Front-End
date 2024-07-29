@@ -88,6 +88,7 @@ export class AccountsComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.findAllSignal();
     this.transactionService.getAllByOwnerSignal();
+    this.transactionService.getBalancesByOwner()
   }
 
   /**
@@ -167,6 +168,7 @@ export class AccountsComponent implements OnInit {
         }
 
         this.isLoading.set(false);
+        this.isVisible.set(false);
       }
     });
   }

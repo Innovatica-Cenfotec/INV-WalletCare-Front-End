@@ -6,7 +6,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { DatePipe } from "@angular/common";
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { IExpense, IIncome, IRecurrence } from '../../../../interfaces';
+import { IBalance, IExpense, IIncome, IRecurrence } from '../../../../interfaces';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
@@ -50,12 +50,12 @@ export class AccountTabRecurrenceComponent implements OnChanges {
                     item: recurrence.income as IIncome,
                     type: 'income'
                 }));
-            } 
+            }
 
-            if (this.type === 'expense') {  
+            if (this.type === 'expense') {
                 this.showTable = this.recurrences.map((recurrence) => ({
                     id: recurrence.id!,
-                    item: recurrence.expense as IExpense,
+                    item: this.formatAmmount(recurrence.expense),
                     type: 'expense'
                 }));
             }
@@ -69,5 +69,40 @@ export class AccountTabRecurrenceComponent implements OnChanges {
    */
     getDate(date: Date | undefined): string {
         return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
+    }
+
+    formatAmmount(expense: IExpense | undefined): IExpense {
+        let returnExpense: IExpense = {};
+
+        if (expense !== undefined &&  expense.amount !== undefined) {
+            returnExpense = expense;
+            let ammount: number = + expense.amount;
+            let calc: number = -Math.abs(ammount);
+            returnExpense.amount = calc.toString();
+            
+        }
+
+        return returnExpense;
+    }
+
+    /**
+     * Set the color for amounts
+     * @param amount is the amount
+     * @returns the ammount whith the feedback color
+     */
+    formatAmount(amount: string | 0 | undefined): string{
+                
+        let style = '';
+        if (amount != undefined) {
+            let ammountNumber : number = + amount;
+            if (ammountNumber > 0) {
+                style = 'color: ' + IBalance.surplus; ';'
+            } else if (ammountNumber < 0) {
+                style = 'color: ' + IBalance.deficit; ';'
+            } else {
+                style = 'color: ' + IBalance.balance; ';'
+            }
+        }
+        return style;
     }
 }

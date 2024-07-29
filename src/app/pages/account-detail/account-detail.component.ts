@@ -158,6 +158,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
         this.recurrenceService.deleteRecurrenceSignal(recurrence.id).subscribe({
           next: (response: any) => {
             this.nzNotificationService.success('Éxito',type === 'gasto' ? 'Se ha eliminado el gasto recurrente con éxito' : 'Se ha eliminado el ingreso recurrente con éxito');
+            this.loadData();
           },
           error: (error => {
             this.nzNotificationService.error('Error', error.error.detail)
@@ -279,9 +280,9 @@ export class AccountDetailComponent implements OnInit, OnChanges {
         }
       })
 
-      this.recurrenceService.findAllSignal();
+      this.recurrenceService.findAllSignal(this.id);
       this.transactionService.getAllSignal(this.id);
-      this.transactionService.getBalances(this.id).subscribe({
+      this.transactionService.getBalancesByAccount(this.id).subscribe({
         next: (response: any) => {
           this.monthExpenses = response.monthlyExpenseBalance;
           this.recurringExpenses = response.recurrentExpensesBalance;
