@@ -1,0 +1,35 @@
+.content {
+    display: flex;
+}
+
+.extra>div {
+    display: flex;
+    width: max-content;
+    justify-content: flex-end;
+}
+
+.main-container{
+    display: flex;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+
+@media (max-width: 576px) {
+    .content {
+        display: block;
+    }
+
+    .main {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .extra {
+        width: 100%;
+        margin-left: 0;
+        text-align: left;
+    }
+}

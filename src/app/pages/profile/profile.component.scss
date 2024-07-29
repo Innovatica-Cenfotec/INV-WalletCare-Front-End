@@ -1,0 +1,49 @@
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    //border-radius: 8px;
+    //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  
+    .title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  
+    h2 {
+      margin: 0;
+    }
+  }
+  
+  .confirm-password-container {
+    display: flex;
+    align-items: center;
+  
+    input {
+      flex: 1;
+      margin-right: 10px;
+    }
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  
+    button {
+      flex: 1;
+      margin-right: 10px;
+    }
+  
+    .save-button {
+      flex: 2;
+    }
+  
+    button:last-child {
+      margin-right: 0;
+    }
+  }
+  

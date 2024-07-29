@@ -1,0 +1,62 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; // Altura completa de la ventana
+  background-color: #f0f2f5; // Fondo claro para el contenedor
+  background-color: #FFFFFF;
+  background-image: url("https://res.cloudinary.com/dqryzh0n1/image/upload/v1720853172/walletcare-background_grdwao.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+
+  .title {
+    text-align: center;
+    color: var(--ant-primary-color);
+  }
+
+  nz-card {
+    width: 100%;
+    max-width: 500px; // Ancho máximo para el card
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Sombra suave
+    border-radius: 8px; // Bordes redondeados
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #666;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      
+      nz-form-item {
+        margin-bottom: 16px;
+
+        nz-input-group {
+          width: 100%;
+          
+          input {
+            width: 100%;
+          }
+        }
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

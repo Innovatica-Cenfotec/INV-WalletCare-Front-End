@@ -1,0 +1,27 @@
+<nz-space nzAlign="center" nzDirection="horizontal" nzSize="large" nzWrap="true">
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="generalBalance" [nzTitle]="'Balance General'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: generalBalanceColor }"></nz-statistic>
+    <ng-template #prefixTplOne><span nz-icon nzType="arrow-up"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="generalExpenses" [nzTitle]="'Gastos generales'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: generalExpensesColor }"></nz-statistic>
+    <ng-template #prefixTplTwo><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="generalSavings" [nzTitle]="'Ahorros Generales'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: generalSavingsColor }"></nz-statistic>
+    <ng-template #prefixTplThree><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="recurringExpenses" [nzTitle]="'Gastos Recurrentes'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: recurringExpensesColor }"></nz-statistic>
+    <ng-template #prefixTplFour><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="recurringSavings" [nzTitle]="'Ahorros Recurentes'" [nzSuffix]="'₡'"
+      [nzValueStyle]="{ color: recurringSavingsColor }"></nz-statistic>
+    <ng-template #prefixTplFive><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+</nz-space>

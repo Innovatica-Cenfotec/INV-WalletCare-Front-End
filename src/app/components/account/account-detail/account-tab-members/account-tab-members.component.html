@@ -1,0 +1,26 @@
+<nz-table #fixedTable [nzData]="accountUsers" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '1000px', y: null}">
+    <thead>
+        <tr>
+            <th nzLeft>Nombres</th>
+            <th>Correo electrónico</th>
+            <th>Estado</th>
+            <th>Balace</th>
+            <th>Fecha de unión</th>
+            <th *ngIf="isOwner" nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td nzLeft>{{ data.user?.name + ' ' + data.user?.lastname }}</td>
+            <td>{{ data.user?.email }}</td>
+            <td>{{ getStatus(data) }}</td>
+            <td>{{ data.lastTransactionBalance }}</td>
+            <td>{{ getDate(data.joinedAt) }}</td>
+            <td *ngIf="isOwner" nzRight>
+                <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteFriend.emit(data)">
+                    <span nz-icon nzType="delete"></span>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

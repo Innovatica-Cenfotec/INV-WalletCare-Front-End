@@ -1,9 +1,7 @@
-
-<div class="contaniner h-100">
-  <div class="d-flex align-items-center justify-content-center">
-    <div class="w-100 text-center">
-      <p class="text-warning">Access denied to resource</p>
-      <a href="/app/dashboard">volver</a>
-    </div>
+<nz-result nzStatus="403" nzTitle="403" nzSubTitle="Lo siento, no tienes acceso a esta página.">
+  <div nz-result-extra>
+    <button nz-button nzType="primary">
+      <a [href]="'/'">Volver al inicio</a>
+    </button>
   </div>
-</div>
+</nz-result>

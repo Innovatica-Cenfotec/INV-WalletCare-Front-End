@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 export interface ILoginResponse {
   accessToken: string;
   expiresIn: number
@@ -9,9 +10,9 @@ export interface IResponse<T> {
 
 export interface IUser {
   id?: number;
-  name?: string;  
+  name?: string;
   lastname?: string;
-  alias?: string;
+  nickname?: string;
   email?: string;
   password?: string;
   active?: boolean;
@@ -48,4 +49,216 @@ export interface ILayout {
   breadcrumb: string[];
   name: string;
   parentPath?: string;
+}
+
+/**
+ * Interface for type of form
+ */
+export enum ITypeForm {
+  create = "CREATE",
+  update = "UPDATE"
+}
+
+/**
+ * Interface for account type
+ */
+export enum IAccountType {
+  personal = "PERSONAL",
+  shared = "SHARED"
+}
+
+/**
+ * Interface for account
+ */
+export interface IAccount {
+  id?: number;
+  name?: string;
+  description?: string;
+  owner?: IUser;
+  type?: IAccountType;
+  balance?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  default?: boolean;
+}
+
+/**
+ * Interface for balance colors
+ */
+export enum IBalance {
+  surplus = '#3E7422',
+  deficit = '#D23537',
+  balance = '#B17A0C'
+}
+
+export interface IForgotResetPassword {
+  otp: string;
+  newPassword: string;
+  email: string;
+}
+export interface ISendInvite {
+  inviteToEmail: string,
+  accountId: number;
+}
+
+/**
+ * Interface for account user
+ */
+export interface IAccountUser {
+  id?: number;
+  account?: IAccount;
+  user?: IUser;
+  isActive?: boolean;
+  lastTransactionId?: string;
+  lastTransactionBalance?: string;
+  joinedAt?: Date;
+  leftAt?: Date;
+  invitationStatus?: number;
+  isDeleted?: boolean;
+}
+
+export interface IGenericResponse {
+  message?: String;
+}
+
+export enum ITransactionType {
+  INCOME = 'Income',
+  EXPENSE = 'Expense',
+  SAVING = 'Saving'
+}
+
+export interface ITransaction {
+  id?: number;
+  owner?: IUser;
+  account?: IAccount;
+  type?: ITransactionType;
+  incomeAllocation?: string;
+  expense?: IExpense;
+  amount?: number;
+  previousBalance?: number;
+  description?: string;
+  createdAt?: Date;
+  deletedAt?: Date;
+  deleted?: boolean;
+}
+/*
+* Interface for allocation
+*/
+export interface IAllocation {
+  id: number;
+  name: string;
+  amount: FormControl<number>;
+  percentage: FormControl<number>;
+  controlInstance: string;
+}
+
+/**
+ * Enum that represents the type of income or expense.
+ */
+export enum IIncomeExpenceType {
+  unique = "UNIQUE",
+  recurrence = "RECURRENCE"
+}
+
+/**
+ * Enumerates the possible types of frequency.
+ */
+export enum IFrequencyType {
+  daily = "DAILY",
+  monthly = "MONTHLY",
+  annual = "ANNUAL",
+  biweekly = "BIWEEKLY",
+  weekly = "WEEKLY",
+  other = "OTHER"
+}
+
+/**
+ * Enumerates the possible types amount.
+ */
+export enum IAmountType {
+  net = "NET",
+  gross = "GROSS"
+}
+
+/**
+ * Interface for tax
+ */
+export interface Itax {
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  percentage?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+
+export interface IIncomeAllocation {
+  id?: number;
+  user?: IUser;
+  income?: IIncome;
+  account?: IAccount;
+  percentage?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+/**
+ * Interface for income
+ */
+export interface IIncome {
+  addTransaction?: boolean;
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  isTemplate?: boolean;
+  type?: IIncomeExpenceType;
+  amount?: 0 | string;
+  amountType?: IAmountType;
+  scheduledDay?: number;
+  isTaxRelated?: boolean;
+  frequency?: IFrequencyType;
+  tax?: Itax;
+  createdAt?: Date;
+  updatedAt?: Date;
+  account?: IAccount;
+  listIncomeAllocation?: IIncomeAllocation[];
+}
+
+export interface IExpense {
+  addTransaction?: boolean;
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  isTemplate?: boolean;
+  type?: IIncomeExpenceType;
+  amount?: 0 | string;
+  amountType?: IAmountType;
+  scheduledDay?: number;
+  isTaxRelated?: boolean;
+  frequency?: IFrequencyType;
+  tax?: Itax;
+  createdAt?: Date;
+  updatedAt?: Date;
+  account?: IAccount;
+}
+
+
+export interface IBalanceDTO {
+  monthlyExpenseBalance?: number;
+  recurrentExpensesBalance?: number;
+  monthlyIncomeBalance?: number;
+  recurrentIncomesBalance?: number;
+}
+
+export interface IRecurrence {
+  id?: number;
+  user?: IUser;
+  account?: IAccount;
+  expense?: IExpense;
+  income?: IIncome;
+  createdAt?: Date;
 }
