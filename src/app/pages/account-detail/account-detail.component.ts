@@ -1,5 +1,15 @@
-import { inject } from '@angular/core';
+import { inject, OnChanges, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
+import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
+import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
+import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
+import { TransactionService } from '../../services/transaction.service';
+import { AccountService } from '../../services/account.service';
+import { AuthService } from '../../services/auth.service';
+import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction } from '../../interfaces';
+import { AccountTabRecurrenceComponent } from '../../components/account/account-detail/account-tab-recurrence/account-tab-recurrence.component';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -10,20 +20,10 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { CommonModule, DatePipe } from '@angular/common';
-import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
-import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
-import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { AccountFromComponent } from '../../components/account/account-from/account-from.component';
-import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
-import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
-
-import { AccountService } from '../../services/account.service';
-import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { RecurrenceService } from '../../services/recurrence.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -39,54 +39,60 @@ import { IAccount, IAccountType, IAccountUser } from '../../interfaces';
     NzTabsModule,
     NzDividerModule,
     AccountTabMembersComponent,
-    AccountTabExpenseComponent,
-    AccountTabIncomesComponent,
+    AccountTabTransactionsComponent,
     NzModalModule,
-    AccountFromComponent,
     InviteAccountComponent,
-    AccountDetailHeaderComponent
+    AccountDetailHeaderComponent,
+    AccountTabRecurrenceComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-detail.component.html',
   styleUrl: './account-detail.component.scss'
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnChanges {
   public accountService = inject(AccountService);
+  public transactionService = inject(TransactionService);
+  public recurrenceService = inject(RecurrenceService);
+
+  public generalBalance: number | undefined;
+  public generalExpenses = 0;
+  public monthExpenses = 0;
+  public monthIncomes = 0;
+  public recurringExpenses = 0;
+  public recurringIncomes = 0;
+
   private nzNotificationService = inject(NzNotificationService);
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
   private authService = inject(AuthService);
+  private router = inject(Router);
+  private nzModalService = inject(NzModalService);
 
   /*
   * Id of the account
   */
   public id: number = 0;
 
-
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-
-      // Validate if the id is not null or number
-      if (!id || isNaN(+id)) {
-        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
-        return;
-      }
-
-      this.id = Number(id);
-      // Get the account by id and get the members if the account is shared
-      this.accountService.getAccountSignal(this.id).subscribe({
-        next: (response: IAccount) => {
-          if (this.isAccountShared()) {
-            this.accountService.getMembersSignal(this.id);
-          }
-        },
-        error: (error: any) => {
-          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
-        }
-      })
-    });
+    this.loadData();
   }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    let monthExp: number;
+    if (changes['generalBalance']) {
+      this.transactionService.transactions$().forEach(element => {
+        if (element.createdAt?.getMonth == new Date().getMonth) {
+          if (element.amount !== undefined) {
+            monthExp = monthExp + element.amount;
+          }
+        }
+      });
+
+
+    }
+  }
+
 
   /**
    * Shows the date in the format dd/MM/yyyy HH:mm
@@ -141,10 +147,63 @@ export class AccountDetailComponent implements OnInit {
     return account.owner?.id === this.authService.getUser()?.id;
   }
 
+  deleteRecurrence(recurrence: any): void {
+    const type = recurrence.type === 'income' ? 'ingreso' : 'gasto';
+
+    this.nzModalService.confirm({
+      nzTitle: type === 'gasto' ? `¿Estás seguro de que quieres eliminar este gasto recurrente?` : `¿Estás seguro de que quieres eliminar este ingreso recurrente?`,
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.recurrenceService.deleteRecurrenceSignal(recurrence.id).subscribe({
+          next: (response: any) => {
+            this.nzNotificationService.success('Éxito',type === 'gasto' ? 'Se ha eliminado el gasto recurrente con éxito' : 'Se ha eliminado el ingreso recurrente con éxito');
+            this.loadData();
+          },
+          error: (error => {
+            this.nzNotificationService.error('Error', error.error.detail)
+          })
+        });      
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+
+
   /**
    * deletes a friend from the account
    */
   deleteFriend(accountUser: IAccountUser): void {
+
+    this.nzModalService.confirm({
+      nzTitle: `¿Estás seguro de que quieres eliminar a ${accountUser.user?.nickname} (${accountUser.user?.email}) de la cuenta?`,
+      nzContent: 'Si lo eliminas, perderas su colaboración y tanto sus gastos, ingresos y ahorros se eliminaran de esta cuenta.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        const payload: IAccountUser = {
+          user: {
+            id: accountUser.user?.id
+          },
+          account: {
+            id: accountUser.account?.id
+          }
+        }
+        this.accountService.leaveSharedAccount(payload).subscribe({
+          next: (response: any) => {
+            this.loadData();
+            this.nzNotificationService.success('Éxito', response.message);
+          },
+          error: (error => {
+            this.nzNotificationService.error('Error', error.error.detail)
+            throw error;
+          })
+        });
+      },
+      nzCancelText: 'No'
+    });
+
 
   }
 
@@ -166,4 +225,71 @@ export class AccountDetailComponent implements OnInit {
     return members.length + 1;
   }
 
+  /**
+   * Handles the rollback for the transaction
+   * @param transaction 
+   */
+  rollbackTransaction(transaction: ITransaction) {
+    this.nzModalService.confirm({
+      nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
+      nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.transactionService.rollbackTransaction(transaction).subscribe({
+          next: (response: any) => {
+            //this.router.navigateByUrl('/app/accounts');
+            this.nzNotificationService.success('Éxito', 'Transacción reversada');
+            this.loadData();
+          },
+          error: ((error: { error: { detail: string | TemplateRef<void>; }; }) => {
+            this.nzNotificationService.error('Error', error.error.detail)
+            throw error;
+          })
+        }
+        );
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+
+  /**
+   * Makes the load of all the data in the view 
+   */
+  loadData() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      // Validate if the id is not null or number
+      if (!id || isNaN(+id)) {
+        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
+        return;
+      }
+      this.id = Number(id);
+      this.accountService.getAccountSignal(this.id).subscribe({
+        next: (response: IAccount) => {
+          this.generalBalance = response.balance;
+
+          if (this.isAccountShared()) {
+            this.accountService.getMembersSignal(this.id);
+          }
+        },
+        error: (error: any) => {
+          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+        }
+      })
+
+      this.recurrenceService.findAllSignal(this.id);
+      this.transactionService.getAllSignal(this.id);
+      this.transactionService.getBalancesByAccount(this.id).subscribe({
+        next: (response: any) => {
+          this.monthExpenses = response.monthlyExpenseBalance;
+          this.recurringExpenses = response.recurrentExpensesBalance;
+          this.monthIncomes = response.monthlyIncomeBalance;
+          this.recurringIncomes = response.recurrentIncomesBalance;
+        }
+      });
+    });
+  }
 }

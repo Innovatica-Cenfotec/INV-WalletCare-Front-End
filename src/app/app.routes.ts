@@ -17,6 +17,8 @@ import { InviteAccountComponent } from './components/account/account-detail/invi
 import { AccountInvitationComponent } from './pages/account-invitation/account-invitation.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
+import { IncomeComponent } from './pages/income/income.component';
+import { ExpensesComponent } from './pages/expenses/expenses.component';
 
 export const routes: Routes = [
   {
@@ -77,12 +79,6 @@ export const routes: Routes = [
         }
       },
       {
-        path: 'accounts/inviteToSharedAccount',
-        component: InviteAccountComponent
-
-
-      },
-      {
         path: 'accounts/details/:id',
         component: AccountDetailComponent,
         data: {
@@ -114,7 +110,39 @@ export const routes: Routes = [
             name: 'Perfil',
           },
         }
-      }
+      },
+      {
+        path: 'income',
+        component: IncomeComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'bank',
+            breadcrumb: ['Ingresos'],
+            name: 'Ingresos',
+          },
+        }
+      },
+      // {
+      //   path: 'expense',
+      //   component: ExpensesComponent,
+      //   data: {
+      //     authorities: [
+      //       IRole.admin,
+      //       IRole.user
+      //     ],
+      //     showInSidebar: true,
+      //     layout: <ILayout>{
+      //       icon: 'fall',
+      //       breadcrumb: ['Gastos'],
+      //       name: 'Gastos',
+      //     },
+      //   }
+      // },
     ],
   },
   {

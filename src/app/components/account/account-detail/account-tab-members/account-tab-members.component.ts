@@ -1,12 +1,14 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
-import {IAccount, IAccountUser} from "../../../../interfaces";
-import {CommonModule, DatePipe} from "@angular/common";
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { IAccount, IAccountUser } from "../../../../interfaces";
+import { CommonModule, DatePipe } from "@angular/common";
 
 // Importing Ng-Zorro modules
-import {NzTabsModule} from 'ng-zorro-antd/tabs';
-import {NzTableModule} from 'ng-zorro-antd/table';
-import {NgIf} from "@angular/common";
-import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NgIf } from "@angular/common";
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
     selector: 'app-account-tab-members',
@@ -16,7 +18,9 @@ import {NzPopconfirmModule} from 'ng-zorro-antd/popconfirm';
         NzTabsModule,
         NzTableModule,
         NgIf,
-        NzPopconfirmModule
+        NzPopconfirmModule,
+        NzButtonModule,
+        NzIconModule
     ],
     providers: [DatePipe],
     templateUrl: './account-tab-members.component.html',

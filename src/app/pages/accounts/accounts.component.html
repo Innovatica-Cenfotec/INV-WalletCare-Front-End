@@ -9,7 +9,9 @@
     </nz-space>
   </nz-page-header-extra>
   <nz-page-header-content>
-    <app-account-cards [accountsList]="accountService.accounts$()"> </app-account-cards>
+    <app-account-cards [accountsList]="accountService.accounts$()"
+    [transactions]="transactionService.transactions$()"
+    [balances]="transactionService.balances$()"> </app-account-cards>
     <nz-divider></nz-divider>
     <app-account-list 
     [accountsList]="accountService.accounts$()" 
@@ -20,6 +22,6 @@
   </nz-page-header-content>
 </nz-page-header>
 
-<app-account-from #form [isVisible]="isVisible" [type]="TypeForm" [title]="title"
+<app-account-form #form [isVisible]="isVisible()" [type]="TypeForm" [title]="title" [isLoading]="isLoading()"
 [nameDefaultAccount]="getNameDefault()" (onCanceled)="onCanceled()"  (onCreated)="createAccount($event)"  (onUpdated)="updateAccount($event)">
-</app-account-from>
+</app-account-form>

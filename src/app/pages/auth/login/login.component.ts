@@ -90,9 +90,12 @@ export class LoginComponent implements OnInit {
       let credentials = this.validateForm.value as { email: string, password: string };
       this.isLoggingIn = true;
       this.authService.login(credentials).subscribe({
-        next: () => this.router.navigateByUrl('/app'),
+        next: () => {
+          this.message.remove();
+          this.router.navigateByUrl('/app')},
         error: (err: any) => {
           if (err.status === 401) {
+            this.message.remove();
             this.loginError = 'Usuario o contraseña incorrectos';
           } else {
             this.loginError = 'Ocurrió un error inesperado, por favor intente más tarde';
