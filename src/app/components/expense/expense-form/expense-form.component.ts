@@ -1,7 +1,6 @@
-import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAmountType, IFrequencyType, IExpense, IIncomeExpenseType, Itax, ITypeForm } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -16,6 +15,13 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { FormModalComponent } from '../../form-modal/form-modal.component';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+
+import { IAmountType, IFrequencyType, IExpense, IIncomeExpenseType, Itax, ITypeForm } from '../../../interfaces';
+
+export interface IAccount {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-expense-form',
@@ -48,14 +54,20 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
   IIncomeExpenceType = IIncomeExpenseType;
   IFrequencyType = IFrequencyType;
   TaxSelected: Itax | undefined;
+  AccountSelected: IAccount | undefined;
   scheduledDayVisible = false;
   scheduledDay: number = 0;
   days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   @Input() taxList: any[] = [];
+  @Input() accountList: IAccount[] = [
+    { id: 1, name: 'Cuenta 1' },
+    { id: 2, name: 'Cuenta 2' },
+    { id: 3, name: 'Cuenta 3' }
+  ];
   @Input() expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
   @Input() id: number = 0;
-
+  
   override formGroup = this.fb.group({
     name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
     description: [this.item?.description, [Validators.maxLength(200)]],
@@ -63,6 +75,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     amountType: [this.item?.amountType, [Validators.required]],
     scheduledDay: [this.item?.scheduledDay],
     tax: [this.item?.tax],
+    account: [this.item?.account, [Validators.required]],
     isTemplate: [this.item?.isTemplate],
     isTaxRelated: [this.item?.isTaxRelated],
     type: [this.item?.type],
@@ -123,6 +136,10 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
   onSelectTax(tax: Itax): void {
     this.TaxSelected = tax;
   }
+
+  onSelectAccount(account: IAccount): void {
+    this.AccountSelected = account;
+}
 
   onSelectFrequency(frequency: IFrequencyType): void {
     this.scheduledDayVisible = frequency === IFrequencyType.other ? true : false;
