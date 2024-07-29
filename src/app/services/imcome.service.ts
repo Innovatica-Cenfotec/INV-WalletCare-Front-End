@@ -8,8 +8,8 @@ import { Observable, catchError, tap } from 'rxjs';
 })
 export class IncomeService extends BaseService<IIncome> {
     protected override source: string = 'incomes';
-    private incomeListSignal = signal<IAccount[]>([]);
-    private incomeSignal = signal<IAccount | undefined>(undefined);
+    private incomeListSignal = signal<IIncome[]>([]);
+    private incomeSignal = signal<IIncome | undefined>(undefined);
 
     /*
     * Gets the incomes.
@@ -77,7 +77,7 @@ export class IncomeService extends BaseService<IIncome> {
 
     /**
      * Updates an income signal.
-     * @param account - The income signal to be updated.
+     * @param income - The income signal to be updated.
      * @returns An Observable that emits the updated income signal.
      */
     updateIncomeSignal(income: IIncome): Observable<any> {
