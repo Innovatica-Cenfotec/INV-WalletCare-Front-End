@@ -1,22 +1,14 @@
-<nz-space [nzWrap]="true" nzSize="middle" [nzWrap]="true">
-    <button class="btn" *nzSpaceItem nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+<nz-space nzSize="middle" [nzWrap]="true">
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('expense')">
         <i nz-icon nzType="plus"></i>
-        Agregar gastos
+        Agregar gasto
     </button>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.unique)">
-            <a>Gasto único</a>
-          </li>
-          <li nz-menu-item (click)="showModalCreateExpense(IIncomeExpenceType.recurrence)">
-            <a>Gasto recurrente</a>
-          </li>
-        </ul>
-      </nz-dropdown-menu>
-    <button class="btn" *nzSpaceItem nz-button nzType="default">
+
+    <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="showTransactionForm('income')">
         <i nz-icon nzType="plus"></i>
-        Agregar ingresos
+        Agregar ingreso
     </button>
+
     @if (isAccountShared && isOwner) {
     <button class="btn" *nzSpaceItem nz-button nzType="default" (click)="inviteFriend()">
         <i nz-icon nzType="plus"></i>
@@ -43,7 +35,9 @@
     <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
             <li nz-menu-item (click)="showEditAccountForm()">Editar cuenta</li>
+            @if (isOwner) {
             <li nz-menu-item (click)="deleteAccount()">Eliminar cuenta</li>
+            }
         </ul>
     </nz-dropdown-menu>
     }
@@ -51,21 +45,25 @@
 </nz-space>
 
 
-<app-account-form #form [isVisible]="isVisible()" [type]="IITypeForm.update" [title]="'Editar cuenta'"
-    (onCanceled)="onCanceled()" (onUpdated)="editAccount($event)" [item]="accountService.account$()"
+<app-account-form #form [isVisible]="isVisibleEditAccount()" [type]="IITypeForm.update" [title]="'Editar cuenta'"
+    (onCanceled)="closeModal()" (onUpdated)="editAccount($event)" [item]="accountService.account$()"
     [isLoading]="isLoading()">
 </app-account-form>
 
-<app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeInviteFriend()"></app-invite-account>
+<app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeModal()">
+</app-invite-account>
 
-<app-expense-form #form [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [item]="expense()"
-[type]="TypeForm"
-[title]="title"
-[expenseType]="expenseType"
-[taxList]="taxService.taxes$()"
-(onCanceled)="closeModalCreateExpense()" 
-(onCreated)="createExpense($event)"
-(onUpdated)="updateIncome($event)"
-[id]="id"
->
+<app-expense-form #formExpense [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [enableTemplate]="true"
+    [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="incomeExpenceType"
+    [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()" (onCreated)="createExpense($event)">
 </app-expense-form>
+
+<app-income-form #formIncome [isVisible]="isVisibleIncome()" [isLoading]="isLoading()" [enableTemplate]="true"
+    [item]="income()" [type]="TypeForm" [title]="title" [incomeType]="incomeExpenceType" [taxList]="taxService.taxes$()"
+    (onCanceled)="closeModalIncomeOrExpense()" (onCreated)="createIncome($event)">
+</app-income-form>
+
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType"
+    [listIncome]="incomeService.incomes$()" [listExpense]="expenseService.expenses$()" (onCancel)="closeModal()"
+    (onSelected)="addSelectedTransaction($event)" (onCreated)="showModalIncomeOrExpense($event)">
+</app-transaction-form>

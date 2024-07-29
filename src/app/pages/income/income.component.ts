@@ -111,6 +111,7 @@ export class IncomeComponent {
    */
   showModalEdit(income: IIncome): void {
     this.title = 'Editar ingreso';
+    this.incomeType = income.type || IIncomeExpenceType.unique;
     this.TypeForm = ITypeForm.update;
     this.income.set(income);
     this.isVisible.set(true);
@@ -135,7 +136,9 @@ export class IncomeComponent {
     if (income.tax) {
       income.tax = { id: income.tax.id };
     }
-
+     // addTransaction to income
+     income.addTransaction 
+     
     this.incomeService.saveIncomeSignal(income).subscribe({
       next: (response: any) => {
         this.isVisible.set(false);

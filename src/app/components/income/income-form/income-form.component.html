@@ -170,9 +170,15 @@
             <!-- Tax | show infor tax selected -->
             @if (TaxSelected != undefined) {
             <nz-descriptions nzTitle="Información del impuesto seleccionado" nzBordered nzLayout="vertical">
-                <nz-descriptions-item nzTitle="Percentage">{{this.TaxSelected.percentage}} %</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Discription">{{this.TaxSelected.description}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Porcentaje">{{this.TaxSelected.percentage}} %</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Descripción">{{this.TaxSelected.description}}</nz-descriptions-item>
             </nz-descriptions>
+            }
+
+            @if (enableTemplate) {
+            <nz-form-item>
+                <label nz-checkbox formControlName="isTemplate" nzChecked="true">Guardar en 'Mis ingresos'</label>
+            </nz-form-item>
             }
         </form>
     </div>

@@ -2,15 +2,14 @@ import { inject, OnChanges, SimpleChanges, TemplateRef, ViewChild } from '@angul
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
-import { AccountTabExpenseComponent } from '../../components/account/account-detail/account-tab-expense/account-tab-expense.component';
-import { AccountTabIncomesComponent } from '../../components/account/account-detail/account-tab-incomes/account-tab-incomes.component';
 import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
 import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
 import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, IBalance, ITransaction } from '../../interfaces';
+import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction } from '../../interfaces';
+import { AccountTabRecurrenceComponent } from '../../components/account/account-detail/account-tab-recurrence/account-tab-recurrence.component';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -24,8 +23,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-
-
+import { RecurrenceService } from '../../services/recurrence.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -41,22 +39,20 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
     NzTabsModule,
     NzDividerModule,
     AccountTabMembersComponent,
-    AccountTabExpenseComponent,
-    AccountTabIncomesComponent,
     AccountTabTransactionsComponent,
     NzModalModule,
     InviteAccountComponent,
-    AccountDetailHeaderComponent
+    AccountDetailHeaderComponent,
+    AccountTabRecurrenceComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-detail.component.html',
   styleUrl: './account-detail.component.scss'
 })
 export class AccountDetailComponent implements OnInit, OnChanges {
-
-
   public accountService = inject(AccountService);
   public transactionService = inject(TransactionService);
+  public recurrenceService = inject(RecurrenceService);
 
   public generalBalance: number | undefined;
   public generalExpenses = 0;
@@ -150,6 +146,29 @@ export class AccountDetailComponent implements OnInit, OnChanges {
 
     return account.owner?.id === this.authService.getUser()?.id;
   }
+
+  deleteRecurrence(recurrence: any): void {
+    const type = recurrence.type === 'income' ? 'ingreso' : 'gasto';
+
+    this.nzModalService.confirm({
+      nzTitle: type === 'gasto' ? `¿Estás seguro de que quieres eliminar este gasto recurrente?` : `¿Estás seguro de que quieres eliminar este ingreso recurrente?`,
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.recurrenceService.deleteRecurrenceSignal(recurrence.id).subscribe({
+          next: (response: any) => {
+            this.nzNotificationService.success('Éxito',type === 'gasto' ? 'Se ha eliminado el gasto recurrente con éxito' : 'Se ha eliminado el ingreso recurrente con éxito');
+          },
+          error: (error => {
+            this.nzNotificationService.error('Error', error.error.detail)
+          })
+        });      
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+
 
   /**
    * deletes a friend from the account
@@ -260,9 +279,10 @@ export class AccountDetailComponent implements OnInit, OnChanges {
         }
       })
 
+      this.recurrenceService.findAllSignal();
       this.transactionService.getAllSignal(this.id);
       this.transactionService.getBalances(this.id).subscribe({
-        next: (response: any) =>{
+        next: (response: any) => {
           this.monthExpenses = response.monthlyExpenseBalance;
           this.recurringExpenses = response.recurrentExpensesBalance;
           this.monthIncomes = response.monthlyIncomeBalance;

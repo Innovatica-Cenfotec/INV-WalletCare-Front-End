@@ -55,9 +55,10 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
   @Input() taxList: any[] = [];
   @Input() expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
   @Input() id: number = 0;
-
+  @Input() enableTemplate: boolean = false;
+  
   override formGroup = this.fb.group({
-    name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
+    name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
     description: [this.item?.description, [Validators.maxLength(200)]],
     amount: [this.item?.amount, [Validators.required]],
     amountType: [this.item?.amountType, [Validators.required]],
@@ -114,11 +115,16 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
       return;
     }
 
+    if(this.enableTemplate === false) {
+      this.formGroup.get('isTemplate')?.setValue(true);
+    }
+
     this.formGroup.get('isTaxRelated')?.setValue(this.TaxSelected !== null);
-    this.formGroup.get('isTemplate')?.setValue(true);
     this.formGroup.get('type')?.setValue(this.expenseType);
     super.handleSubmit();
   }
+
+  
 
   onSelectTax(tax: Itax): void {
     this.TaxSelected = tax;

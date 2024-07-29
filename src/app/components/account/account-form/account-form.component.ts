@@ -45,7 +45,7 @@ export class AccountFormComponent extends FormModalComponent<IAccount> {
      * Get the form group
      */
     override formGroup = this.fb.group({
-        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
+        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
         description: [this.item?.description, [Validators.maxLength(200)]],
         type: [this.item?.type, [Validators.required, Validators.min(0), Validators.max(1)]]
     });

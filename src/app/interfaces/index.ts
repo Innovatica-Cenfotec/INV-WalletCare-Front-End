@@ -208,6 +208,7 @@ export interface IIncomeAllocation {
  * Interface for income
  */
 export interface IIncome {
+  addTransaction?: boolean;
   id?: number;
   user?: IUser;
   name?: string;
@@ -222,10 +223,12 @@ export interface IIncome {
   tax?: Itax;
   createdAt?: Date;
   updatedAt?: Date;
+  account?: IAccount;
   listIncomeAllocation?: IIncomeAllocation[];
 }
 
 export interface IExpense {
+  addTransaction?: boolean;
   id?: number;
   user?: IUser;
   name?: string;
@@ -249,4 +252,13 @@ export interface IBalanceDTO {
   recurrentExpensesBalance?: number;
   monthlyIncomeBalance?: number;
   recurrentIncomesBalance?: number;
+}
+
+export interface IRecurrence {
+  id?: number;
+  user?: IUser;
+  account?: IAccount;
+  expense?: IExpense;
+  income?: IIncome;
+  createdAt?: Date;
 }
