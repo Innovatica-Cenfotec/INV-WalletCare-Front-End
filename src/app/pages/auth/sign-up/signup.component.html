@@ -163,7 +163,7 @@
             El nombre de la cuenta debe tener al menos 4 caracteres.
             }
             @else if(control.errors?.['pattern']) {
-            El nombre de la cuenta financiera solo puede contener letras.
+            El nombre de la cuenta financiera solo puede contener letras o números.
             }
             @else {
             {{control.errors?.['message']}}

@@ -57,14 +57,15 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
 
     @Input() taxList: any[] = [];
     @Input() incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
-
+    @Input() enableTemplate: boolean = false;
+    
     /**
      * Get the form group
      */
     override formGroup = this.fb.group({
-        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
+        name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
         description: [this.item?.description, [Validators.maxLength(200)]],
-        amount: [this.item?.amount, [Validators.required]],
+        amount: [this.item?.amount, [Validators.required, Validators.min(1)] ],
         amountType: [this.item?.amountType, [Validators.required]],
         scheduledDay: [this.item?.scheduledDay],
         tax: [this.item?.tax],
@@ -122,8 +123,11 @@ export class IncomeFormComponent extends FormModalComponent<IIncome> {
             return;
         }
 
+        if(this.enableTemplate === false) {
+            this.formGroup.get('isTemplate')?.setValue(true);
+        }
+
         this.formGroup.get('isTaxRelated')?.setValue(this.TaxSelected !== null);
-        this.formGroup.get('isTemplate')?.setValue(true);
         this.formGroup.get('type')?.setValue(this.incomeType);
         super.handleSubmit();
     }

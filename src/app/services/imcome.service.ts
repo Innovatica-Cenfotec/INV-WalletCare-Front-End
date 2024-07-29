@@ -113,4 +113,21 @@ export class IncomeService extends BaseService<IIncome> {
             })
         );
     }
+
+    /**
+     * Adds an income to an account signal.
+     * @param income - The income to be added to the account.
+     * @returns An Observable that emits the added income.
+     */
+    addIncomeToAccountSignal(income: IIncome): Observable<any> {
+        return this.http.post(`${this.source}/add-to-account`, income).pipe(
+            tap((response: any) => {
+                this.incomeListSignal.update(income => [response, ...income]);
+            }),
+            catchError(error => {
+                console.error('Error adding income to account', error);
+                throw error;
+            })
+        );
+    }
 }

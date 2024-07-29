@@ -6,10 +6,10 @@
             <!-- name -->
             <nz-form-item>
                 <nz-form-label nzRequired nzFor="name">Nombre de la cuenta</nz-form-label>
-                <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-control [nzErrorTip]="errorNameTpl">
                     <nz-input-group>
                         <input type="text" nz-input formControlName="name">
-                        <ng-template #errorTpl let-control>
+                        <ng-template #errorNameTpl let-control>
                             @if (control.errors?.['maxlength']) {
                             El nombre de la cuenta no puede tener más de 100 caracteres
                             }
@@ -36,12 +36,12 @@
             <!-- description -->
             <nz-form-item>
                 <nz-form-label nzFor="description">Descripción</nz-form-label>
-                <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-control [nzErrorTip]="errorDescriptionTpl">
                     <nz-textarea-count [nzMaxCharacterCount]="200">
                         <textarea rows="3" formControlName="description" nz-input></textarea>
-                        <ng-template #errorTpl let-control>
+                        <ng-template #errorDescriptionTpl let-control>
                             @if (control.errors?.['maxlength']) {
-                            El nombre de la cuenta no puede tener más de 100 caracteres
+                            La descripción no puede tener más de 200 caracteres
                             }
                             @else {
                             {{control.errors?.['message']}}

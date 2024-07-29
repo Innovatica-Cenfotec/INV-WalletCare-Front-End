@@ -116,10 +116,31 @@ export interface IAccountUser {
   invitationStatus?: number;
   isDeleted?: boolean;
 }
+
 export interface IGenericResponse {
   message?: String;
 }
 
+export enum ITransactionType {
+  INCOME = 'Income',
+  EXPENSE = 'Expense',
+  SAVING = 'Saving'
+}
+
+export interface ITransaction {
+  id?: number;
+  owner?: IUser;
+  account?: IAccount;
+  type?: ITransactionType;
+  incomeAllocation?: string;
+  expense?: IExpense;
+  amount?: number;
+  previousBalance?: number;
+  description?: string;
+  createdAt?: Date;
+  deletedAt?: Date;
+  deleted?: boolean;
+}
 /*
 * Interface for allocation
 */
@@ -187,6 +208,7 @@ export interface IIncomeAllocation {
  * Interface for income
  */
 export interface IIncome {
+  addTransaction?: boolean;
   id?: number;
   user?: IUser;
   name?: string;
@@ -201,5 +223,42 @@ export interface IIncome {
   tax?: Itax;
   createdAt?: Date;
   updatedAt?: Date;
+  account?: IAccount;
   listIncomeAllocation?: IIncomeAllocation[];
+}
+
+export interface IExpense {
+  addTransaction?: boolean;
+  id?: number;
+  user?: IUser;
+  name?: string;
+  description?: string;
+  isTemplate?: boolean;
+  type?: IIncomeExpenceType;
+  amount?: 0 | string;
+  amountType?: IAmountType;
+  scheduledDay?: number;
+  isTaxRelated?: boolean;
+  frequency?: IFrequencyType;
+  tax?: Itax;
+  createdAt?: Date;
+  updatedAt?: Date;
+  account?: IAccount;
+}
+
+
+export interface IBalanceDTO {
+  monthlyExpenseBalance?: number;
+  recurrentExpensesBalance?: number;
+  monthlyIncomeBalance?: number;
+  recurrentIncomesBalance?: number;
+}
+
+export interface IRecurrence {
+  id?: number;
+  user?: IUser;
+  account?: IAccount;
+  expense?: IExpense;
+  income?: IIncome;
+  createdAt?: Date;
 }
