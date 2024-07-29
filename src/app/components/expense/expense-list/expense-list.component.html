@@ -1,0 +1,41 @@
+<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '100px', '100px', '100px', '100px']">
+    <thead>
+        <tr>
+            <th nzColumnKey="name" [nzSortFn]="sortByName">
+                <!--
+                <input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" /> -->Nombre
+            </th>
+            <th nzColumnKey="'description" [nzSortFn]="sortByDescription">Descripción</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortByAmount">Monto</th>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
+            <th *ngIf="!showAccount && !showOwner">Frecuencia</th>
+            <th nzColumnKey="account" [nzSortFn]="sortByAccount" *ngIf="showAccount">Cuenta</th>
+            <th nzColumnKey="user" [nzSortFn]="sortByUser" *ngIf="showOwner">Modificado por</th>
+            <th nzColumnKey="date" [nzSortFn]="sortByDate">Fecha</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.description }}</td>
+            <td> ₡ {{ data.amount }}</td>
+            <td>{{ getExpenseType(data) }}</td>
+            <td *ngIf="!showAccount && !showOwner">{{ getExpenseFrecuency(data) }}</td>
+            <td *ngIf="showAccount">{{ getExpenseAccount(data) }}</td>
+            <td *ngIf="showOwner">{{ getExpenseOwner(data) }}</td>
+            <td>{{ getDate(data.updatedAt) }}</td>
+            <td nzRight>
+                <nz-space>
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)">
+              <span nz-icon nzType="edit"></span>
+            </button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteExpense.emit(data)">
+              <span nz-icon nzType="delete"></span>
+            </button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

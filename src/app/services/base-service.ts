@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IResponse, IUser } from '../interfaces';
 import { Injectable, inject } from '@angular/core';
@@ -54,5 +54,17 @@ export class BaseService<T> {
    */
   public del(id: any): Observable<IResponse<T>> {
     return this.http.delete<IResponse<T>>(this.source + '/' + id);
+  }
+
+
+  /* Filters with params */
+  public filter(params: { [key: string]: string | number | boolean }): Observable<IResponse<T[]>> {
+    let httpParams = new HttpParams();
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        httpParams = httpParams.set(key, params[key].toString());
+      }
+    }
+    return this.http.get<IResponse<T[]>>(this.source + '/filter', { params: httpParams });
   }
 }
