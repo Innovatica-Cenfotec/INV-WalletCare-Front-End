@@ -11,6 +11,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @Component({
     selector: 'app-transaction-form',
@@ -27,7 +28,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
         NzSelectModule,
         NzIconModule,
         NzInputModule,
-        NzTypographyModule
+        NzTypographyModule,
+        NzSpaceModule
     ],
     templateUrl: './transaction-form.component.html',
     styleUrl: './transaction-form.component.scss',
@@ -70,18 +72,29 @@ export class TransactionFormComponent implements OnChanges {
     @Output() onCancel = new EventEmitter<void>();
 
     /**
-     * The event emitter that emits when the form is confirmed.
+     * The event emitter that emits when a new item is selected.
      */
-    @Output() onConfirm = new EventEmitter<any>();
+    @Output() onSelected = new EventEmitter<any>();
+
+    /**
+     * The event emitter that emits when a new income is created.
+     */
+    @Output() onCreated = new EventEmitter<IIncomeExpenceType>();
 
     /**
      * The selected item.
      */
-    selectedItem: any;
-
+    selectedItem: any ={
+        frequency: null
+    };
+    
     formGroup = this.fb.group({
         selected: [null, [Validators.required]]
     });
+
+
+    optionsIncome: any[] = [];
+    optionsExpense: any[] = [];
 
     ngOnChanges(changes: SimpleChanges): void {
         // Reset the form when the modal is closed
@@ -89,6 +102,14 @@ export class TransactionFormComponent implements OnChanges {
             this.isLoading = false;
             this.selectedItem = null;
             this.formGroup.reset();
+        }
+
+        if (changes['listIncome']?.currentValue) {
+            this.optionsIncome = this.listIncome.filter((item) => item.isTemplate === true);
+        }
+
+        if (changes['listExpense']?.currentValue) {
+            this.optionsExpense = this.listExpense.filter((item) => item.isTemplate === true);
         }
     }
 
@@ -104,6 +125,28 @@ export class TransactionFormComponent implements OnChanges {
     }
 
     /**
+     * Emits the `onCreated` event with the type of the item.
+     */
+    handleAddItem(): void {
+        if (this.type === 'income') {
+            this.onCreated.emit(IIncomeExpenceType.unique);
+        } else {
+            this.onCreated.emit(IIncomeExpenceType.unique);
+        }
+    }
+
+    /**
+     * Emits the `onCreated` event with the type of the item.
+     */
+    handleAddRecurrentItem(): void {
+        if (this.type === 'income') {
+            this.onCreated.emit(IIncomeExpenceType.recurrence);
+        } else {
+            this.onCreated.emit(IIncomeExpenceType.recurrence);
+        }
+    }
+
+    /**
     * Emits the `onConfirm` event with the form group value.
     */
     handleConfirm(): void {
@@ -115,7 +158,7 @@ export class TransactionFormComponent implements OnChanges {
         }
 
         this.isLoading = true;
-        this.onConfirm.emit(this.selectedItem);        
+        this.onSelected.emit(this.selectedItem);        
     }
 
     /**
@@ -194,5 +237,10 @@ export class TransactionFormComponent implements OnChanges {
      */
     getTitle(): string {
         return this.type === 'income' ? 'Agregar ingreso a la cuenta' : 'Agregar gasto a la cuenta';
+    }
+
+
+    getNoItemMessage(): string {
+        return this.type === 'income' ? '¿No encuentras el ingreso que buscas?' : '¿No encuentras el gasto que buscas?';
     }
 }

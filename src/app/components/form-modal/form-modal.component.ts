@@ -59,8 +59,8 @@ export class FormModalComponent<T> {
     ngOnChanges(changes: SimpleChanges): void {
         // Reset the form when the modal is closed
         if (changes['isVisible']?.currentValue === false) {
-            this.isLoading = false;
             this.formGroup.reset();
+            this.isLoading = false;
         }
 
         // Patch the form values when the modal is opened and the item is set
@@ -109,8 +109,6 @@ export class FormModalComponent<T> {
      * Resets the form group and emits the `onCanceled` event.
      */
     handleCancel(): void {
-        this.isLoading = false;
-        this.formGroup.reset();
         this.onCanceled.emit();
     }
 
@@ -125,5 +123,9 @@ export class FormModalComponent<T> {
         if (control) {
             control.setErrors({ message });
         }
+    }
+
+    stopLoading(): void {
+        this.isLoading = false;
     }
 }

@@ -1,18 +1,19 @@
 <nz-modal [nzTitle]="getTitle()" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()"
     [nzCancelLoading]="isLoading">
-    <div *nzModalContent>      
+    <div *nzModalContent>
+
         <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
             <nz-form-item>
                 <nz-form-label nzRequired nzFor="selected">{{getPleaceholder()}}</nz-form-label>
                 <nz-form-control [nzErrorTip]="getErrorMessage()">
-                    <nz-select formControlName="selected" nzShowSearch nzAllowClear nzPlaceHolder="{{getPleaceholder()}}"
-                        (ngModelChange)="onSelectItem($event)">
+                    <nz-select formControlName="selected" nzShowSearch nzAllowClear
+                        nzPlaceHolder="{{getPleaceholder()}}" (ngModelChange)="onSelectItem($event)">
                         @if (type=="income") {
-                        <nz-option *ngFor="let option of listIncome" [nzLabel]="option.name"
+                        <nz-option *ngFor="let option of optionsIncome" [nzLabel]="option.name"
                             [nzValue]="option"></nz-option>
                         }
                         @if (type=="expense") {
-                        <nz-option *ngFor="let option of listExpense" [nzLabel]="option.name"
+                        <nz-option *ngFor="let option of optionsExpense" [nzLabel]="option.name"
                             [nzValue]="option"></nz-option>
                         }
                     </nz-select>
@@ -42,17 +43,36 @@
                 </nz-descriptions-item>
             </nz-descriptions>
             }
+
+            @if (selectedItem == null){
+            <nz-form-item>
+                <nz-form-label>{{getNoItemMessage()}}</nz-form-label>
+                <nz-form-control>
+                <nz-space nzDirection="vertical">
+                    <button *nzSpaceItem nz-button nzType="default" nzBlock (click)="handleAddItem()">
+                        {{this.type == 'income' ? 'Agregar ingreso' : 'Agregar gasto'}}
+                    </button>
+
+                    <button *nzSpaceItem nz-button nzType="default" nzBlock (click)="handleAddRecurrentItem()">
+                        {{this.type == 'income' ? 'Agregar ingreso recurrente' : 'Agregar gasto recurrente'}}
+                    </button>
+                </nz-space>
+            </nz-form-control>
+            </nz-form-item>
+            }
         </form>
     </div>
     <div *nzModalFooter>
         <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
+        @if (selectedItem != null){
         <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleConfirm()">
             @if (type=="income") {
-            {{this.selectedItem.frequency == null ? 'Agregar' : 'Activar ingreso recurrente'}}
+            {{this.selectedItem?.frequency == null ? 'Agregar' : 'Activar ingreso recurrente'}}
             }
             @if ( type=="expense" ) {
-            {{this.selectedItem.frequency == null ? 'Agregar' : 'Activar gasto recurrente'}}
+            {{this.selectedItem?.frequency == null ? 'Agregar' : 'Activar gasto recurrente'}}
             }
         </button>
+        }
     </div>
 </nz-modal>

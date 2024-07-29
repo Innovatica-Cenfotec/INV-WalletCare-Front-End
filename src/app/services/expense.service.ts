@@ -6,7 +6,7 @@ import { catchError, Observable, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ExpenseService extends BaseService<IExpense>{
+export class ExpenseService extends BaseService<IExpense> {
   protected override source: string = 'expenses';
   private expenseListSignal = signal<IAccount[]>([]);
   private expenseSignal = signal<IAccount | undefined>(undefined);
@@ -49,6 +49,18 @@ export class ExpenseService extends BaseService<IExpense>{
       }),
       catchError(error => {
         console.error('Error fetching expense', error);
+        throw error;
+      })
+    );
+  }
+
+  addExpenseToAccountSignal(expense: IExpense): Observable<IExpense> {
+    return this.http.post(`${this.source}/add-to-account`, expense).pipe(
+      tap((response: any) => {
+        this.expenseListSignal.update(expense => [response, ...expense]);
+      }),
+      catchError(error => {
+        console.error('Error adding expense to account', error);
         throw error;
       })
     );

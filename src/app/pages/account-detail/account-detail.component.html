@@ -41,10 +41,10 @@
                 (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
             </nz-tab>
             <nz-tab nzTitle="Gastos recurrentes">
-                <app-account-tab-expense></app-account-tab-expense>
+                <app-account-tab-recurrence [type]="'expense'" [recurrences]="recurrenceService.recurrencesExpense$()" (deleteRecurrence)="deleteRecurrence($event)"></app-account-tab-recurrence>
             </nz-tab>
             <nz-tab nzTitle="Ingresos recurrentes">
-                <app-account-tab-incomes></app-account-tab-incomes>
+                <app-account-tab-recurrence [type]="'income'" [recurrences]="recurrenceService.recurrencesIncome$()" (deleteRecurrence)="deleteRecurrence($event)"></app-account-tab-recurrence>
             </nz-tab>
             <nz-tab nzTitle="Mis amigos" *ngIf="isAccountShared()">
                 <app-account-tab-members [account]="accountService.account$()"
