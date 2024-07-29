@@ -1,6 +1,7 @@
-import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceType, Itax, ITypeForm } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -15,13 +16,6 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { FormModalComponent } from '../../form-modal/form-modal.component';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
-
-import { IAmountType, IFrequencyType, IExpense, IIncomeExpenseType, Itax, ITypeForm } from '../../../interfaces';
-
-export interface IAccount {
-  id: number;
-  name: string;
-}
 
 @Component({
   selector: 'app-expense-form',
@@ -51,21 +45,15 @@ export interface IAccount {
 export class ExpenseFormComponent extends FormModalComponent<IExpense> {
 
   IAmountType = IAmountType;
-  IIncomeExpenceType = IIncomeExpenseType;
+  IIncomeExpenceType = IIncomeExpenceType;
   IFrequencyType = IFrequencyType;
   TaxSelected: Itax | undefined;
-  AccountSelected: IAccount | undefined;
   scheduledDayVisible = false;
   scheduledDay: number = 0;
   days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   @Input() taxList: any[] = [];
-  @Input() accountList: IAccount[] = [
-    { id: 1, name: 'Cuenta 1' },
-    { id: 2, name: 'Cuenta 2' },
-    { id: 3, name: 'Cuenta 3' }
-  ];
-  @Input() expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
+  @Input() expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
   @Input() id: number = 0;
   @Input() enableTemplate: boolean = false;
   
@@ -76,7 +64,6 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     amountType: [this.item?.amountType, [Validators.required]],
     scheduledDay: [this.item?.scheduledDay],
     tax: [this.item?.tax],
-    account: [this.item?.account, [Validators.required]],
     isTemplate: [this.item?.isTemplate],
     isTaxRelated: [this.item?.isTaxRelated],
     type: [this.item?.type],
@@ -100,7 +87,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
       }
     }
 
-    if (this.expenseType === IIncomeExpenseType.recurrence) {
+    if (this.expenseType === IIncomeExpenceType.recurrence) {
       const frequency = this.formGroup.get('frequency')?.value;
       // If the frequency is null, mark it as dirty
       if (frequency === null) {
@@ -142,10 +129,6 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
   onSelectTax(tax: Itax): void {
     this.TaxSelected = tax;
   }
-
-  onSelectAccount(account: IAccount): void {
-    this.AccountSelected = account;
-}
 
   onSelectFrequency(frequency: IFrequencyType): void {
     this.scheduledDayVisible = frequency === IFrequencyType.other ? true : false;

@@ -14,7 +14,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 // Custom elements
-import { IExpense, IIncomeExpenseType, IFrequencyType, IBalance } from '../../../interfaces';
+import { IExpense, IIncomeExpenceType, IFrequencyType, IBalance } from '../../../interfaces';
 
 @Component({
   selector: 'app-expense-list',
@@ -68,9 +68,9 @@ export class ExpenseListComponent {
       return '';
     }
     switch (expense.type) {
-      case IIncomeExpenseType.recurrence:
+      case IIncomeExpenceType.recurrence:
         return 'Recurrente';
-      case IIncomeExpenseType.unique:
+      case IIncomeExpenceType.unique:
         return 'Unico';
       default:
         return '';
@@ -102,7 +102,7 @@ export class ExpenseListComponent {
   }
 
   getExpenseOwner(expense: IExpense): string {
-    return expense.owner?.nickname ?? "-";
+    return expense.user?.nickname ?? "-";
   }
 
   /**
@@ -158,7 +158,7 @@ export class ExpenseListComponent {
   }
 
   sortByUser(a: IExpense, b: IExpense): number {
-    return (a.owner?.nickname ?? '').localeCompare(b.owner?.nickname ?? '');
+    return (a.user?.nickname ?? '').localeCompare(b.user?.nickname ?? '');
   }
 
   sortByDate(a: IExpense, b: IExpense): number {
@@ -171,7 +171,7 @@ export class ExpenseListComponent {
       return (!this.filters.name || expense.name?.toLowerCase().includes(this.filters.name.toLowerCase())) &&
              (!this.filters.amount || expense.amount?.toString().includes(this.filters.amount)) &&
              (!this.filters.type || this.getExpenseType(expense).toLowerCase().includes(this.filters.type.toLowerCase())) &&
-             (!this.filters.user || (expense.owner?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
+             (!this.filters.user || (expense.user?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
              (!this.filters.date || this.getDate(expense.updatedAt).includes(this.filters.date));
     });
   }

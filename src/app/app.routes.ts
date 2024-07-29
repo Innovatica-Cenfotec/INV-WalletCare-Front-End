@@ -122,8 +122,8 @@ export const routes: Routes = [
           showInSidebar: true,
           layout: <ILayout>{
             icon: 'bank',
-            breadcrumb: ['Ingresos'],
-            name: 'Ingresos',
+            breadcrumb: ['Mis ingresos'],
+            name: 'Mis ingresos',
           },
         }
       },
@@ -138,8 +138,8 @@ export const routes: Routes = [
           showInSidebar: true,
           layout: <ILayout>{
             icon: 'fall',
-            breadcrumb: ['Gastos'],
-            name: 'Gastos',
+            breadcrumb: ['Mis gastos'],
+            name: 'Mis gastos',
           },
         }
       },

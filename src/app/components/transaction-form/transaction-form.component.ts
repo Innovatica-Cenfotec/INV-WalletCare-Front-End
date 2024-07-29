@@ -6,7 +6,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { IAmountType, IFrequencyType, IIncomeExpenseType } from '../../interfaces';
+import { IAmountType, IFrequencyType, IIncomeExpenceType } from '../../interfaces';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -37,7 +37,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 })
 export class TransactionFormComponent implements OnChanges {
     protected fb = inject(FormBuilder);
-    IIncomeExpenseType = IIncomeExpenseType;
+    IIncomeExpenceType = IIncomeExpenceType;
 
     /**
      * The list of income.
@@ -184,7 +184,7 @@ export class TransactionFormComponent implements OnChanges {
             return '';
         }
 
-        return item.type === IIncomeExpenseType.unique ? 'Único' : 'Recurrencia';
+        return item.type === IIncomeExpenceType.unique ? 'Único' : 'Recurrencia';
     }
 
     /**
