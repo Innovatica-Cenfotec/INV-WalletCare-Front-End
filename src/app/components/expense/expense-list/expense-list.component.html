@@ -10,7 +10,7 @@
             <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th *ngIf="!showAccount && !showOwner">Frecuencia</th>
             <th nzColumnKey="account" [nzSortFn]="sortByAccount" *ngIf="showAccount">Cuenta</th>
-            <th nzColumnKey="user" [nzSortFn]="sortByUser" *ngIf="showOwner">Autor</th>
+            <th nzColumnKey="user" [nzSortFn]="sortByUser" *ngIf="showOwner">Modificado por</th>
             <th nzColumnKey="date" [nzSortFn]="sortByDate">Fecha</th>
             <th nzRight>Acciones</th>
         </tr>
@@ -19,7 +19,7 @@
         <tr *ngFor="let data of fixedTable.data">
             <td>{{ data.name }}</td>
             <td>{{ data.description }}</td>
-            <td>{{ data.amount }}</td>
+            <td> ₡ {{ data.amount }}</td>
             <td>{{ getExpenseType(data) }}</td>
             <td *ngIf="!showAccount && !showOwner">{{ getExpenseFrecuency(data) }}</td>
             <td *ngIf="showAccount">{{ getExpenseAccount(data) }}</td>

@@ -227,7 +227,7 @@ export interface IIncome {
 
 export interface IExpense {
   id?: number;
-  user?: IUser;
+  owner?: IUser;
   account?: IAccount;
   name?: string;
   description?: string;

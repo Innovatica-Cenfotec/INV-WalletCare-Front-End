@@ -14,7 +14,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 // Custom elements
-import { IExpense, IIncomeExpenseType, IFrequencyType } from '../../../interfaces';
+import { IExpense, IIncomeExpenseType, IFrequencyType, IBalance } from '../../../interfaces';
 
 @Component({
   selector: 'app-expense-list',
@@ -102,12 +102,35 @@ export class ExpenseListComponent {
   }
 
   getExpenseOwner(expense: IExpense): string {
-    console.log("User of this account: " + expense.user);
-    return expense.user?.nickname ?? "-";
+    return expense.owner?.nickname ?? "-";
   }
 
+  /**
+   * Set the date format
+   * @param date is the date
+   * @returns formated date dd/MM/yyyy HH:mm
+   */
   getDate(date: Date | undefined): string {
     return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
+  }
+
+  /**
+   * Set the color for amounts
+   * @param amount is the amount
+   * @returns the ammount whith the feedback color
+   */
+  formatAmount(amount: number | undefined) {
+    let style = '';
+    if (amount != undefined) {
+        if (amount > 0) {
+            style = 'color: ' + IBalance.surplus; ';'
+        } else if (amount < 0) {
+            style = 'color: ' + IBalance.deficit; ';'
+        } else {
+            style = 'color: ' + IBalance.balance; ';'
+        }
+    }
+    return style;
   }
 
   // Sort by attribute
@@ -135,7 +158,7 @@ export class ExpenseListComponent {
   }
 
   sortByUser(a: IExpense, b: IExpense): number {
-    return (a.user?.nickname ?? '').localeCompare(b.user?.nickname ?? '');
+    return (a.owner?.nickname ?? '').localeCompare(b.owner?.nickname ?? '');
   }
 
   sortByDate(a: IExpense, b: IExpense): number {
@@ -148,7 +171,7 @@ export class ExpenseListComponent {
       return (!this.filters.name || expense.name?.toLowerCase().includes(this.filters.name.toLowerCase())) &&
              (!this.filters.amount || expense.amount?.toString().includes(this.filters.amount)) &&
              (!this.filters.type || this.getExpenseType(expense).toLowerCase().includes(this.filters.type.toLowerCase())) &&
-             (!this.filters.user || (expense.user?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
+             (!this.filters.user || (expense.owner?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
              (!this.filters.date || this.getDate(expense.updatedAt).includes(this.filters.date));
     });
   }

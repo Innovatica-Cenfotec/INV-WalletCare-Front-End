@@ -7,16 +7,17 @@ import { catchError, Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class ExpenseService extends BaseService<IExpense>{
+
   protected override source: string = 'expenses';
   private expenseListSignal = signal<IExpense[]>([]);
   private expenseSignal = signal<IExpense | undefined>(undefined);
 
   get expenses$() {
-    return this.expenseListSignal;
+    return this.expenseListSignal.asReadonly();
   }
 
   get expense$() {
-    return this.expenseSignal;
+    return this.expenseSignal.asReadonly();
   }
 
   saveExpenseSignal(expense: IExpense): Observable<IExpense> {
@@ -31,6 +32,9 @@ export class ExpenseService extends BaseService<IExpense>{
     );
   }
 
+  /**
+   * Retreives all the texpenses owned by the user
+   */
   findAllSignal() {
     return this.findAll().subscribe({
       next: (response: any) => {
@@ -42,6 +46,11 @@ export class ExpenseService extends BaseService<IExpense>{
     });
   }
 
+  /**
+   * Get list of expenses by account signal.
+   * @param id - The account id to search.
+   * @returns An Observable that emits the expenses.
+   */
   filterByAccountSignal(id: number) {
     let params = { account: id };
 
@@ -55,6 +64,11 @@ export class ExpenseService extends BaseService<IExpense>{
     });
   }
 
+  /**
+   * Get list of expenses by account signal.
+   * @param id - The account id to search.
+   * @returns An Observable that emits the expenses.
+   */
   getExpenseSignal(id: number): Observable<IExpense> {
     return this.find(id).pipe(
       tap((response: any) => {

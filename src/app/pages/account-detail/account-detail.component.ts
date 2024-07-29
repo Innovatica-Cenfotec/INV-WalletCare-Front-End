@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, ViewChild, TemplateRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -11,14 +12,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { CommonModule, DatePipe } from '@angular/common';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 // Custom elements
+import { IAccount, IAccountType, IAccountUser, IExpense, IIncomeExpenseType, ITypeForm, ITransaction } from '../../interfaces/index';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
 import { ExpenseService } from '../../services/expense.service';
-import { IAccount, IAccountType, IAccountUser, IExpense, IIncomeExpenseType, ITypeForm, ITransaction } from '../../interfaces/index';
+import { TransactionService } from '../../services/transaction.service';
 import { InviteAccountComponent } from '../../components/account/account-detail/invite-account/invite-account.component';
 import { AccountDetailHeaderComponent } from '../../components/account/account-detail/account-detail-header/account-detail-header.component';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
@@ -26,7 +27,6 @@ import { AccountTabIncomesComponent } from '../../components/account/account-det
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { AccountTabTransactionsComponent } from '../../components/account/account-detail/account-tab-transactions/account-tab-transactions.component';
-import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -45,10 +45,10 @@ import { TransactionService } from '../../services/transaction.service';
     AccountTabMembersComponent,
     AccountTabIncomesComponent,
     AccountTabTransactionsComponent,
+    AccountDetailHeaderComponent,
     ExpenseListComponent,
     ExpenseFormComponent,
-    InviteAccountComponent,
-    AccountDetailHeaderComponent
+    InviteAccountComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-detail.component.html',
@@ -83,7 +83,6 @@ export class AccountDetailComponent implements OnInit {
 
   // Expenses modal
   @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
-  public expense = signal<IExpense>({amount: 0});
   public expenseType: IIncomeExpenseType = IIncomeExpenseType.unique;
   public title: string = '';
   public TypeForm: ITypeForm = ITypeForm.create;
@@ -93,14 +92,12 @@ export class AccountDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
 
-      // Validate if the id is not null or number
       if (!id || isNaN(+id)) {
         this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
         return;
       }
 
       this.id = Number(id);
-      // Get the account by id and get the members if the account is shared
       this.accountService.getAccountSignal(this.id).subscribe({
         next: (response: IAccount) => {
           if (this.isAccountShared()) {
@@ -110,13 +107,7 @@ export class AccountDetailComponent implements OnInit {
         error: (error: any) => {
           this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
         }
-      })
-    });
-    
-    this.route.params.subscribe(params => {
-      this.id = +params['id']; // '+' is used to convert the string to a number
-      // Fetch account details and expenses based on the id
-      this.expenseService.filterByAccountSignal(this.id);
+      });
     });
   }
   
@@ -127,6 +118,34 @@ export class AccountDetailComponent implements OnInit {
   onCanceled(): void {
     this.isVisible.set(false);
     this.isLoading.set(false);
+  }
+
+  /**
+   * Makes the load of all the data in the view 
+   */
+  loadData() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      if (!id || isNaN(+id)) {
+        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
+        return;
+      }
+      this.id = Number(id);
+      this.accountService.getAccountSignal(this.id).subscribe({
+        next: (response: IAccount) => {
+          if (this.isAccountShared()) {
+            this.accountService.getMembersSignal(this.id);
+          }
+        },
+        error: (error: any) => {
+          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+        }
+      });
+
+      this.transactionService.getAllSignal(this.id);
+      this.expenseService.filterByAccountSignal(this.id);
+    });
   }
   
   /**
@@ -198,8 +217,6 @@ export class AccountDetailComponent implements OnInit {
    * deletes a friend from the account
    */
   deleteFriend(accountUser: IAccountUser): void {
-
-
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres eliminar a ${accountUser.user?.nickname} (${accountUser.user?.email}) de la cuenta?`,
       nzContent: 'Si lo eliminas, perderas su colaboración y tanto sus gastos, ingresos y ahorros se eliminaran de esta cuenta.',
@@ -248,84 +265,55 @@ export class AccountDetailComponent implements OnInit {
 
     return members.length + 1;
   }
-
-    /**
+  
+  /**
    * Handles the rollback for the transaction
    * @param transaction 
    */
-    rollbackTransaction(transaction: ITransaction) {
-      this.nzModalService.confirm({
-        nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
-        nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
-        nzOkText: 'Sí',
-        nzOkType: 'primary',
-        nzOnOk: () => {
-          this.transactionService.rollbackTransaction(transaction).subscribe({
-            next: (response: any) => {
-              //this.router.navigateByUrl('/app/accounts');
-              this.nzNotificationService.success('Éxito', 'Transacción reversada');
-              this.loadData();
-            },
-            error: ((error: { error: { detail: string | TemplateRef<void>; }; }) => {
-              this.nzNotificationService.error('Error', error.error.detail)
-              throw error;
-            })
-          }
-          );
-        },
-        nzCancelText: 'No'
-      });
-    }
-  
-    /**
-     * Makes the load of all the data in the view 
-     */
-    loadData() {
-      this.route.paramMap.subscribe(params => {
-        const id = params.get('id');
-  
-        // Validate if the id is not null or number
-        if (!id || isNaN(+id)) {
-          this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
-          return;
+  rollbackTransaction(transaction: ITransaction) {
+    this.nzModalService.confirm({
+      nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
+      nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.transactionService.rollbackTransaction(transaction).subscribe({
+          next: (response: any) => {
+            //this.router.navigateByUrl('/app/accounts');
+            this.nzNotificationService.success('Éxito', 'Transacción reversada');
+            this.loadData();
+          },
+          error: ((error: { error: { detail: string | TemplateRef<void>; }; }) => {
+            this.nzNotificationService.error('Error', error.error.detail)
+            throw error;
+          })
         }
-        this.id = Number(id);
-        this.accountService.getAccountSignal(this.id).subscribe({
-          next: (response: IAccount) => {
-            if (this.isAccountShared()) {
-              this.accountService.getMembersSignal(this.id);
-            }
+        );
+      },
+      nzCancelText: 'No'
+    });
+  }
+
+  /**
+  * Deletes the expense
+  */
+  deleteExpense(expense: IExpense): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar el gasto?',
+      nzContent: 'Si eliminas el gasto, se eliminarán todos los datos relacionados al mismo.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.expenseService.deleteExpenseSignal(expense.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'El gasto se ha eliminado correctamente');
           },
           error: (error: any) => {
-            this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
           }
-        })
-  
-        this.transactionService.getAllSignal(this.id);
-      });
-    }
-  
-       
-    /**
-    * Deletes the expense
-    */
-    deleteExpense(expense: IExpense): void {
-      this.nzModalService.confirm({
-        nzTitle: '¿Estás seguro de que quieres eliminar la cuenta?',
-        nzContent: 'Si eliminas la cuenta, se eliminarán todos los datos relacionados con ella.',
-        nzOkText: 'Sí',
-        nzOkType: 'primary',
-        nzOnOk: () => {
-          this.expenseService.deleteExpenseSignal(expense.id).subscribe({
-            next: () => {
-              this.nzNotificationService.success('Éxito', 'La cuenta se ha eliminado correctamente');
-            },
-            error: (error: any) => {
-              this.nzNotificationService.error('Lo sentimos', error.error.detail);
-            }
-          });
-        },
-        nzCancelText: 'No'
-      });
-    }
+        });
+      },
+      nzCancelText: 'No'
+    });
+  }
 }
