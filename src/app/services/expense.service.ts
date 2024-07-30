@@ -68,6 +68,22 @@ export class ExpenseService extends BaseService<IExpense> {
    * @param id - The account id to search.
    * @returns An Observable that emits the expenses.
    */
+  findAllTemplatesSignal() {
+    return this.findExpenseTemplates().subscribe({
+      next: (response: any) => {
+        this.expenseListSignal.set(response);
+      }, error: (error: any) => {
+        console.error('Error fetching expenses', error);
+        throw error;
+      }
+    });
+  }
+
+  /**
+   * Get list of expenses by account signal.
+   * @param id - The account id to search.
+   * @returns An Observable that emits the expenses.
+   */
   getExpenseSignal(id: number): Observable<IExpense> {
     return this.find(id).pipe(
       tap((response: any) => {

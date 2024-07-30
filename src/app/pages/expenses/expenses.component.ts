@@ -70,7 +70,7 @@ export class ExpensesComponent implements OnInit {
   public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
-    this.expenseService.findAllSignal();
+    this.expenseService.findAllTemplatesSignal();
     this.taxService.findAllSignal();
   }
 

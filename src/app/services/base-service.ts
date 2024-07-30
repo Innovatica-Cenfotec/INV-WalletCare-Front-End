@@ -56,8 +56,11 @@ export class BaseService<T> {
     return this.http.delete<IResponse<T>>(this.source + '/' + id);
   }
 
-
-  /* Filters with params */
+  /**
+   * Retrieves a list with the items filtered by params.
+   * @param params - An array of params to use.
+   * @returns An Observable that emits an IResponse containing an array of items.
+   */
   public filter(params: { [key: string]: string | number | boolean }): Observable<IResponse<T[]>> {
     let httpParams = new HttpParams();
     for (const key in params) {
@@ -66,5 +69,17 @@ export class BaseService<T> {
       }
     }
     return this.http.get<IResponse<T[]>>(this.source + '/filter', { params: httpParams });
+  }
+
+
+  // CUSTOM FOR EXPENSES
+
+  /**
+   * Retrieves a list with the items filtered by params.
+   * @param params - An array of params to use.
+   * @returns An Observable that emits an IResponse containing an array of items.
+   */
+  public findExpenseTemplates(): Observable<IResponse<T>> {
+    return this.http.get<IResponse<T>>(this.source + '/templates');
   }
 }
