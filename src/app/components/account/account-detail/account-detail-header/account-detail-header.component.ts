@@ -254,10 +254,6 @@ export class AccountDetailHeaderComponent implements OnChanges {
             id: this.id
         }
 
-        if ('owner' in item) {
-            item.owner = null;
-        }
-
         item.account = payload;
         if (this.TransactionFormType === 'income') {
             this.incomeService.addIncomeToAccountSignal(item).subscribe({
