@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal, ViewChild, OnInit } from '@angular/core';
+import { CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
@@ -10,12 +11,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { CommonModule} from '@angular/common';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom elements
 import { IExpense, IIncomeExpenceType, ITypeForm } from '../../interfaces/index';
@@ -42,6 +42,7 @@ import { ExpenseFormComponent } from '../../components/expense/expense-form/expe
     NzModalModule,
     NzButtonModule,
     NzDropDownModule,
+    NzPopoverModule,
     ExpenseListComponent,
     ExpenseFormComponent
   ],

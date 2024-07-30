@@ -1,5 +1,8 @@
 <nz-page-header>
-    <nz-page-header-title>Mis Gastos</nz-page-header-title>
+    <nz-page-header-title>
+        Mis Gastos
+        <button nz-button nz-popover nzType="dashed" nzPopoverTitle="Lista de plantillas" nzPopoverContent="En esta página encontrará todas sus plantillas de gastos." nzShape="circle"><span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#B17A0C'" nzType="info-circle"></span></button>
+    </nz-page-header-title>
     <nz-page-header-extra>
         <nz-space [nzWrap]="true">
             <button *nzSpaceItem nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
