@@ -81,13 +81,13 @@ export class ExpenseListComponent {
             case IIncomeExpenceType.unique:
                 return 'Unico';
             default:
-                return '';
+                return '-';
         }
     }
 
     getExpenseFrequency(expense: IExpense): string {
         if (!expense) {
-            return '';
+            return '-';
         }
         switch (expense.frequency) {
             case IFrequencyType.annual:
