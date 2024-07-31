@@ -94,6 +94,8 @@ export class ExpenseListComponent {
                 return 'Anual';
             case IFrequencyType.monthly:
                 return 'Mensual';
+            case IFrequencyType.biweekly:
+                return 'Quincenal';
             case IFrequencyType.weekly:
                 return 'Semanal';
             case IFrequencyType.daily:

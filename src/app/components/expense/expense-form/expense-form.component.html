@@ -50,7 +50,7 @@
                     <nz-form-item>
                         <nz-form-label nzFor="tax">Declaración de impuestos (opcional)</nz-form-label>
                         <nz-form-control>
-                            <nz-select class="select" formControlName="tax" nzAllowClear nzPlaceHolder="Choose" (ngModelChange)="onSelectTax($event)">
+                            <nz-select class="select" formControlName="tax" nzAllowClear nzPlaceHolder="Seleccione impuesto" (ngModelChange)="onSelectTax($event)">
                                 <nz-option *ngFor="let tax of taxList" [nzLabel]="tax.name" [nzValue]="tax">
                                 </nz-option>
                             </nz-select>
