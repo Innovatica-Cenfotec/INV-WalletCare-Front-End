@@ -102,7 +102,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
     /// ------- Expense
     public expense = signal<IExpense>({ amount: 0 });
-    public isVisibleExpense = signal(false);
+    public isVisibleExpense = signal(false); 
 
     /// ------- Income
     public isVisibleIncome = signal(false);

@@ -70,8 +70,14 @@ export class ExpensesComponent implements OnInit {
      */
     public isVisible = signal(false);
     public isLoading = signal(false);
-    public isVisibleTest = signal(false);
-    public expense = signal<IExpense>({amount: 0});
+    
+    /// ------- Details
+    public isVisibleDetails = signal(false);
+
+    /// ------- Details
+    public isVisibleCreate = signal(false); 
+
+    public expense = signal<IExpense>({ amount: 0 });
     public expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
     public title: string = '';
     public TypeForm: ITypeForm = ITypeForm.create;
@@ -85,20 +91,7 @@ export class ExpensesComponent implements OnInit {
       this.isVisible.set(false);
       this.isLoading.set(false);
     }
-
-    /**
-     * Shows the modal to create the expense
-     */
-    openExpenseListModal(): void {
-        this.nzModalService.create({
-        nzContent: ExpenseDetailsComponent,
-        nzFooter: null,
-        nzClosable: true,
-        });
-        this.isVisibleTest.set(true);
-    }
     
-
     /**
      * Shows the modal to create the expense
      */
@@ -138,6 +131,7 @@ export class ExpensesComponent implements OnInit {
      */
     showModalEdit(expense: IExpense): void {
         this.title = 'Editar gasto';
+        this.expenseType = expense.type ?? this.expenseType;
         this.TypeForm = ITypeForm.update;
         this.form.item = expense;
         this.isVisible.set(true);
