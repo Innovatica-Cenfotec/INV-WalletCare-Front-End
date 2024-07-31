@@ -71,6 +71,13 @@ export class ExpenseListComponent {
         this.applyFilters();
     }
 
+    getExpenseDesc(expense: IExpense): string {
+        if (!expense.description) {
+            return '-';
+        }
+        return expense.description;
+    }
+
     getExpenseType(expense: IExpense): string {
         if (!expense) {
             return '';
