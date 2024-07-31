@@ -101,7 +101,7 @@ export class ExpenseListComponent {
             case IFrequencyType.daily:
                 return 'Diario';
             case IFrequencyType.other:
-                return 'Otro';
+                return 'Personalizado';
             default:
                 return '-';
         }
