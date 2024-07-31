@@ -150,6 +150,7 @@ export class ExpensesComponent implements OnInit {
         if (expense.tax) {
             expense.tax = {id: expense.tax.id};
         }
+        expense.isTemplate = true;
         this.expenseService.saveExpenseSignal(expense).subscribe({
           next: (response: any) => {
               this.isVisible.set(false);
