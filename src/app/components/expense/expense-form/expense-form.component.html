@@ -1,5 +1,4 @@
-<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()"
-    [nzCancelLoading]="isLoading" nzWidth="600px">
+<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()" [nzCancelLoading]="isLoading" nzWidth="600px">
     <div *nzModalContent>
         <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
             <!-- name -->
@@ -9,23 +8,8 @@
                     <nz-input-group>
                         <input type="text" nz-input formControlName="name">
                         <ng-template #errorNameTpl let-control>
-                            @if (control.errors?.['maxlength']) {
-                            El nombre del gasto no puede tener más de 100 caracteres
-                            }
-                            @else if (control.errors?.['minlength']) {
-                            El nombre del gasto debe tener al menos 4 caracteres
-                            }
-                            @else if (control.errors?.['required']) {
-                            Por favor ingrese el nombre del gasto
-                            }
-                            @else if(control.errors?.['duplicated']){
-                            El nombre del gasto ya existe
-                            }
-                            @else if (control.errors?.['pattern']) {
-                            El nombre del gasto solo puede contener letras y números
-                            }
-                            @else {
-                            {{control.errors?.['message']}}
+                            @if (control.errors?.['maxlength']) { El nombre del gasto no puede tener más de 100 caracteres } @else if (control.errors?.['minlength']) { El nombre del gasto debe tener al menos 4 caracteres } @else if (control.errors?.['required']) { Por favor ingrese
+                            el nombre del gasto } @else if(control.errors?.['duplicated']){ El nombre del gasto ya existe } @else if (control.errors?.['pattern']) { El nombre del gasto solo puede contener letras y números } @else { {{control.errors?.['message']}}
                             }
                         </ng-template>
                     </nz-input-group>
@@ -39,19 +23,10 @@
                         <nz-form-label nzRequired nzFor="amount">Monto</nz-form-label>
                         <nz-form-control [nzErrorTip]="errorAmountTpl">
                             <nz-input-group>
-                                <nz-input-number class="input-number" [nzMin]="1" formControlName="amount"
-                                    [nzFormatter]="formatterConlon" [nzParser]="parserConlon">
-                            </nz-input-number>
+                                <nz-input-number class="input-number" [nzMin]="1" formControlName="amount" [nzFormatter]="formatterConlon" [nzParser]="parserConlon">
+                                </nz-input-number>
                                 <ng-template #errorAmountTpl let-control>
-                                    @if (control.errors?.['required']) {
-                                    Por favor ingrese el monto
-                                    }
-                                    @else if (control.errors?.['min']) {
-                                    El monto dede ser mayor a 0
-                                    }
-                                    @else {
-                                    {{control.errors?.['message']}}
-                                    }
+                                    @if (control.errors?.['required']) { Por favor ingrese el monto } @else if (control.errors?.['min']) { El monto dede ser mayor a 0 } @else { {{control.errors?.['message']}} }
                                 </ng-template>
                             </nz-input-group>
                         </nz-form-control>
@@ -66,12 +41,7 @@
                                 <label nz-radio nzValue="{{IAmountType.gross}}">Bruto</label>
                             </nz-radio-group>
                             <ng-template #errorAmountTypeTpl let-control>
-                                @if (control.errors?.['required']) {
-                                Por favor seleccione el tipo de gasto
-                                }
-                                @else {
-                                {{control.errors?.['message']}}
-                                }
+                                @if (control.errors?.['required']) { Por favor seleccione el tipo de gasto } @else { {{control.errors?.['message']}} }
                             </ng-template>
                         </nz-form-control>
                     </nz-form-item>
@@ -80,8 +50,7 @@
                     <nz-form-item>
                         <nz-form-label nzFor="tax">Declaración de impuestos (opcional)</nz-form-label>
                         <nz-form-control>
-                            <nz-select class="select" formControlName="tax" nzAllowClear nzPlaceHolder="Choose"
-                                (ngModelChange)="onSelectTax($event)">
+                            <nz-select class="select" formControlName="tax" nzAllowClear nzPlaceHolder="Choose" (ngModelChange)="onSelectTax($event)">
                                 <nz-option *ngFor="let tax of taxList" [nzLabel]="tax.name" [nzValue]="tax">
                                 </nz-option>
                             </nz-select>
@@ -97,12 +66,7 @@
                             <nz-textarea-count [nzMaxCharacterCount]="200">
                                 <textarea rows="9" formControlName="description" nz-input></textarea>
                                 <ng-template #errorDescriptionTpl let-control>
-                                    @if (control.errors?.['maxlength']) {
-                                    La descripción no puede menos de 200 caracteres
-                                    }
-                                    @else {
-                                    {{control.errors?.['message']}}
-                                    }
+                                    @if (control.errors?.['maxlength']) { La descripción no puede menos de 200 caracteres } @else { {{control.errors?.['message']}} }
                                 </ng-template>
                             </nz-textarea-count>
                         </nz-form-control>
@@ -126,12 +90,7 @@
                                 <label nz-radio nzValue="{{IFrequencyType.other}}">Personalizado</label>
                             </nz-radio-group>
                             <ng-template #errorFrequencyTpl let-control>
-                                @if (control.errors?.['required']) {
-                                Por favor seleccione la frecuencia
-                                }
-                                @else {
-                                {{control.errors?.['message']}}
-                                }
+                                @if (control.errors?.['required']) { Por favor seleccione la frecuencia } @else { {{control.errors?.['message']}} }
                             </ng-template>
                         </nz-form-control>
                     </nz-form-item>
@@ -148,22 +107,14 @@
                                 </nz-option>
                             </nz-select>
                             <ng-template #errorScheduledDayTpl let-control>
-                                @if (control.errors?.['required']) {
-                                Por favor seleccione el día programado
-                                }
-                                @else {
-                                {{control.errors?.['message']}}
-                                }
+                                @if (control.errors?.['required']) { Por favor seleccione el día programado } @else { {{control.errors?.['message']}} }
                             </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                }
-
-                @if (this.scheduledDay === 31) {
+                } @if (this.scheduledDay === 31) {
                 <span nz-typography nzType="warning">Los meses del año que tienen menos de 31 días, el día programado se
-                    ajustará al último día del mes</span>
-                }
+                    ajustará al último día del mes</span> }
             </div>
             }
 
@@ -173,13 +124,11 @@
                 <nz-descriptions-item nzTitle="Percentage">{{this.TaxSelected.percentage}} %</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Discription">{{this.TaxSelected.description}}</nz-descriptions-item>
             </nz-descriptions>
+            } @if (enableTemplate) {
+            <nz-form-item>
+                <label nz-checkbox formControlName="isTemplate" nzChecked="true">Guardar en 'Mis gastos'</label>
+            </nz-form-item>
             }
-
-            @if (enableTemplate) {
-                <nz-form-item>
-                    <label nz-checkbox formControlName="isTemplate" nzChecked="true">Guardar en 'Mis gastos'</label>
-                </nz-form-item>
-                }
         </form>
     </div>
     <div *nzModalFooter>

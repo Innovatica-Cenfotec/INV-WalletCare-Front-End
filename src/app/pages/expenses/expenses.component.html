@@ -22,10 +22,11 @@
         </nz-space>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <app-expense-list [expensesList]="expenseService.expenses$()" [showOwner]="true" (editExpense)="showModalEdit($event)" (deleteExpense)="deleteExpense($event)"></app-expense-list>
+        <app-expense-list [showTax]="true" [expensesList]="expenseService.expenses$()" (detailsExpense)="showModalDetails($event)" (editExpense)="showModalEdit($event)" (deleteExpense)="deleteExpense($event)"></app-expense-list>
     </nz-page-header-content>
 </nz-page-header>
 
-<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="onCanceled()" (onCreated)="createExpense($event)"
-    (onUpdated)="updateExpense($event)">
-</app-expense-form>
+<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)"
+    (onUpdated)="updateExpense($event)"></app-expense-form>
+
+<app-expense-details #details></app-expense-details>
