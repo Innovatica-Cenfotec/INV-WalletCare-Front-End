@@ -134,9 +134,8 @@ export class IncomeComponent {
     if (income.tax) {
       income.tax = { id: income.tax.id };
     }
-     // addTransaction to income
-     income.addTransaction 
-     
+
+    income.addTransaction     
     this.incomeService.saveIncomeSignal(income).subscribe({
       next: (response: any) => {
         this.isVisible.set(false);
