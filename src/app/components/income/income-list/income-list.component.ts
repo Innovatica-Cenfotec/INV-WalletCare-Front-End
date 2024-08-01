@@ -62,7 +62,7 @@ export class IncomeListComponent {
             case IIncomeExpenceType.recurrence:
               return 'Recurrente';
             case IIncomeExpenceType.unique:
-              return 'Extraordinario';
+              return 'Único';
             default:
               return '';
           }
