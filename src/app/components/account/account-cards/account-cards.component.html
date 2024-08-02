@@ -10,13 +10,23 @@
     <ng-template #prefixTplTwo><span nz-icon nzType="arrow-down"></span></ng-template>
   </nz-card>
   <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="generalIncomes" [nzTitle]="'Ingresos Generales'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: generalIncomesColor }"></nz-statistic>
+    <ng-template #prefixTplThree><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
     <nz-statistic [nzValue]="generalSavings" [nzTitle]="'Ahorros Generales'" [nzPrefix]="'₡'"
       [nzValueStyle]="{ color: generalSavingsColor }"></nz-statistic>
     <ng-template #prefixTplThree><span nz-icon nzType="arrow-down"></span></ng-template>
   </nz-card>
   <nz-card [nzBordered]="false">
-    <nz-statistic [nzValue]="recurringExpenses" [nzTitle]="'Gastos Recurrentes'" [nzPrefix]="'₡'"
+    <nz-statistic [nzValue]="transactionService.balances$().recurrentExpensesBalance" [nzTitle]="'Gastos Recurrentes'" [nzPrefix]="'₡'"
       [nzValueStyle]="{ color: recurringExpensesColor }"></nz-statistic>
+    <ng-template #prefixTplFour><span nz-icon nzType="arrow-down"></span></ng-template>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="recurringIncomes" [nzTitle]="'Ingresos Recurrentes'" [nzPrefix]="'₡'"
+      [nzValueStyle]="{ color: recurringIncomesColor }"></nz-statistic>
     <ng-template #prefixTplFour><span nz-icon nzType="arrow-down"></span></ng-template>
   </nz-card>
   <nz-card [nzBordered]="false">

@@ -24,7 +24,6 @@ import { TaxService } from '../../services/tax.service';
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
 
-
 @Component({
     selector: 'app-expenses',
     standalone: true,

@@ -361,6 +361,15 @@ export class AccountDetailComponent implements OnInit, OnChanges {
           this.recurringIncomes = response.recurrentIncomesBalance;
         }
       });
+      this.transactionService.getBalancesByOwner().subscribe({
+        next: (response: any) => {
+          //this.monthExpenses = response.monthlyExpenseBalance;
+          //&this.recurringExpenses = response.recurrentExpensesBalance;
+          //this.monthIncomes = response.monthlyIncomeBalance;
+          //this.recurringIncomes = response.recurrentIncomesBalance;
+          
+        }
+      })
     });
   }
 
