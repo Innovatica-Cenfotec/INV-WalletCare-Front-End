@@ -21,6 +21,13 @@
   <nz-page-header-content>
     
     <nz-divider></nz-divider>
+    <app-income-list 
+    [incomeList]="incomeService.incomes$()"
+    (viewIncomeDetails)="viewIncomeDetails($event)"
+    (deleteIncome)="deleteIncome($event)"
+    (editIncome)="showModalEdit($event)">
+    </app-income-list>
+   
 
   </nz-page-header-content>
 </nz-page-header>

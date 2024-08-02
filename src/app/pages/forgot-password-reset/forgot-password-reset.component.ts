@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordRecoveryService } from '../../services/password-recovery.service';
@@ -46,6 +46,7 @@ export class ForgotPasswordResetComponent implements OnInit {
    * This is the visibility of the confirm password
    */
   public confirmPasswordVisible = false;
+  @Input() className = 'forgot-password-reset-container';
 
   constructor(
     private fb: FormBuilder,
@@ -80,19 +81,32 @@ export class ForgotPasswordResetComponent implements OnInit {
         this.message.error('Las contraseñas no coinciden');
         return;
       }
+      if (this.className == '') {
+        this.passwordRecoveryService.changePassword(forgotPasswordReset).subscribe({
+          next:()=>{
+            this.message.success('Contraseña actualizada correctamente');
+            this.router.navigate(['app/profile'])
+          },
+          error:(error)=>{
+            this.message.error('Error al cambiar la contraseña, porfavor intente más tarde')
+            console.error('Error',error)
+          }
 
-      this.passwordRecoveryService.resetPassword(forgotPasswordReset).subscribe({
-        next: (response) => {
-          console.log('Success response:', response); // Depuración de respuesta
-          this.message.success('Contraseña actualizada correctamente');
-          this.router.navigate(['/login']); // Redirige al inicio de sesión
-        },
+        })
+      } else {
 
-        error: (err) => {
-          console.log('Error response:', err); // Depuración de error
-          this.message.error('Error al actualizar la contraseña, por favor intente más tarde')
-        }
-      });
+        this.passwordRecoveryService.resetPassword(forgotPasswordReset).subscribe({
+          next: (response) => {
+            console.log('Success response:', response); // Depuración de respuesta
+            this.message.success('Contraseña actualizada correctamente');
+            this.router.navigate(['/login']); // Redirige al inicio de sesión
+          },
+          error: (err) => {
+            console.log('Error response:', err); // Depuración de error
+            this.message.error('Error al actualizar la contraseña, por favor intente más tarde')
+          }
+        });
+      }
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {

@@ -124,8 +124,6 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     super.handleSubmit();
   }
 
-  
-
   onSelectTax(tax: Itax): void {
     this.TaxSelected = tax;
   }

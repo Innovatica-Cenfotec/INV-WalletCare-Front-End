@@ -102,7 +102,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
     /// ------- Expense
     public expense = signal<IExpense>({ amount: 0 });
-    public isVisibleExpense = signal(false);
+    public isVisibleExpense = signal(false); 
 
     /// ------- Income
     public isVisibleIncome = signal(false);
@@ -252,10 +252,6 @@ export class AccountDetailHeaderComponent implements OnChanges {
     addSelectedTransaction(item: IIncome | IExpense): void {
         const payload: IAccount = {
             id: this.id
-        }
-
-        if ('owner' in item) {
-            item.owner = null;
         }
 
         item.account = payload;

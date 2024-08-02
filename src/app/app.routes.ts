@@ -122,27 +122,27 @@ export const routes: Routes = [
           showInSidebar: true,
           layout: <ILayout>{
             icon: 'bank',
-            breadcrumb: ['Ingresos'],
-            name: 'Ingresos',
+            breadcrumb: ['Mis ingresos'],
+            name: 'Mis ingresos',
           },
         }
       },
-      // {
-      //   path: 'expense',
-      //   component: ExpensesComponent,
-      //   data: {
-      //     authorities: [
-      //       IRole.admin,
-      //       IRole.user
-      //     ],
-      //     showInSidebar: true,
-      //     layout: <ILayout>{
-      //       icon: 'fall',
-      //       breadcrumb: ['Gastos'],
-      //       name: 'Gastos',
-      //     },
-      //   }
-      // },
+      {
+        path: 'expense',
+        component: ExpensesComponent,
+       data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'fall',
+            breadcrumb: ['Mis gastos'],
+            name: 'Mis gastos',
+          },
+        }
+      },
     ],
   },
   {
