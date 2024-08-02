@@ -25,7 +25,5 @@
     </nz-page-header-content>
 </nz-page-header>
 
-<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)"
-    (onUpdated)="updateExpense($event)"></app-expense-form>
-
-<app-expense-details #details></app-expense-details>
+<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" 
+                  (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)" (onUpdated)="updateExpense($event)"></app-expense-form>

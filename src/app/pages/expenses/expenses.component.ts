@@ -23,8 +23,6 @@ import { ExpenseService } from '../../services/expense.service';
 import { TaxService } from '../../services/tax.service';
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
 import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
-import { ExpenseDetailsComponent } from '../../components/expense/expense-details/expense-details.component';
-
 
 @Component({
     selector: 'app-expenses',
@@ -45,8 +43,7 @@ import { ExpenseDetailsComponent } from '../../components/expense/expense-detail
         NzDropDownModule,
         NzPopoverModule,
         ExpenseFormComponent,
-        ExpenseListComponent,
-        ExpenseDetailsComponent
+        ExpenseListComponent
     ],
     templateUrl: './expenses.component.html',
     styleUrl: './expenses.component.scss',
@@ -63,7 +60,6 @@ export class ExpensesComponent implements OnInit {
     public taxService = inject(TaxService);
 
     @ViewChild(ExpenseFormComponent) form!: ExpenseFormComponent;
-    @ViewChild(ExpenseDetailsComponent) details!: ExpenseDetailsComponent;
 
     /**
      * The visibility of the invite friend form.
