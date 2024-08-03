@@ -7,7 +7,7 @@
             <th nzColumnKey="title" [nzSortFn]="sortByTitle">Asunto</th>
             <th nzColumnKey="'message" *ngIf="showDetailsModal">Contenido</th>
             <th nzColumnKey="type" [nzSortFn]="sortByType" *ngIf="showDetailsModal">Tipo</th>
-            <th nzColumnKey="createdAt" [nzSortFn]="sortByDate">Enviado a las</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortByDate">Fecha</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
