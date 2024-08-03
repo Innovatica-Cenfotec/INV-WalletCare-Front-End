@@ -14,7 +14,7 @@
     <tbody>
         <tr *ngFor="let data of fixedTable.data">
             <td>{{ data.title }}</td>
-            <td *ngIf="showDetailsModal">{{ data.message }}</td>
+            <td *ngIf="showDetailsModal">{{ data.type }}: {{ data.message }}</td>
             <td *ngIf="showDetailsModal">{{ data.type }}</td>
             <td>{{ getDate(data.createdAt) }}</td>
             <td nzRight>
