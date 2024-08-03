@@ -118,10 +118,10 @@ export class HeaderComponent implements OnInit {
     markNotificationAsRead(notification: INotification): void {
         this.notificationService.markAsReadNotifSignal(notification.id).subscribe({
             next: () => {
-                this.nzNotificationService.success('Éxito', 'La notificación se ha marcado como leída');
+                console.log('Éxito: La notificación se ha marcado como leída');
             },
             error: (error: any) => {
-                this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                console.log('Lo sentimos', error.error.detail);
             }
         });
     }

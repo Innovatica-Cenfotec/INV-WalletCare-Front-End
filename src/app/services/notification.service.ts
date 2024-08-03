@@ -63,6 +63,10 @@ export class NotificationService extends BaseService<INotification> {
      * @returns An Observable that emits the updated notification.
      */
     markAsReadNotifSignal(id: number | undefined): Observable<any> {
+        if (!id) {
+            throw new Error('Invalid notification ID. ');
+        }
+        
         return this.http.put(`${this.source}/read/${id}`, null).pipe(
             tap((response: any) => {
                 this.notificationListSignal.update(
