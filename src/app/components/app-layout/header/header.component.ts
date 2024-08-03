@@ -6,9 +6,13 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+
+// Custom components
 import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
+import { NotificationsListComponent } from '../../notifications/notifications-list/notifications-list.component';
 
 @Component({
   selector: 'app-layout-header',
@@ -17,7 +21,9 @@ import { ProfileService } from '../../../services/profile.service';
     NzLayoutModule,
     NzIconModule,
     NzFlexModule,
-    NzDropDownModule
+    NzDropDownModule,
+    NzDrawerModule,
+    NotificationsListComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -68,5 +74,27 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl('/login'); 
+  }
+
+  // FOR NOTIFICATION DRAWER
+  visibleNotifications = false;
+
+  openNotifications(): void {
+    this.visibleNotifications = true;
+  }
+
+  closeNotifications(): void {
+    this.visibleNotifications = false;
+  }
+
+  // FOR CALCULATOR DRAWER
+  visibleCalculator = false;
+
+  openCalculator(): void {
+    this.visibleCalculator = true;
+  }
+
+  closeCalculator(): void {
+    this.visibleCalculator = false;
   }
 }

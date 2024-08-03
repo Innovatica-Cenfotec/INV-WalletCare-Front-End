@@ -25,7 +25,7 @@ import { IExpense, IIncomeExpenceType, IFrequencyType, IBalance, IAmountType } f
     providers: [DatePipe],
     templateUrl: './expense-list.component.html',
     styleUrls: ['./expense-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpenseListComponent {
     @Input() expensesList: IExpense[] = [];

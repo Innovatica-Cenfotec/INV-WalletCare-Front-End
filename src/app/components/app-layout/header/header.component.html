@@ -10,31 +10,42 @@
         </span>
     </div>
     <div>
-        <a class="header-calculator">
+        <a class="header-calculator" (click)="openCalculator()">
             <span nz-icon nzType="calculator" nzTheme="outline"></span>
         </a>
-        <a class="header-notification">
+        <a class="header-notification" (click)="openNotifications()">
             <span nz-icon nzType="notification" nzTheme="outline"></span>
         </a>
-        <div>           
+        <div>
             <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
-                <span nz-icon nzType="user" nzTheme="outline"></span>
-                {{user?.nickname}}
+                <span nz-icon nzType="user" nzTheme="outline"></span> {{user?.nickname}}
                 <span nz-icon nzType="down"></span>
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
                     <li nz-menu-item (click)="navigateToProfile()">
-                        <span nz-icon nzType="setting" nzTheme="outline"></span>
-                        Mi Perfil
+                        <span nz-icon nzType="setting" nzTheme="outline"></span> Mi Perfil
                     </li>
                     <li nz-menu-divider></li>
                     <li nz-menu-item (click)="logout()">
-                        <span nz-icon nzType="logout" nzTheme="outline"></span>
-                        Cerrar Sesión
+                        <span nz-icon nzType="logout" nzTheme="outline"></span> Cerrar Sesión
                     </li>
                 </ul>
             </nz-dropdown-menu>
         </div>
     </div>
 </nz-header>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visibleCalculator" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="closeCalculator()">
+    <ng-container *nzDrawerContent>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+    </ng-container>
+</nz-drawer>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visibleNotifications" nzPlacement="right" nzTitle="Notificaciones" (nzOnClose)="closeNotifications()">
+    <ng-container *nzDrawerContent>
+        <app-notifications-list></app-notifications-list>
+    </ng-container>
+</nz-drawer>

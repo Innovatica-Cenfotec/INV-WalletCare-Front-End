@@ -272,7 +272,6 @@ export interface IRecurrence {
 export interface INotification {
     id?: number;
     owner?: IUser;
-    receiverEmail?: string;
     type?: string;
     title?: string;
     message?: string;
