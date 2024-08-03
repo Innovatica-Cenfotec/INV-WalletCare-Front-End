@@ -118,7 +118,7 @@ export class HeaderComponent implements OnInit {
     deleteNotification(notification: INotification): void {
         this.nzModalService.confirm({
             nzTitle: '¿Estás seguro de que quieres eliminar la notificación?',
-            nzContent: 'Las notificaciones se eliminan para siempre.',
+            nzContent: 'Las notificaciones se eliminan de manera permanente.',
             nzOkText: 'Sí',
             nzOkType: 'primary',
             nzOnOk: () => {
