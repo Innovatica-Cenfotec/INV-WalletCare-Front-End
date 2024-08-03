@@ -6,7 +6,7 @@ import { catchError, Observable, tap } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class ExpenseService extends BaseService<INotification> {
+export class NotificationService extends BaseService<INotification> {
     protected override source: string = 'notifications';
     private responseSignal = signal<IGenericResponse>({});
     private notificationListSignal = signal<INotification[]>([]);

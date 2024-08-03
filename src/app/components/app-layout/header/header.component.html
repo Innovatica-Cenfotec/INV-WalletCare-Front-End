@@ -46,6 +46,6 @@
 
 <nz-drawer [nzClosable]="false" [nzVisible]="visibleNotifications" nzPlacement="right" nzTitle="Notificaciones" (nzOnClose)="closeNotifications()">
     <ng-container *nzDrawerContent>
-        <app-notifications-list></app-notifications-list>
+        <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (readNotification)="markNotificationAsRead($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
     </ng-container>
 </nz-drawer>
