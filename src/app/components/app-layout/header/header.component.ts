@@ -108,14 +108,23 @@ export class HeaderComponent implements OnInit {
     }
 
     /**
-    * Delete the notification
+    * Display details of the notification
     */
     showModalDetails(notification: INotification): void {}
     
     /**
-    * Delete the notification
+    * Mark the notification as read
     */
-    markNotificationAsRead(notification: INotification): void {}
+    markNotificationAsRead(notification: INotification): void {
+        this.notificationService.markAsReadNotifSignal(notification.id).subscribe({
+            next: () => {
+                this.nzNotificationService.success('Éxito', 'La notificación se ha marcado como leída');
+            },
+            error: (error: any) => {
+                this.nzNotificationService.error('Lo sentimos', error.error.detail);
+            }
+        });
+    }
     
     /**
     * Delete the notification
