@@ -28,7 +28,7 @@ export class ExpenseService extends BaseService<IExpense> {
 
     /**
      * Saves an expense signal.
-     * @param income - The expense signal to be saved.
+     * @param expense - The expense signal to be saved.
      * @returns An Observable that emits the saved expense signal.
      */
     saveExpenseSignal(expense: IExpense): Observable<IExpense> {
@@ -44,7 +44,7 @@ export class ExpenseService extends BaseService<IExpense> {
     }
 
     /**
-     * Retreives all the texpenses owned by the user
+     * Retreives all the expenses owned by the user
      */
     findAllSignal() {
         return this.findAll().subscribe({
@@ -141,7 +141,7 @@ export class ExpenseService extends BaseService<IExpense> {
 
     /**
      * Deletes an expense signal.
-     * @param expense - The expense to be deleted.
+     * @param id - The expense to be deleted.
      * @returns An Observable that emits the deleted expense.
      */
     deleteExpenseSignal(id: number | undefined): Observable<any> {
