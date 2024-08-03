@@ -1,7 +1,7 @@
 <!--
 <input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" />
 -->
-<nz-table #fixedTable [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '100px', '130px']">
+<nz-table #fixedTable [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '100px', '100px']">
     <thead>
         <tr>
             <th nzColumnKey="title" [nzSortFn]="sortByTitle">Asunto</th>
@@ -20,8 +20,7 @@
             <td nzRight>
                 <nz-space>
                     <button nz-button nzType="default" [nzSize]="'large'" (click)="detailsNotification.emit(data)"><span nz-icon nzType="eye"></span></button>
-                    <nz-divider nzType="vertical" *ngIf="showDetailsModal"></nz-divider>
-                    <button nz-button nzType="default" [nzSize]="'large'" (click)="readNotification.emit(data)"><span nz-icon nzType="mail"></span></button>
+                    <nz-divider nzType="vertical"></nz-divider>
                     <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteNotification.emit(data)"><span nz-icon nzType="delete"></span></button>
                 </nz-space>
             </td>
