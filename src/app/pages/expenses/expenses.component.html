@@ -1,7 +1,7 @@
 <nz-page-header>
     <nz-page-header-title>
-        Mis Gastos
-        <button nz-button nz-popover nzType="dashed" nzPopoverTitle="Lista de plantillas" nzPopoverContent="En esta página encontrará todas sus plantillas de gastos." nzShape="circle"><span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle"></span></button>
+        Mis Gastos &nbsp;
+        <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de plantillas" nzPopoverContent="En esta página encontrará todas sus plantillas de gastos."></span>
     </nz-page-header-title>
     <nz-page-header-extra>
         <nz-space [nzWrap]="true">
@@ -25,5 +25,5 @@
     </nz-page-header-content>
 </nz-page-header>
 
-<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" 
-                  (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)" (onUpdated)="updateExpense($event)"></app-expense-form>
+<app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)"
+    (onUpdated)="updateExpense($event)"></app-expense-form>
