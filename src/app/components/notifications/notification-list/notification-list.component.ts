@@ -9,7 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 // Custom elements
-import { INotification } from '../../../interfaces';
+import { INotification, INotificationType } from '../../../interfaces';
 
 @Component({
     selector: 'app-notification-list',
@@ -42,6 +42,29 @@ export class NotificationListComponent {
 
     ngOnChanges() {
         this.sortedExpenses = [...this.notificationList];
+    }
+    
+    /**
+     * Get type of notification.
+     * @param notification Notification object.
+     * @returns String with type of notification.
+     */
+    getNotificationType(notification: INotification): string {
+        if (!notification) {
+            return '-';
+        }
+        switch (notification.type) {
+            case INotificationType.achievement:
+                return 'Logro';
+            case INotificationType.account_status:
+                return 'Estado de cuenta';
+            case INotificationType.goal:
+                return 'Meta';
+            case INotificationType.tip:
+                return 'Consejo';
+            default:
+                return '-';
+        }
     }
     
     /**

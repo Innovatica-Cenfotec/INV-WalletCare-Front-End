@@ -272,13 +272,23 @@ export interface IRecurrence {
 export interface INotification {
     id?: number;
     owner?: IUser;
-    type?: string;
+    type?: INotificationType;
     title?: string;
     message?: string;
     read?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
     deleted?: boolean;
+}
+
+/**
+ * Enumerates the possible types of notification.
+ */
+export enum INotificationType {
+    achievement = "ACHIEVEMENT",
+    account_status = "ACCOUNT_STATUS",
+    goal = "GOAL",
+    tip = "TIP"
 }
 
 export interface INotificationOTP {
