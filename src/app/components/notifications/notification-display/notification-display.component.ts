@@ -16,7 +16,7 @@ import { NotificationListComponent } from '../notification-list/notification-lis
     standalone: true,
     imports: [
         NzModalModule,
-        NzPopoverModule,
+        NzPopoverModule, 
         NzIconModule,
         NotificationListComponent
     ],
