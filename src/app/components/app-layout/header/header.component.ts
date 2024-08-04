@@ -95,6 +95,10 @@ export class HeaderComponent implements OnInit {
         this.visibleCalculator = false;
     }
 
-    // FOR NOTIFICATION DISPLAY
+    /**
+     * Boolean to display the notification popover
+     * False - Hide popover.
+     * True - Show popover
+     */
     visibleNotifications = false;
 }

@@ -28,18 +28,40 @@ import { INotification, INotificationType } from '../../../interfaces';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationListComponent {
+    /**
+     * Input property to accept an array of notifications to be displayed.
+     */
     @Input() notificationList: INotification[] = [];
+    
+    /**
+     * Input property to accept a boolean value for the modal visibility.
+     * True - Show modal.
+     * False - Hide modal.
+     */
     @Input() showDetailsModal: boolean = false;
 
-    // Sort and filter lists
+    /**
+     * Array of notifications sorted by selected column.
+     */
     sortedExpenses: INotification[] = [];
 
+    /**
+     * Output event emitter to notify when the notification details are show.
+     * Emits the notification object that was selected.
+     */
     @Output() detailsNotification = new EventEmitter<INotification>();
-    @Output() readNotification = new EventEmitter<INotification>();
+
+    /**
+     * Output event emitter to notify when the notification is deleated.
+     * Emits the notification object that was selected.
+     */
     @Output() deleteNotification = new EventEmitter<INotification>();
 
     private datePipe = inject(DatePipe);
 
+    /**
+     * Execute when component is called
+     */
     ngOnChanges() {
         this.sortedExpenses = [...this.notificationList];
     }
@@ -77,17 +99,35 @@ export class NotificationListComponent {
     }
 
 
-    // SORT FUNCTIONS
+    // SORT FUNCTIONS --------------------------------------------------------------------------
 
+    /**
+     * Sort notifications by title. Use toLowerCase to ignore capital letters.
+     * @param a Notification a to campare with b.
+     * @param b Notification b to be compared with a.
+     * @returns A list ordered by notification title.
+     */
     sortByTitle(a: INotification, b: INotification): number {
         return (a.title?.toLowerCase() ?? '').localeCompare(b.title?.toLowerCase() ?? '');
     }
     
+    /**
+     * Sort notifications by type.
+     * @param a Notification a to campare with b.
+     * @param b Notification b to be compared with a.
+     * @returns A list ordered by notification type.
+     */
     sortByType(a: INotification, b: INotification): number {
         return (a.type?.toString() ?? '').localeCompare(b.type?.toString() ?? '');
     }
 
+    /**
+     * Sort notifications by created date.
+     * @param a Notification a to campare with b.
+     * @param b Notification b to be compared with a.
+     * @returns A list ordered by notification date.
+     */
     sortByDate(a: INotification, b: INotification): number {
-        return new Date(a.updatedAt ?? new Date).getTime() - new Date(b.updatedAt ?? new Date).getTime();
+        return new Date(a.createdAt ?? new Date).getTime() - new Date(b.createdAt ?? new Date).getTime();
     }
 }
