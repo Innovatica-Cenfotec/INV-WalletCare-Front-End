@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzFlexModule } from 'ng-zorro-antd/flex';
+import { NzFlexModule, NzAlign, NzJustify } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -101,12 +101,8 @@ export class HeaderComponent implements OnInit {
     // FOR NOTIFICATION DRAWER
     visibleNotifications = false;
 
-    clickMe(): void {
+    closeNotification(): void {
         this.visibleNotifications = false;
-    }
-    
-    change(value: boolean): void {
-        console.log(value);
     }
 
     /**

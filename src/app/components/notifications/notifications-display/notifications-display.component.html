@@ -1,1 +1,7 @@
-<p>notifications-display works!</p>
+<ng-template #titleNotification>
+    <span>Notificaciones</span>
+    <span nzType="primary" nz-icon nzType="close" nzTheme="outline" (click)="closeNotification()"></span>
+</ng-template>
+<ng-template #sctNotification>
+    <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
+</ng-template>
