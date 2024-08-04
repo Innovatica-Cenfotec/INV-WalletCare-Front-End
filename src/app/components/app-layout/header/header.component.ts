@@ -14,7 +14,6 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
-import { NotificationService } from '../../../services/notification.service';
 import { NotificationDisplayComponent } from '../../notifications/notification-display/notification-display.component';
 
 @Component({
@@ -37,7 +36,6 @@ export class HeaderComponent implements OnInit {
     // Services
     private authService = inject(AuthService);
     private profileService = inject(ProfileService);
-    public notificationService = inject(NotificationService);
     private router = inject(Router);
 
     @Input() isCollapsed: boolean = false;  
@@ -54,7 +52,6 @@ export class HeaderComponent implements OnInit {
                 this.user.nickname = user.nickname;
             }
         });
-        this.notificationService.findAllSignal();
     }
     
     /**
