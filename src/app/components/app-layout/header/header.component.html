@@ -14,8 +14,7 @@
             <span nz-icon nzType="calculator" nzTheme="outline"></span>
         </a>
         <a class="header-notification">
-            <span nz-popover nzPopoverTrigger="click" nzPopoverPlacement="bottomRight" [nzPopoverArrowPointAtCenter]="true" [nzPopoverTitle]="titleNotification" [nzPopoverContent]="sctNotification" [(nzPopoverVisible)]="visibleNotifications" nzType="primary" nz-icon
-                nzType="notification" nzTheme="outline"></span>
+            <app-notifications-display [(visibleNotifications)]="visibleNotifications"></app-notifications-display>
         </a>
         <div>
             <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
@@ -44,11 +43,3 @@
         <p>Some contents...</p>
     </ng-container>
 </nz-drawer>
-
-<ng-template #titleNotification>
-    <a (click)="closeNotification()"><span nzType="primary" nz-icon nzType="close" nzTheme="outline"></span></a>
-    <span>&nbsp; Notificaciones</span>
-</ng-template>
-<ng-template #sctNotification>
-    <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
-</ng-template>

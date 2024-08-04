@@ -1,22 +1,21 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output  } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzFlexModule, NzAlign, NzJustify } from 'ng-zorro-antd/flex';
+import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom components
-import { INotification, IUser } from '../../../interfaces';
+import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
-import { NotificationsListComponent } from '../../notifications/notifications-list/notifications-list.component';
 import { NotificationService } from '../../../services/notification.service';
+import { NotificationsDisplayComponent } from '../../notifications/notifications-display/notifications-display.component';
 
 @Component({
   selector: 'app-layout-header',
@@ -29,15 +28,13 @@ import { NotificationService } from '../../../services/notification.service';
     NzDrawerModule,
     NzModalModule,
     NzPopoverModule,
-    NotificationsListComponent
+    NotificationsDisplayComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
     // Services
-    private nzNotificationService = inject(NzNotificationService);
-    private nzModalService = inject(NzModalService);
     private authService = inject(AuthService);
     private profileService = inject(ProfileService);
     public notificationService = inject(NotificationService);
@@ -98,38 +95,6 @@ export class HeaderComponent implements OnInit {
         this.visibleCalculator = false;
     }
 
-    // FOR NOTIFICATION DRAWER
+    // FOR NOTIFICATION DISPLAY
     visibleNotifications = false;
-
-    closeNotification(): void {
-        this.visibleNotifications = false;
-    }
-
-    /**
-    * Display details of the notification
-    */
-    showModalDetails(notification: INotification): void {}
-    
-    /**
-    * Delete the notification
-    */
-    deleteNotification(notification: INotification): void {
-        this.nzModalService.confirm({
-            nzTitle: '¿Estás seguro de que quieres eliminar la notificación?',
-            nzContent: 'Las notificaciones se eliminan de manera permanente.',
-            nzOkText: 'Sí',
-            nzOkType: 'primary',
-            nzOnOk: () => {
-                this.notificationService.deleteNotificationSignal(notification.id).subscribe({
-                    next: () => {
-                        this.nzNotificationService.success('Éxito', 'La notificación se ha eliminado correctamente');
-                    },
-                    error: (error: any) => {
-                        this.nzNotificationService.error('Lo sentimos', error.error.detail);
-                    }
-                });
-            },
-            nzCancelText: 'No'
-        });
-    }
 }
