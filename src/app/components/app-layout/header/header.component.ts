@@ -9,6 +9,7 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom components
 import { INotification, IUser } from '../../../interfaces';
@@ -27,6 +28,7 @@ import { NotificationService } from '../../../services/notification.service';
     NzDropDownModule,
     NzDrawerModule,
     NzModalModule,
+    NzPopoverModule,
     NotificationsListComponent
   ],
   templateUrl: './header.component.html',
@@ -85,17 +87,6 @@ export class HeaderComponent implements OnInit {
         this.router.navigateByUrl('/login'); 
     }
 
-    // FOR NOTIFICATION DRAWER
-    visibleNotifications = false;
-
-    openNotifications(): void {
-        this.visibleNotifications = true;
-    }
-
-    closeNotifications(): void {
-        this.visibleNotifications = false;
-    }
-
     // FOR CALCULATOR DRAWER
     visibleCalculator = false;
 
@@ -105,6 +96,17 @@ export class HeaderComponent implements OnInit {
 
     closeCalculator(): void {
         this.visibleCalculator = false;
+    }
+
+    // FOR NOTIFICATION DRAWER
+    visibleNotifications = false;
+
+    clickMe(): void {
+        this.visibleNotifications = false;
+    }
+    
+    change(value: boolean): void {
+        console.log(value);
     }
 
     /**

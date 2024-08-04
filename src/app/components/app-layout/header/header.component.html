@@ -13,8 +13,8 @@
         <a class="header-calculator" (click)="openCalculator()">
             <span nz-icon nzType="calculator" nzTheme="outline"></span>
         </a>
-        <a class="header-notification" (click)="openNotifications()">
-            <span nz-icon nzType="notification" nzTheme="outline"></span>
+        <a class="header-notification">
+            <span nz-popover nzType="primary" nzPopoverTrigger="click" nzPopoverPlacement="bottomRight" nzPopoverTitle="Notificaciones" [nzPopoverContent]="sctNotification" nz-icon nzType="notification" nzTheme="outline"></span>
         </a>
         <div>
             <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
@@ -44,8 +44,7 @@
     </ng-container>
 </nz-drawer>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visibleNotifications" nzPlacement="right" nzTitle="Notificaciones" (nzOnClose)="closeNotifications()">
-    <ng-container *nzDrawerContent>
-        <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
-    </ng-container>
-</nz-drawer>
+<ng-template #sctNotification>
+    <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
+    <a (click)="clickMe()">Close</a>
+</ng-template>
