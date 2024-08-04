@@ -1,18 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject} from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
 
 // Importing Ng-Zorro modules
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzInputModule } from 'ng-zorro-antd/input';
 
 // Custom elements
 import { IExpense, IIncomeExpenceType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
@@ -22,22 +16,16 @@ import { IExpense, IIncomeExpenceType, IFrequencyType, IBalance, IAmountType } f
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule,
         NzTableModule,
         NzDividerModule,
         NzIconModule,
         NzButtonModule,
-        NzCardModule,
-        NzStatisticModule,
-        NzGridModule,
-        NzSpaceModule,
-        NzToolTipModule,
-        NzInputModule
+        NzSpaceModule
     ],
     providers: [DatePipe],
     templateUrl: './expense-list.component.html',
     styleUrls: ['./expense-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpenseListComponent {
     @Input() expensesList: IExpense[] = [];

@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+
 export interface ILoginResponse {
     accessToken: string;
     expiresIn: number
@@ -227,6 +228,9 @@ export interface IIncome {
     listIncomeAllocation?: IIncomeAllocation[];
 }
 
+/**
+ * Interface for expense
+ */
 export interface IExpense {
     addTransaction?: boolean;
     id?: number;
@@ -261,4 +265,35 @@ export interface IRecurrence {
     expense?: IExpense;
     income?: IIncome;
     createdAt?: Date;
+}
+
+// NOTIFICATIONS
+
+export interface INotification {
+    id?: number;
+    owner?: IUser;
+    type?: INotificationType;
+    title?: string;
+    message?: string;
+    read?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deleted?: boolean;
+}
+
+/**
+ * Enumerates the possible types of notification.
+ */
+export enum INotificationType {
+    achievement = "ACHIEVEMENT",
+    account_status = "ACCOUNT_STATUS",
+    goal = "GOAL",
+    tip = "TIP"
+}
+
+export interface INotificationOTP {
+    receiverEmail?: string;
+    type?: string;
+    title?: string;
+    message?: string;
 }
