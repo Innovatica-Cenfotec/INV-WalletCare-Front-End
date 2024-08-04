@@ -1,7 +1,7 @@
 <!--
 <input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" />
 -->
-<nz-table #fixedTable [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '100px', '120px']">
+<nz-table #fixedTable nzShowPagination [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="5" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '100px', '120px']">
     <thead>
         <tr>
             <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>

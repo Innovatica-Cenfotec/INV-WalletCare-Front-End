@@ -41,11 +41,6 @@ export class NotificationListComponent {
     @Input() showDetailsModal: boolean = false;
 
     /**
-     * Array of notifications sorted by selected column.
-     */
-    sortedExpenses: INotification[] = [];
-
-    /**
      * Output event emitter to notify when the notification details are show.
      * Emits the notification object that was selected.
      */
@@ -56,6 +51,11 @@ export class NotificationListComponent {
      * Emits the notification object that was selected.
      */
     @Output() deleteNotification = new EventEmitter<INotification>();
+    
+    /**
+     * Array of notifications sorted by selected column.
+     */
+    sortedExpenses: INotification[] = [];
 
     private datePipe = inject(DatePipe);
 
@@ -98,6 +98,8 @@ export class NotificationListComponent {
         return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
     }
 
+    // PAGINATION FUNCTIONS --------------------------------------------------------------------
+    // Change row number with [nzPageSize] property on nx-table
 
     // SORT FUNCTIONS --------------------------------------------------------------------------
 
