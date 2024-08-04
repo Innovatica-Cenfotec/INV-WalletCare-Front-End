@@ -15,7 +15,7 @@ import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
 import { NotificationService } from '../../../services/notification.service';
-import { NotificationsDisplayComponent } from '../../notifications/notifications-display/notifications-display.component';
+import { NotificationDisplayComponent } from '../../notifications/notification-display/notification-display.component';
 
 @Component({
   selector: 'app-layout-header',
@@ -28,7 +28,7 @@ import { NotificationsDisplayComponent } from '../../notifications/notifications
     NzDrawerModule,
     NzModalModule,
     NzPopoverModule,
-    NotificationsDisplayComponent
+    NotificationDisplayComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

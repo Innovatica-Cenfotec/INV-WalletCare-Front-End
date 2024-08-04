@@ -9,21 +9,21 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 // Custom components
 import { INotification } from '../../../interfaces';
 import { NotificationService } from '../../../services/notification.service';
-import { NotificationsListComponent } from '../notifications-list/notifications-list.component';
+import { NotificationListComponent } from '../notification-list/notification-list.component';
 
 @Component({
-    selector: 'app-notifications-display',
+    selector: 'app-notification-display',
     standalone: true,
     imports: [
         NzModalModule,
         NzPopoverModule,
         NzIconModule,
-        NotificationsListComponent
+        NotificationListComponent
     ],
-    templateUrl: './notifications-display.component.html',
-    styleUrl: './notifications-display.component.scss'
+    templateUrl: './notification-display.component.html',
+    styleUrl: './notification-display.component.scss'
 })
-export class NotificationsDisplayComponent implements OnInit {
+export class NotificationDisplayComponent implements OnInit {
     @Input() visibleNotifications = false;
     @Output() visibleNotificationsChange = new EventEmitter<boolean>();
   

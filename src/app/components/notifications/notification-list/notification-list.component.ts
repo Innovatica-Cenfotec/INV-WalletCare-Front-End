@@ -12,7 +12,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { INotification } from '../../../interfaces';
 
 @Component({
-    selector: 'app-notifications-list',
+    selector: 'app-notification-list',
     standalone: true,
     imports: [
         CommonModule,
@@ -23,11 +23,11 @@ import { INotification } from '../../../interfaces';
         NzSpaceModule
     ],
     providers: [DatePipe],
-    templateUrl: './notifications-list.component.html',
-    styleUrl: './notifications-list.component.scss',
+    templateUrl: './notification-list.component.html',
+    styleUrl: './notification-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotificationsListComponent {
+export class NotificationListComponent {
     @Input() notificationList: INotification[] = [];
     @Input() showDetailsModal: boolean = false;
 

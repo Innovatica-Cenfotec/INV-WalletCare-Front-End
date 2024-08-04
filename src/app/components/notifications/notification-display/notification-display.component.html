@@ -7,5 +7,5 @@
     <span>&nbsp; Notificaciones</span>
 </ng-template>
 <ng-template #sctNotification>
-    <app-notifications-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notifications-list>
+    <app-notification-list [notificationList]="notificationService.notifications$()" (detailNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notification-list>
 </ng-template>
