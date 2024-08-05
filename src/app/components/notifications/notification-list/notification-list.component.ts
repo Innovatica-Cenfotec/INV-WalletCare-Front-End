@@ -7,12 +7,13 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-
-// Custom elements
-import { INotification, INotificationType } from '../../../interfaces';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NotificationService } from '../../../services/notification.service';
+
+// Custom elements
+import { INotification, INotificationType } from '../../../interfaces';
+
 
 @Component({
     selector: 'app-notification-list',
@@ -66,6 +67,7 @@ export class NotificationListComponent {
     public isVisible = false;
     public notification: INotification = {};
     public notificationService = inject(NotificationService);
+
     /**
      * Execute when component is called
      */
@@ -106,6 +108,8 @@ export class NotificationListComponent {
     }
 
 
+    // PAGINATION FUNCTIONS --------------------------------------------------------------------
+    // Change row number with [nzPageSize] property on nx-table
     // SORT FUNCTIONS --------------------------------------------------------------------------
 
     /**
@@ -163,4 +167,5 @@ export class NotificationListComponent {
     handleCancel(): void {
         this.isVisible = false;
     }
+
 }

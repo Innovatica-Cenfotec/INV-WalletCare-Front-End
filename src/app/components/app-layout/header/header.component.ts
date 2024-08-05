@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
     public user?: IUser;
     public dot = true;
+
     ngOnInit(): void {
         this.user = this.authService.getUser();
         this.profileService.getUserObservable()?.subscribe(user => {
