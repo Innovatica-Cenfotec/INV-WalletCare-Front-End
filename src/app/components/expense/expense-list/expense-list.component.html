@@ -1,7 +1,7 @@
 <!--
 <input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" />
 -->
-<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px','200px','100px', '130px', '100px', '100px', '100px', '100px', '130px']">
+<nz-table #fixedTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['150px','200px','150px', '130px', '100px', '100px', '100px', '150px', '130px']">
     <thead>
         <tr>
             <th nzColumnKey="name" [nzSortFn]="sortByName">Nombre</th>
