@@ -20,13 +20,10 @@ import { catchError, tap } from 'rxjs';
     styleUrl: './account-tab-transactions.component.scss',
 })
 export class AccountTabTransactionsComponent{
-    
-
     @Input() transactions: ITransaction[] = [];
     @Output() rollbackTransaction = new EventEmitter<ITransaction>();
     private datePipe = inject(DatePipe);
     public transactionService = inject(TransactionService); 
-
 
     /**
      * Set the date format
@@ -78,6 +75,4 @@ export class AccountTabTransactionsComponent{
                 return '';
         }
     }
-
-
 }

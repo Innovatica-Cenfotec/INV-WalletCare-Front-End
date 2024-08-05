@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGenericResponse, ITransaction } from '../interfaces';
+import { IBalanceDTO, IGenericResponse, ITransaction } from '../interfaces';
 import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -11,11 +11,15 @@ export class TransactionService extends BaseService<ITransaction> {
   protected override source: string = 'transactions';
   private transactionListSignal = signal<ITransaction[]>([]);
   private responseSignal = signal<IGenericResponse>({});
+  private balancesSignal = signal<IBalanceDTO>({});
 
   get transactions$() {
     return this.transactionListSignal;
   }
 
+  get balances$(){
+    return this.balancesSignal;
+  }
 
   /**
    * Retreives all the transactions for the account
@@ -24,6 +28,19 @@ export class TransactionService extends BaseService<ITransaction> {
   getAllSignal(id: number) {
 
     this.http.get<ITransaction[]>(`${this.source}/${id}`).subscribe({
+      next: (response: any) => {
+        response.reverse();
+        this.transactionListSignal.set(response);
+      },
+      error: (error: any) => {
+        console.error('Error fetching transacctions', error);
+      }
+    });
+  }
+
+  getAllByOwnerSignal() {
+
+    this.http.get<ITransaction[]>(`${this.source}/owner`).subscribe({
       next: (response: any) => {
         response.reverse();
         this.transactionListSignal.set(response);
@@ -52,5 +69,29 @@ export class TransactionService extends BaseService<ITransaction> {
       })
     );
 
+  }
+
+  getBalancesByAccount(id: number){
+    return this.http.get(`${this.source}/balances-account/${id}`).pipe(
+      tap((response: any) => {
+        this.balancesSignal.set(response);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
+  }
+
+  getBalancesByOwner(){
+    return this.http.get<IBalanceDTO>(this.source + '/balances-user').pipe(
+      tap((response: any) => {
+        this.balancesSignal.set(response);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
   }
 }

@@ -22,4 +22,13 @@ export class PasswordRecoveryService {
   resetPassword(forgotResetPassword:IForgotResetPassword): Observable<any> {
     return this.http.post(`password/reset-password`,  forgotResetPassword);
   }
+  sendOTPChange():Observable<any>{
+    const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
+    return this.http.post('password/change-password-otp',null,{headers,responseType:'text'});
+  }
+  changePassword(forgotResetPassword:IForgotResetPassword):Observable<any>{
+    const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
+    return this.http.post('password/change-password',forgotResetPassword);
+
+  }
 }

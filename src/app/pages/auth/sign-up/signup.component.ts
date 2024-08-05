@@ -56,7 +56,7 @@ export class SignupComponent {
     address: ['', [Validators.maxLength(225)]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+-={};':"|,.<>\/?]).{8,}$`)]],
     confirmPassword: ['', [Validators.required]],
-    accountName: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+'), Validators.minLength(4), Validators.maxLength(100)]],
+    accountName: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
     accountDescription: ['', [Validators.maxLength(200)]]
   });
 
