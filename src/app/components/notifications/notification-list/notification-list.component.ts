@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -10,6 +10,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 // Custom elements
 import { INotification, INotificationType } from '../../../interfaces';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-notification-list',
@@ -20,7 +23,9 @@ import { INotification, INotificationType } from '../../../interfaces';
         NzDividerModule,
         NzIconModule,
         NzButtonModule,
-        NzSpaceModule
+        NzSpaceModule,
+        NzModalModule,
+        NzCardModule
     ],
     providers: [DatePipe],
     templateUrl: './notification-list.component.html',
@@ -32,7 +37,7 @@ export class NotificationListComponent {
      * Input property to accept an array of notifications to be displayed.
      */
     @Input() notificationList: INotification[] = [];
-    
+
     /**
      * Input property to accept a boolean value for the modal visibility.
      * True - Show modal.
@@ -58,14 +63,16 @@ export class NotificationListComponent {
     @Output() deleteNotification = new EventEmitter<INotification>();
 
     private datePipe = inject(DatePipe);
-
+    public isVisible = false;
+    public notification: INotification = {};
+    public notificationService = inject(NotificationService);
     /**
      * Execute when component is called
      */
     ngOnChanges() {
         this.sortedExpenses = [...this.notificationList];
     }
-    
+
     /**
      * Get type of notification.
      * @param notification Notification object.
@@ -88,7 +95,7 @@ export class NotificationListComponent {
                 return '-';
         }
     }
-    
+
     /**
      * Set the date format
      * @param date is the date
@@ -110,7 +117,7 @@ export class NotificationListComponent {
     sortByTitle(a: INotification, b: INotification): number {
         return (a.title?.toLowerCase() ?? '').localeCompare(b.title?.toLowerCase() ?? '');
     }
-    
+
     /**
      * Sort notifications by type.
      * @param a Notification a to campare with b.
@@ -129,5 +136,31 @@ export class NotificationListComponent {
      */
     sortByDate(a: INotification, b: INotification): number {
         return new Date(a.createdAt ?? new Date).getTime() - new Date(b.createdAt ?? new Date).getTime();
+    }
+
+    /**
+     * shows the modal
+     * @param data is the selected notification
+     */
+    showModal(data: INotification | undefined): void {
+        if (data !== undefined) {
+            this.notification = data;
+        }
+        this.isVisible = true;
+        this.detailsNotification.emit(data);
+    }
+
+    /**
+     * close the modal
+     */
+    handleOk(): void {
+        this.isVisible = false;
+    }
+
+    /**
+     * close the modal
+     */
+    handleCancel(): void {
+        this.isVisible = false;
     }
 }

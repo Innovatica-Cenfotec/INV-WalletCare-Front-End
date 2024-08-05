@@ -9,6 +9,7 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 // Custom components
 import { IUser } from '../../../interfaces';
@@ -27,6 +28,7 @@ import { NotificationDisplayComponent } from '../../notifications/notification-d
     NzDrawerModule,
     NzModalModule,
     NzPopoverModule,
+    NzBadgeModule,
     NotificationDisplayComponent
   ],
   templateUrl: './header.component.html',
@@ -41,7 +43,7 @@ export class HeaderComponent implements OnInit {
     @Input() isCollapsed: boolean = false;  
     @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
     public user?: IUser;
-      
+    public dot = true;
     ngOnInit(): void {
         this.user = this.authService.getUser();
         this.profileService.getUserObservable()?.subscribe(user => {

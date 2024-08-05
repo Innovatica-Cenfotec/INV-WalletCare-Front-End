@@ -13,9 +13,11 @@
         <a class="header-calculator" (click)="openCalculator()">
             <span nz-icon nzType="calculator" nzTheme="outline"></span>
         </a>
-        <a class="header-notification">
-            <app-notification-display [(visibleNotifications)]="visibleNotifications"></app-notification-display>
-        </a>
+        <nz-badge [nzDot]="dot">
+            <a class="header-notification">
+                <app-notification-display [(visibleNotifications)]="visibleNotifications"></app-notification-display>
+            </a>
+        </nz-badge>
         <div>
             <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
                 <span nz-icon nzType="user" nzTheme="outline"></span> {{user?.nickname}}
