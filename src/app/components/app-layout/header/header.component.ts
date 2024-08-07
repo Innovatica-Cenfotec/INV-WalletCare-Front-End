@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output  } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
@@ -12,34 +12,37 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 // Custom components
 import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
 import { NotificationDisplayComponent } from '../../notifications/notification-display/notification-display.component';
-import { FeeCalculatorComponent } from '../../tools/fee-calculator/fee-calculator.component';
+import { NzCardComponent } from 'ng-zorro-antd/card';
+import { tr_TR } from 'ng-zorro-antd/i18n';
 
 
 @Component({
-  selector: 'app-layout-header',
-  standalone: true,
-  imports: [
-    NzLayoutModule,
-    NzIconModule,
-    NzFlexModule,
-    NzDropDownModule,
-    NzDrawerModule,
-    NzModalModule,
-    NzPopoverModule,
-    NzBadgeModule,
-    NzButtonModule,
-    NzDividerModule,
-    NotificationDisplayComponent,
-    FeeCalculatorComponent
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-layout-header',
+    standalone: true,
+    imports: [
+        NzLayoutModule,
+        NzIconModule,
+        NzFlexModule,
+        NzDropDownModule,
+        NzDrawerModule,
+        NzModalModule,
+        NzPopoverModule,
+        NzBadgeModule,
+        NzButtonModule,
+        NzDividerModule,
+        NzCardComponent,
+        NzFormModule,
+        NotificationDisplayComponent
+    ],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
     // Services
@@ -47,10 +50,23 @@ export class HeaderComponent implements OnInit {
     private profileService = inject(ProfileService);
     private router = inject(Router);
 
-    @Input() isCollapsed: boolean = false;  
+    @Input() isCollapsed: boolean = false;
     @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
     public user?: IUser;
     public dot = true;
+
+    /**
+    * Boolean to display the notification popover
+    * False - Hide popover.
+    * True - Show popover
+    */
+    visibleNotifications = false;
+
+    // FOR CALCULATOR DRAWER
+    visibleCalculator = false;
+
+    //For the Calculator modal
+    isVisible = false;
 
     ngOnInit(): void {
         this.user = this.authService.getUser();
@@ -63,7 +79,7 @@ export class HeaderComponent implements OnInit {
             }
         });
     }
-    
+
     /**
      * Toggles the collapsed state of the sidebar
      * @returns void
@@ -88,11 +104,8 @@ export class HeaderComponent implements OnInit {
      */
     logout(): void {
         this.authService.logout();
-        this.router.navigateByUrl('/login'); 
+        this.router.navigateByUrl('/login');
     }
-
-    // FOR CALCULATOR DRAWER
-    visibleCalculator = false;
 
     openCalculator(): void {
         this.visibleCalculator = true;
@@ -102,10 +115,21 @@ export class HeaderComponent implements OnInit {
         this.visibleCalculator = false;
     }
 
-    /**
-     * Boolean to display the notification popover
-     * False - Hide popover.
-     * True - Show popover
-     */
-    visibleNotifications = false;
+    showModal(): void {
+        this.isVisible = true;
+    }
+
+    handleOk(): void {
+        console.log('Button ok clicked!');
+        this.isVisible = false
+    }
+
+    handleCancel(): void {
+        console.log('Button cancel clicked!');
+        this.isVisible = false;
+    }
+
+
+
+
 }
