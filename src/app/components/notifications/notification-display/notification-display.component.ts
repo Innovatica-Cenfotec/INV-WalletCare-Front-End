@@ -16,7 +16,7 @@ import { NotificationListComponent } from '../notification-list/notification-lis
     standalone: true,
     imports: [
         NzModalModule,
-        NzPopoverModule,
+        NzPopoverModule, 
         NzIconModule,
         NotificationListComponent
     ],
@@ -41,6 +41,7 @@ export class NotificationDisplayComponent implements OnInit {
     private nzNotificationService = inject(NzNotificationService);
     private nzModalService = inject(NzModalService);
     public notificationService = inject(NotificationService);
+
     /**
      * Execute when component is called
      */
@@ -82,6 +83,7 @@ export class NotificationDisplayComponent implements OnInit {
             nzOkText: 'Sí',
             nzOkType: 'primary',
             nzOnOk: () => {
+
                 this.notificationService.deleteNotificationSignal(notification.id).subscribe({
                     next: () => {
                         this.nzNotificationService.success('Éxito', 'La notificación se ha eliminado correctamente');
@@ -90,6 +92,7 @@ export class NotificationDisplayComponent implements OnInit {
                         this.nzNotificationService.error('Lo sentimos', error.error.detail);
                     }
                 });
+
             },
             nzCancelText: 'No'
         });

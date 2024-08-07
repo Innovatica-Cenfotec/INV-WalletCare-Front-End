@@ -3,6 +3,7 @@
 -->
 <nz-table #fixedTable [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }"
     [nzWidthConfig]="['100px', '300px', '120px']">
+
     <thead>
         <tr>
             <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
