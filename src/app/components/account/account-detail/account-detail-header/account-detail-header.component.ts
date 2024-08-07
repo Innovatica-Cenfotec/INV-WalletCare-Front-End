@@ -14,7 +14,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { IAccount, IAccountUser, IExpense, IIncome, IIncomeExpenceType, ITypeForm } from '../../../../interfaces';
+import { IAccount, IAccountUser, IExpense, IIncome, IIncomeExpenceSavingType, ISaving, ITypeForm } from '../../../../interfaces';
 import { AuthService } from '../../../../services/auth.service';
 import { AccountService } from '../../../../services/account.service';
 import { InviteAccountComponent } from "../invite-account/invite-account.component";
@@ -24,6 +24,8 @@ import { TaxService } from '../../../../services/tax.service';
 import { ExpenseFormComponent } from '../../../expense/expense-form/expense-form.component';
 import { IncomeService } from '../../../../services/imcome.service';
 import { IncomeFormComponent } from '../../../income/income-form/income-form.component';
+import { SavingFormComponent } from '../../../saving/saving-form/saving-form.component';
+import { SavingService } from '../../../../services/saving.service';
 
 @Component({
     selector: 'app-account-detail-header',
@@ -43,7 +45,8 @@ import { IncomeFormComponent } from '../../../income/income-form/income-form.com
         NzDropDownModule,
         ExpenseFormComponent,
         IncomeFormComponent,
-        TransactionFormComponent
+        TransactionFormComponent,
+        SavingFormComponent
     ],
     templateUrl: './account-detail-header.component.html',
     styleUrl: './account-detail-header.component.scss',
@@ -53,6 +56,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     @ViewChild(AccountFormComponent) form!: AccountFormComponent;
     @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
     @ViewChild(IncomeFormComponent) formIncome!: IncomeFormComponent;
+    @ViewChild(SavingFormComponent) formSaving!: SavingFormComponent;
 
     /*
     * The account id.
@@ -98,22 +102,24 @@ export class AccountDetailHeaderComponent implements OnChanges {
     public isLoading = signal(false);
     public TypeForm: ITypeForm = ITypeForm.create;
     public title: string = '';
-    public incomeExpenceType: IIncomeExpenceType = IIncomeExpenceType.unique;
+    public incomeExpenceSavingType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
 
     /// ------- Expense
     public expense = signal<IExpense>({ amount: 0 });
-    public isVisibleExpense = signal(false); 
+    public isVisibleExpense = signal(false);
 
     /// ------- Income
     public isVisibleIncome = signal(false);
     public income = signal<IExpense>({ amount: 0 });
 
-
+    /// ------- Saving
+    public isVisibleSaving = signal(false);
+    public saving = signal<ISaving>({ amount: 0 });
 
     /**
      * The transaction form type.
      */
-    public TransactionFormType: 'income' | 'expense' = 'income';
+    public TransactionFormType: 'income' | 'expense' | 'saving' = 'income';
 
     /**
      * The visibility of the transaction form.
@@ -128,8 +134,9 @@ export class AccountDetailHeaderComponent implements OnChanges {
     public incomeService = inject(IncomeService);
     public accountService = inject(AccountService);
     public expenseService = inject(ExpenseService);
+    public savingService = inject(SavingService);
     public taxService = inject(TaxService);
-    public IIncomeExpenceType = IIncomeExpenceType;
+    public IIncomeExpenceType = IIncomeExpenceSavingType;
     private authService = inject(AuthService);
     private nzModalService = inject(NzModalService);
     private nzNotificationService = inject(NzNotificationService);
@@ -141,6 +148,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.accountService.findAllSignal();
         this.taxService.findAllSignal();
         this.incomeService.findAllSignal();
+        this.savingService.findAllSignal();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -249,7 +257,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     /**
      * Shows the transaction form.
      */
-    addSelectedTransaction(item: IIncome | IExpense): void {
+    addSelectedTransaction(item: IIncome | IExpense | ISaving): void {
         const payload: IAccount = {
             id: this.id
         }
@@ -258,12 +266,12 @@ export class AccountDetailHeaderComponent implements OnChanges {
         if (this.TransactionFormType === 'income') {
             this.incomeService.addIncomeToAccountSignal(item).subscribe({
                 next: (response: any) => {
-                    if(item.type === IIncomeExpenceType.unique){
+                    if (item.type === IIncomeExpenceSavingType.unique) {
                         this.nzNotificationService.create("success", "", 'Ingreso agregado exitosamente', { nzDuration: 5000 });
                     }
-                    else{
+                    else {
                         this.nzNotificationService.create("success", "", 'Ingreso recurrente agregado exitosamente, se agregará a las transacciones futuras según la configuración', { nzDuration: 10000 });
-                    }                   
+                    }
                     this.isVisibleTransaction = false;
                     this.loadData.emit();
                 },
@@ -271,16 +279,32 @@ export class AccountDetailHeaderComponent implements OnChanges {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
             });
-    
         }
-        else {
+        if (this.TransactionFormType === 'expense') {
             this.expenseService.addExpenseToAccountSignal(item).subscribe({
                 next: (response: any) => {
-                    if(item.type === IIncomeExpenceType.unique){
+                    if (item.type === IIncomeExpenceSavingType.unique) {
                         this.nzNotificationService.create("success", "", 'Gasto agregado exitosamente', { nzDuration: 5000 });
                     }
-                    else{
+                    else {
                         this.nzNotificationService.create("success", "", 'Gasto recurrente agregado exitosamente, se agregará a las transacciones futuras según la configuración', { nzDuration: 10000 });
+                    }
+                    this.isVisibleTransaction = false;
+                    this.loadData.emit();
+                },
+                error: (error: any) => {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
+            });
+        }
+        if (this.TransactionFormType === 'saving') {
+            this.savingService.addSavingToAccountSignal(item).subscribe({
+                next: (response: any) => {
+                    if (item.type === IIncomeExpenceSavingType.unique) {
+                        this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', {nzDuration: 5000});
+                    }
+                    else {
+                        this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, seagregará a las transacciones futuras según la configuración.', { nzDuration: 10000});
                     }
                     this.isVisibleTransaction = false;
                     this.loadData.emit();
@@ -295,7 +319,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     /**
      * Shows the transaction form.
      */
-    showTransactionForm(type: 'income' | 'expense'): void {
+    showTransactionForm(type: 'income' | 'expense' | 'saving'): void {
         this.isVisibleTransaction = true;
         this.TransactionFormType = type;
     }
@@ -304,18 +328,24 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Shows the income or expense form.
      * @param incomeOrExpenseType The income or expense
      */
-    showModalIncomeOrExpense(incomeOrExpenseType: IIncomeExpenceType): void {
+    showModalIncomeOrExpense(incomeOrExpenseType: IIncomeExpenceSavingType): void {
         if (this.TransactionFormType === 'income') {
             // Show the income form
-            this.title = incomeOrExpenseType === IIncomeExpenceType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
-            this.incomeExpenceType = incomeOrExpenseType;
+            this.title = incomeOrExpenseType === IIncomeExpenceSavingType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
+            this.incomeExpenceSavingType = incomeOrExpenseType;
             this.TypeForm = ITypeForm.create;
             this.income.set({ amount: 0 });
             this.isVisibleIncome.set(true);
+        } if (this.TransactionFormType === 'saving') {
+            this.title = incomeOrExpenseType === IIncomeExpenceSavingType.unique ? 'Crear ahorro único' : 'Crear ahorro recurrente';
+            this.incomeExpenceSavingType = incomeOrExpenseType;
+            this.TypeForm = ITypeForm.create;
+            this.saving.set({ amount: 0 } as ISaving);
+            this.isVisibleSaving.set(true);
         } else {
             //  Show the expense form
-            this.title = incomeOrExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
-            this.incomeExpenceType = incomeOrExpenseType;
+            this.title = incomeOrExpenseType === IIncomeExpenceSavingType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
+            this.incomeExpenceSavingType = incomeOrExpenseType;
             this.TypeForm = ITypeForm.create;
             this.expense.set({ amount: 0 });
             this.isVisibleExpense.set(true);
@@ -359,7 +389,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.expenseService.saveExpenseSignal(expense).subscribe({
             next: (response: any) => {
                 this.isVisibleExpense.set(false);
-                if (this.incomeExpenceType === IIncomeExpenceType.unique) {
+                if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
                     this.nzNotificationService.create("success", "", 'Gasto agregado exitosamente', { nzDuration: 5000 });
                 }
                 else {
@@ -367,7 +397,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
                 this.loadData.emit();
             },
-            error: (error: any) => {                
+            error: (error: any) => {
                 error.error.fieldErrors?.map((fieldError: any) => {
                     this.formExpense.setControlError(fieldError.field, fieldError.message);
                 });
@@ -397,7 +427,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.incomeService.saveIncomeSignal(income).subscribe({
             next: (response: any) => {
                 this.isVisibleIncome.set(false);
-                if (this.incomeExpenceType === IIncomeExpenceType.unique) {
+                if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
                     this.nzNotificationService.create("success", "", 'Ingreso agregado exitosamente', { nzDuration: 5000 });
                 }
                 else {
@@ -422,11 +452,51 @@ export class AccountDetailHeaderComponent implements OnChanges {
     }
 
     /**
+     * Create saving
+     * @param saving saving to create
+     */
+    createSaving(saving: ISaving): void {
+        const payload: IAccount = {
+            id: this.id
+        }
+
+        saving.addTransaction = true;
+        saving.account = payload;
+
+        this.savingService.saveSavingSignal(saving).subscribe({
+            next: (response: any) => {
+                this.isVisibleSaving.set(false);
+                if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
+                    this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', { nzDuration: 5000 });
+                }
+                else {
+                    this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, se agregará a las transacciones futuras según la configuración', { nzDuration: 10000 });
+                }
+                this.loadData.emit();
+            },
+            error: (error: any) => {
+                // Displaying the error message in the form
+                error.error.fieldErrors?.map((fieldError: any) => {
+                    this.formSaving.setControlError(fieldError.field, fieldError.message);
+                });
+
+                // show other errors
+                if (error.error.fieldErrors === undefined) {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
+
+                this.isLoading.set(false);
+            }
+        });
+    }
+
+    /**
      * Close the income or expense form.
      */
     closeModalIncomeOrExpense(): void {
         this.isVisibleIncome.set(false);
         this.isVisibleExpense.set(false);
+        this.isVisibleSaving.set(false);
     }
 
     /**

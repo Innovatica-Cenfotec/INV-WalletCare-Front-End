@@ -156,7 +156,7 @@ export interface IAllocation {
 /**
  * Enum that represents the type of income or expense.
  */
-export enum IIncomeExpenceType {
+export enum IIncomeExpenceSavingType {
     unique = "UNIQUE",
     recurrence = "RECURRENCE"
 }
@@ -215,7 +215,7 @@ export interface IIncome {
     name?: string;
     description?: string;
     isTemplate?: boolean;
-    type?: IIncomeExpenceType;
+    type?: IIncomeExpenceSavingType;
     amount?: 0 | string;
     amountType?: IAmountType;
     scheduledDay?: number;
@@ -238,7 +238,7 @@ export interface IExpense {
     name?: string;
     description?: string;
     isTemplate?: boolean;
-    type?: IIncomeExpenceType;
+    type?: IIncomeExpenceSavingType;
     amount?: 0 | string;
     amountType?: IAmountType;
     scheduledDay?: number;
@@ -296,4 +296,19 @@ export interface INotificationOTP {
     type?: string;
     title?: string;
     message?: string;
+}
+
+export interface ISaving {
+    id?: number;
+    name?: string;
+    description?: string;
+    amount?: 0 | string;
+    frequency?: IFrequencyType;
+    scheduledDay?: number;
+    type?: IIncomeExpenceSavingType;
+    addTransaction?: boolean;
+    account?: IAccount;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deleted?: boolean;
 }
