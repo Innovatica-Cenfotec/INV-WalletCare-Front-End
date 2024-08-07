@@ -10,12 +10,16 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 // Custom components
 import { IUser } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
 import { NotificationDisplayComponent } from '../../notifications/notification-display/notification-display.component';
+import { FeeCalculatorComponent } from '../../tools/fee-calculator/fee-calculator.component';
+
 
 @Component({
   selector: 'app-layout-header',
@@ -29,7 +33,10 @@ import { NotificationDisplayComponent } from '../../notifications/notification-d
     NzModalModule,
     NzPopoverModule,
     NzBadgeModule,
-    NotificationDisplayComponent
+    NzButtonModule,
+    NzDividerModule,
+    NotificationDisplayComponent,
+    FeeCalculatorComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

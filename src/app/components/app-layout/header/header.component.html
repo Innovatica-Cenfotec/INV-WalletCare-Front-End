@@ -38,10 +38,8 @@
     </div>
 </nz-header>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visibleCalculator" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="closeCalculator()">
+<nz-drawer [nzClosable]="false" [nzVisible]="visibleCalculator" nzPlacement="right" nzTitle="Herramientas y calculadoras" (nzOnClose)="closeCalculator()">
     <ng-container *nzDrawerContent>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <app-fee-calculator></app-fee-calculator>
     </ng-container>
 </nz-drawer>
