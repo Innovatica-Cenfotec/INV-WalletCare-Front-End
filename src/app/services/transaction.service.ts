@@ -73,7 +73,6 @@ export class TransactionService extends BaseService<ITransaction> {
 
   getBalancesByAccount(id: number){
     return this.http.get(`${this.source}/balances-account/${id}`).pipe(
-
       tap((response: any) => {
         this.balancesSignal.set(response);
       }),
@@ -85,8 +84,7 @@ export class TransactionService extends BaseService<ITransaction> {
   }
 
   getBalancesByOwner(){
-    return this.http.get(`${this.source}/balances-user`).pipe(
-
+    return this.http.get<IBalanceDTO>(this.source + '/balances-user').pipe(
       tap((response: any) => {
         this.balancesSignal.set(response);
       }),

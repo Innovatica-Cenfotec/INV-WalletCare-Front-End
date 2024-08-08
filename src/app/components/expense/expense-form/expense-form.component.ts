@@ -1,7 +1,7 @@
 import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceType, Itax, ITypeForm } from '../../../interfaces';
+import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceSavingType, Itax, ITypeForm } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -45,7 +45,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 export class ExpenseFormComponent extends FormModalComponent<IExpense> {
 
   IAmountType = IAmountType;
-  IIncomeExpenceType = IIncomeExpenceType;
+  IIncomeExpenceType = IIncomeExpenceSavingType;
   IFrequencyType = IFrequencyType;
   TaxSelected: Itax | undefined;
   scheduledDayVisible = false;
@@ -53,7 +53,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
   days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   @Input() taxList: any[] = [];
-  @Input() expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  @Input() expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
   @Input() id: number = 0;
   @Input() enableTemplate: boolean = false;
   
@@ -87,7 +87,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
       }
     }
 
-    if (this.expenseType === IIncomeExpenceType.recurrence) {
+    if (this.expenseType === IIncomeExpenceSavingType.recurrence) {
       const frequency = this.formGroup.get('frequency')?.value;
       // If the frequency is null, mark it as dirty
       if (frequency === null) {
@@ -123,8 +123,6 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     this.formGroup.get('type')?.setValue(this.expenseType);
     super.handleSubmit();
   }
-
-  
 
   onSelectTax(tax: Itax): void {
     this.TaxSelected = tax;

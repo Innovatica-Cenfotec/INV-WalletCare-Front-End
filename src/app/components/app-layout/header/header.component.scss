@@ -1,5 +1,4 @@
 $header-font-size: 14px;
-
 nz-header {
     display: flex;
     justify-content: space-between;
@@ -36,8 +35,7 @@ nz-header>div>*:last-child {
 .header-calculator,
 .header-notification {
     color: white;
-
-    :hover {
+     :hover {
         color: #d9d9d9;
     }
 }
