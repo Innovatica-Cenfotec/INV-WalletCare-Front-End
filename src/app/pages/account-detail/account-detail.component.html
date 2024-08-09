@@ -1,19 +1,15 @@
 <nz-page-header nzBackIcon [nzGhost]="false">
     <nz-page-header-title>{{accountService.account$()?.name}}</nz-page-header-title>
     <nz-page-header-extra>
-        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()"
-            [isAccountShared]="isAccountShared()" [isOwner]="isOwer()" [id]="id"
-            (loadData)="loadData()"></app-account-detail-header>
+        <app-account-detail-header [AccountsMembers]="accountService.membersAccount$()" [isAccountShared]="isAccountShared()" [isOwner]="isOwner()" [id]="id" (loadData)="loadData()"></app-account-detail-header>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered
-            nzSize="small">
+        <nz-descriptions [nzColumn]="{ xxl: 10, xl: 9, lg: 7, md: 4, sm: 3, xs: 1 }" nzLayout="vertical" nzBordered nzSize="small">
             <nz-descriptions-item nzTitle="Balance general">
                 ₡ {{generalBalance | currency:'':'':'1.2-2'}}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Tipo de cuenta" nzSpan="2">{{getAccountType()}}
-            </nz-descriptions-item>
-            <nz-descriptions-item *ngIf="isAccountShared() && isOwer()" nzTitle="Propietario">
+            <nz-descriptions-item nzTitle="Tipo de cuenta" nzSpan="2">{{getAccountType()}}</nz-descriptions-item>
+            <nz-descriptions-item *ngIf="isAccountShared() && isOwner()" nzTitle="Propietario">
                 {{accountService.account$()?.owner?.name}}
             </nz-descriptions-item>
             <nz-descriptions-item *ngIf="isAccountShared()" nzTitle="Miembros">
@@ -23,22 +19,20 @@
             <nz-descriptions-item nzTitle="Gastos recurrentes">₡ {{recurringExpenses | currency:'':'':'1.2-2'}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Ingresos del mes">₡ {{monthIncomes | currency:'':'':'1.2-2'}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Ingresos recurrentes">₡ {{recurringIncomes | currency:'':'':'1.2-2'}}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Ahorros del mes">₡ -</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Ahorros recurrentes">-</nz-descriptions-item>
+            <!-- <nz-descriptions-item nzTitle="Ahorros del mes">₡ -</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ahorros recurrentes">-</nz-descriptions-item> -->
             <nz-descriptions-item nzTitle="Fecha de creación">
                 {{ getDate(accountService.account$()?.createdAt) }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Última actualización">
                 {{ getDate(accountService.account$()?.updatedAt) }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Descripción">{{accountService.account$()?.description ||
-                ""}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Descripción">{{accountService.account$()?.description || ""}}</nz-descriptions-item>
         </nz-descriptions>
         <nz-divider></nz-divider>
         <nz-tabset>
             <nz-tab nzTitle="Transacciones">
-                <app-account-tab-transactions [transactions]="transactionService.transactions$()"
-                (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
+                <app-account-tab-transactions [transactions]="transactionService.transactions$()" (rollbackTransaction)="rollbackTransaction($event)"></app-account-tab-transactions>
             </nz-tab>
             <nz-tab nzTitle="Gastos recurrentes">
                 <app-account-tab-recurrence [type]="'expense'" [recurrences]="recurrenceService.recurrencesExpense$()" (deleteRecurrence)="deleteRecurrence($event)"></app-account-tab-recurrence>
@@ -47,9 +41,7 @@
                 <app-account-tab-recurrence [type]="'income'" [recurrences]="recurrenceService.recurrencesIncome$()" (deleteRecurrence)="deleteRecurrence($event)"></app-account-tab-recurrence>
             </nz-tab>
             <nz-tab nzTitle="Mis amigos" *ngIf="isAccountShared()">
-                <app-account-tab-members [account]="accountService.account$()"
-                    [accountUsers]="accountService.membersAccount$()" [isOwner]="isOwer()"
-                    (deleteFriend)="deleteFriend($event)">
+                <app-account-tab-members [account]="accountService.account$()" [accountUsers]="accountService.membersAccount$()" [isOwner]="isOwner()" (deleteFriend)="deleteFriend($event)">
                 </app-account-tab-members>
             </nz-tab>
         </nz-tabset>

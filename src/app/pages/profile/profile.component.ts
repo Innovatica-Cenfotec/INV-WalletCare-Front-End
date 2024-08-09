@@ -8,6 +8,13 @@ import { IUser } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { PasswordRecoveryService } from '../../services/password-recovery.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ForgotPasswordResetComponent } from '../forgot-password-reset/forgot-password-reset.component';
+import { error } from '@ant-design/icons-angular';
+
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +26,9 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
     NzIconModule,
     NzFormModule,
     FormsModule,
-    NzPageHeaderModule
+    NzPageHeaderModule,
+    NzModalModule,
+    ForgotPasswordResetComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -32,10 +41,12 @@ export class ProfileComponent implements OnInit {
     email: '',
     password: ''
   };
+  constructor(private modal: NzModalService,private message: NzMessageService) {}
   public profileService = inject(ProfileService);
+  public changePasswordService=inject(PasswordRecoveryService)
   public confirmPassword: string = '';
   public isEditing: boolean = false;
-
+  public isVisible=false;
   /**
    * Initializes the component and loads the user profile.
    */
@@ -69,7 +80,28 @@ export class ProfileComponent implements OnInit {
   /**
    * Placeholder method for changing the user's password.
    */
-  changePassword(): void {}
+  changePasswordConfirmation(): void {
+    this.modal.confirm({
+      nzTitle: 'Seguro que desea cambiar su contraseña?',
+      nzContent: '<b style="color: red;">Proceder enviará un código OTP a su correo</b>',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.changePasswordService.sendOTPChange().subscribe({
+        next: (response:any) => {
+        this.message.success('OTP enviado a tu correo electrónico. Proceda con la verificación.')
+        this.isVisible = true; // Mostrar el modal
+        }
+        ,
+        error: (error:any) => this.message.error('Error al enviar OTP, por favor intente más tarde.')
+    }),
+      nzCancelText: 'No',
+      nzOnCancel: () => console.log('Cancelado')
+    });
+  }
+  closeModal():void{
+    this.isVisible=false;
+  }
 
   /**
    * Enables editing mode for the user profile.

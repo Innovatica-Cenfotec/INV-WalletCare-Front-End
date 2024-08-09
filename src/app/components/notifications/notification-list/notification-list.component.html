@@ -1,0 +1,29 @@
+<!--
+<input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" />
+-->
+<nz-table #fixedTable nzShowPagination [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="5" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '100px', '120px']">
+    <thead>
+        <tr>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
+            <th nzColumnKey="title" [nzSortFn]="sortByTitle">Asunto</th>
+            <th nzColumnKey="'message" *ngIf="showDetailsModal">Contenido</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortByDate" *ngIf="showDetailsModal">Fecha</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td>{{ getNotificationType(data) }}</td>
+            <td>{{ data.title }}</td>
+            <td *ngIf="showDetailsModal">{{ data.message }}</td>
+            <td *ngIf="showDetailsModal">{{ getDate(data.createdAt) }}</td>
+            <td nzRight>
+                <nz-space>
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="detailsNotification.emit(data)"><span nz-icon nzType="eye"></span></button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteNotification.emit(data)"><span nz-icon nzType="delete"></span></button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

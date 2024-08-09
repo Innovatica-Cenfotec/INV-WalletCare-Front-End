@@ -1,4 +1,4 @@
-import { Component, Inject, inject, Input, OnChanges, OnInit, Signal, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 
 // Importing Ng-Zorro modules
@@ -88,6 +88,15 @@ export class AccountsComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.findAllSignal();
     this.transactionService.getAllByOwnerSignal();
+    this.transactionService.getBalancesByOwner().subscribe({
+      next: (response: any) => {
+        //this.monthExpenses = response.monthlyExpenseBalance;
+        //&this.recurringExpenses = response.recurrentExpensesBalance;
+        //this.monthIncomes = response.monthlyIncomeBalance;
+        //this.recurringIncomes = response.recurrentIncomesBalance;
+
+      }
+    });
   }
 
   /**
@@ -167,6 +176,7 @@ export class AccountsComponent implements OnInit {
         }
 
         this.isLoading.set(false);
+        this.isVisible.set(false);
       }
     });
   }
