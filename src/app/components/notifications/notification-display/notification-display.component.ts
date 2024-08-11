@@ -30,13 +30,13 @@ export class NotificationDisplayComponent implements OnInit {
      * True - Show popover.
      */
     @Input() visibleNotifications = false;
-    
+
     /**
      * Output event emitter to notify when the notification is display.
      * Emits the boolean status of the notification popover.
      */
     @Output() visibleNotificationsChange = new EventEmitter<boolean>();
-  
+
     // Services
     private nzNotificationService = inject(NzNotificationService);
     private nzModalService = inject(NzModalService);
@@ -56,15 +56,22 @@ export class NotificationDisplayComponent implements OnInit {
         this.visibleNotifications = false;
         this.visibleNotificationsChange.emit(this.visibleNotifications);
     }
-  
+
     /**
      * Display modal with the notification details.
      * @param notification Notification body.
      */
     showModalDetails(notification: INotification): void {
-        // Implement the logic to show notification details
+        this.notificationService.markAsReadNotifSignal(notification?.id).subscribe({
+            next: (response: any) => {
+                console.log(response);
+            },
+            error: (error: any) => {
+                this.nzNotificationService.error('Lo sentimos', error.error.detail);
+            }
+        });
     }
-  
+
     /**
      * Delete a notification by its ID.
      * @param notification Notification body used to extract ID.
@@ -76,14 +83,16 @@ export class NotificationDisplayComponent implements OnInit {
             nzOkText: 'Sí',
             nzOkType: 'primary',
             nzOnOk: () => {
-            this.notificationService.deleteNotificationSignal(notification.id).subscribe({
-                next: () => {
-                this.nzNotificationService.success('Éxito', 'La notificación se ha eliminado correctamente');
-                },
-                error: (error: any) => {
-                this.nzNotificationService.error('Lo sentimos', error.error.detail);
-                }
-            });
+
+                this.notificationService.deleteNotificationSignal(notification.id).subscribe({
+                    next: () => {
+                        this.nzNotificationService.success('Éxito', 'La notificación se ha eliminado correctamente');
+                    },
+                    error: (error: any) => {
+                        this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    }
+                });
+
             },
             nzCancelText: 'No'
         });
