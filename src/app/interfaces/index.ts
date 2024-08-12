@@ -297,3 +297,16 @@ export interface INotificationOTP {
     title?: string;
     message?: string;
 }
+
+export interface LoanDTO {
+    currecy?: ICurrencyType | null,
+    ammount?: 0 | number | null,
+    paymentDeadline?: 0 | number | null,
+    interestRate?: 0 | number | null,
+    fee?: 0 | number | null
+}
+
+export enum ICurrencyType {
+    colones = "COLONES",
+    dollars = "DOLLARS"
+}
