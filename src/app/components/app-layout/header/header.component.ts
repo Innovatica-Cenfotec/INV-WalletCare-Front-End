@@ -20,7 +20,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 // Custom components
-import { ICurrencyType, IUser, LoanDTO } from '../../../interfaces';
+import { CurrencyCodesDTO, CurrencyExchangeDTO, ICurrencyType, IUser, LoanDTO } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
 import { NotificationDisplayComponent } from '../../notifications/notification-display/notification-display.component';
@@ -29,6 +29,7 @@ import { CommonModule } from '@angular/common';
 import { FormModalComponent } from '../../form-modal/form-modal.component';
 import { ToolsService } from '../../../services/tools.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 @Component({
@@ -54,56 +55,89 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
         NzRadioModule,
         NzInputModule,
         NzInputNumberModule,
+        NzSelectModule,
         NotificationDisplayComponent
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss'
 })
 export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnInit {
+
+    //inputs
+    @Input() isCollapsed: boolean = false;
+
+    //outputs
+    @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
+
     // Services
+    public toolsService = inject(ToolsService);
     private authService = inject(AuthService);
     private profileService = inject(ProfileService);
     private router = inject(Router);
     private nzModalService = inject(NzModalService);
-    private toolsService = inject(ToolsService);
     private nzNotificationService = inject(NzNotificationService);
     override fb = inject(FormBuilder);
 
-    @Input() isCollapsed: boolean = false;
-    @Output() toggleCollapsedEvent: EventEmitter<void> = new EventEmitter<void>()
+    /**
+     * is the currencu codes list
+     */
+    public currencyCodes: CurrencyCodesDTO[] = [];
+
     public user?: IUser;
     public dot = true;
     public fee: number = 0;
+    public exchangeValue: number = 0;
 
-    ICurrency = ICurrencyType
-    currencyIcon = '';
+    public ICurrency = ICurrencyType
+    public currencyIcon = '';
     /**
     * Boolean to display the notification popover
     * False - Hide popover.
     * True - Show popover
     */
-    visibleNotifications = false;
+    public visibleNotifications = false;
 
     // FOR CALCULATOR DRAWER
-    visibleCalculator = false;
-
-    override isVisible = false;
-
-    override isLoading = false;
-
-    formatterPercent = (value: number): string => `${value} %`;
-    parserPercent = (value: string): string => value.replace(' %', '');
-    formatterDollar = (value: number): string => `$ ${value}`;
-    parserDollar = (value: string): string => value.replace('$ ', '');
 
     /**
-    * Get the form group
+     * Boolean to display the calculators drawer
+     */
+    public visibleCalculator = false;
+
+    //FOR THE FORMS IN THE DRAWER
+
+    /**
+     * Boolean to display the loans calculator 
+     */
+    override isVisible = false;
+
+    /**
+     * Boolean to display the exchange calculator 
+     */
+    public isVisibleExchange = false;
+
+    /**
+     * Boolean to set the form in loading mode
+     */
+    override isLoading = false;
+
+    /**
+    * Get the form group for loans calculator
     */
     override formGroup = this.fb.group({
         currency: [this.item?.currecy, [Validators.required, Validators.min(0), Validators.max(1)]],
-        ammount: [this.item?.ammount, [Validators.required, Validators.min(1)]],
+        amount: [this.item?.amount, [Validators.required, Validators.min(1)]],
         paymentDeadline: [this.item?.paymentDeadline, [Validators.required, Validators.min(1)]],
         interestRate: [this.item?.interestRate, [Validators.required, Validators.min(1)]]
+    });
+
+    /**
+     * Get the form group for exchange calculator
+     */
+    formGroupExchange = this.fb.group({
+        currencyFrom: ['', [Validators.required]],
+        currencyTo: ['', [Validators.required]],
+        amount: [0, [Validators.required]],
     });
 
     ngOnInit(): void {
@@ -117,8 +151,6 @@ export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnIn
             }
         });
     }
-
-
 
     /**
      * Toggles the collapsed state of the sidebar
@@ -147,22 +179,38 @@ export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnIn
         this.router.navigateByUrl('/login');
     }
 
+    /**
+     * Opens the calculator drawer
+     */
     openCalculator(): void {
         this.visibleCalculator = true;
     }
 
+    /**
+     * Closes the calculation drawer
+     */
     closeCalculator(): void {
         this.visibleCalculator = false;
     }
 
+    /**
+     * Shows the modal for Loans calculator 
+     */
     showModal(): void {
         this.isVisible = true;
     }
 
+    /**
+     * handles the cancelation button for Loans calculator 
+     */
     override handleCancel() {
         this.isVisible = false;
     }
 
+    /**
+     * handle the submit button for loans calculator
+     * @returns returns the errors in the form validations
+     */
     override handleSubmit() {
         for (const key in this.formGroup.controls) {
             console.log(this.formGroup.get(key)?.value)
@@ -184,7 +232,7 @@ export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnIn
 
         const loan: LoanDTO = {
             currecy: this.formGroup.value.currency,
-            ammount: this.formGroup.value.ammount,
+            amount: this.formGroup.value.amount,
             paymentDeadline: this.formGroup.value.paymentDeadline,
             interestRate: this.formGroup.value.interestRate
         }
@@ -205,6 +253,69 @@ export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnIn
                 });
             },
             nzCancelText: 'No'
+        });
+    }
+
+    /**
+     * Shows the modal for exchange calculator 
+     */
+    showModalExchange() {
+        this.toolsService.currencyCodes().subscribe({
+            next: (response: any) => {
+                this.currencyCodes = response;
+            },
+            error: (error => {
+                this.nzNotificationService.error('Error', error.error.detail)
+            })
+        });
+        this.isVisibleExchange = true;
+    }
+
+    /**
+     * handles the cancelation button for exchange calculator 
+     */
+    handleCancelExchange() {
+        this.isVisibleExchange = false;
+    }
+
+    /**
+     * handle the submit button for exchange calculationss
+     * @returns returns the errors in the form validations
+     */
+    handleSubmitExchange() {
+        for (const key in this.formGroupExchange.controls) {
+            console.log(this.formGroupExchange.get(key)?.value)
+            if (typeof this.formGroupExchange.get(key)?.value === 'string') {
+                // Trim the string
+                this.formGroupExchange.get(key)?.setValue(this.formGroupExchange.get(key)?.value?.trim());
+            }
+
+            // If the form control is invalid, mark it as dirty
+            if (this.formGroupExchange.get(key)?.invalid) {
+                this.formGroupExchange.get(key)?.markAsDirty();
+                this.formGroupExchange.get(key)?.updateValueAndValidity({ onlySelf: true });
+            }
+        }
+
+        if (this.formGroupExchange.invalid) {
+            return;
+        }
+
+        const exchange: CurrencyExchangeDTO = {
+            currencyFrom: this.formGroupExchange.value.currencyFrom,
+            currencyTo: this.formGroupExchange.value.currencyTo,
+            amount: this.formGroupExchange.value.amount
+        }
+
+        this.toolsService.curencyExchange(exchange).subscribe({
+            next: (response: any) => {
+                this.currencyIcon = this.formGroupExchange.value.currencyTo === null || this.formGroupExchange.value.currencyTo === undefined
+                    ? '' : this.formGroupExchange.value.currencyTo;
+                this.exchangeValue = response.exchangeValue;
+            },
+            error: (error => {
+                this.nzNotificationService.error('Error', error.error.detail)
+            })
         });
     }
 

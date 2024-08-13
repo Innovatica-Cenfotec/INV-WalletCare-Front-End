@@ -300,7 +300,7 @@ export interface INotificationOTP {
 
 export interface LoanDTO {
     currecy?: ICurrencyType | null,
-    ammount?: 0 | number | null,
+    amount?: 0 | number | null,
     paymentDeadline?: 0 | number | null,
     interestRate?: 0 | number | null,
     fee?: 0 | number | null
@@ -309,4 +309,15 @@ export interface LoanDTO {
 export enum ICurrencyType {
     colones = "COLONES",
     dollars = "DOLLARS"
+}
+
+export interface CurrencyCodesDTO{
+    currencyCode?: string;
+    currencyName?: string;
+}
+
+export interface CurrencyExchangeDTO{
+    currencyFrom?: string | null;
+    currencyTo?: string | null;
+    amount?: 0 | number | null,
 }
