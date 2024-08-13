@@ -56,4 +56,20 @@ export class SavingService extends BaseService<ISaving> {
     );
   }
 
+  deleteSavingSignal(id: number | undefined): Observable<any> {
+    if (!id) {
+        throw new Error('Invalid Saving ID');
+    }
+
+    return this.del(id).pipe(
+        tap((response: any) => {
+            this.savingListSignal.update(income => income.filter(a => a.id !== id));
+        }),
+        catchError(error => {
+            console.error('Error deleting account', error);
+            throw error;
+        })
+    );
+}
+
 }
