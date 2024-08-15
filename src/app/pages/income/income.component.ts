@@ -15,6 +15,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 import { IncomeService } from '../../services/imcome.service';
 import { IIncome, IIncomeExpenceType, ITypeForm } from '../../interfaces';
@@ -43,7 +44,8 @@ import { IncomeListComponent } from '../../components/income/income-list/income-
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
-    NzDropDownModule
+    NzDropDownModule,
+    NzPopoverModule
   ],
   templateUrl: './income.component.html',
   styleUrl: './income.component.scss',
