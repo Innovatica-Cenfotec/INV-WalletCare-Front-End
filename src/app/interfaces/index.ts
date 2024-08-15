@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -321,3 +322,14 @@ export interface CurrencyExchangeDTO{
     currencyTo?: string | null;
     amount?: 0 | number | null,
 }
+
+export type ChartOptions = {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    xaxis: ApexXAxis;
+    dataLabels: ApexDataLabels;
+    colors: Array<string>;
+    grid: ApexGrid;
+    stroke: ApexStroke;
+    title: ApexTitleSubtitle;
+  };
