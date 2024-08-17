@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ILoginResponse, IResponse, IUser } from '../interfaces';
+import { ILoginResponse, IResponse, IRole, IUser } from '../interfaces';
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
@@ -102,6 +102,15 @@ export class AuthService {
    */
   public hasRole(role: string): boolean {
     return this.user.authorities ? this.user?.authorities.some(authority => authority.authority == role) : false;
+  }
+
+  /**
+   * Checks if the user is an admin.
+   * 
+   * @returns {boolean} True if the user is an admin, otherwise false.
+   */
+  public isAdmin(): boolean {
+    return this.hasRole(IRole.admin);
   }
 
   /**

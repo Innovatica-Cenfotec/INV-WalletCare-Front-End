@@ -19,6 +19,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
 import { IncomeComponent } from './pages/income/income.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
+import { GoalsComponent } from './pages/goals/goals.component';
 import { SavingsComponent } from './pages/savings/savings.component';
 
 export const routes: Routes = [
@@ -69,7 +70,6 @@ export const routes: Routes = [
         component: AccountsComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           layout: <ILayout>{
@@ -84,7 +84,6 @@ export const routes: Routes = [
         component: AccountDetailComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           parent: 'accounts',
@@ -117,7 +116,6 @@ export const routes: Routes = [
         component: IncomeComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           showInSidebar: true,
@@ -149,7 +147,6 @@ export const routes: Routes = [
         component: ExpensesComponent,
        data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           showInSidebar: true,
@@ -157,6 +154,22 @@ export const routes: Routes = [
             icon: 'fall',
             breadcrumb: ['Mis gastos'],
             name: 'Mis gastos',
+          },
+        }
+      },
+      {
+        path: 'goals',
+        component: GoalsComponent,
+       data: {
+          authorities: [
+            IRole.admin,
+            IRole.user            
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'fund-view',
+            breadcrumb: ['Metas'],
+            name: 'Metas',
           },
         }
       },

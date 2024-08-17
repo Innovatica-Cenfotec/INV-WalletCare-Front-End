@@ -348,3 +348,40 @@ export interface ISaving {
     updatedAt?: Date;
     deleted?: boolean;
 }
+
+/**
+ * Enumerates the possible types of goal.
+ */
+export enum GoalTypeEnum {
+    saving = "SAVING",
+    expense_reduction = "EXPENSE_REDUCTION",
+}
+
+/**
+ * Enumerates the possible status of goal.
+ */
+export enum GoalStatusEnum {
+    goal_pending = "GOAL_PENDING",
+    goal_rejected = "GOAL_REJECTED",
+    active = "ACTIVE",
+    completed = "COMPLETED",
+    failed = "FAILED",
+}
+
+/**
+ * Interface for goal
+ */
+export interface IGoal {
+    id?: number;//
+    owner?: IUser;//
+    account?: IAccount;//
+    saving?: ISaving;//
+    name?: string;
+    description?: string;
+    recommendation?: string;
+    type?: GoalTypeEnum;
+    status?: GoalStatusEnum;
+    createdAt?: Date;
+    targetDate?: Date;
+    targetAmount?: number;
+}
