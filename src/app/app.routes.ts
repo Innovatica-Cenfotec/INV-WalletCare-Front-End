@@ -19,6 +19,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
 import { IncomeComponent } from './pages/income/income.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
+import { SavingsComponent } from './pages/savings/savings.component';
 
 export const routes: Routes = [
   {
@@ -124,6 +125,22 @@ export const routes: Routes = [
             icon: 'bank',
             breadcrumb: ['Mis ingresos'],
             name: 'Mis ingresos',
+          },
+        }
+      },
+      {
+        path: 'savings',
+        component: SavingsComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'dollar-circle',
+            breadcrumb: ['Mis ahorros'],
+            name: 'Mis ahorros',
           },
         }
       },

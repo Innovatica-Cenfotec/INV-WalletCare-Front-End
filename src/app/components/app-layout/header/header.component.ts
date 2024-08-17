@@ -85,6 +85,7 @@ export class HeaderComponent extends FormModalComponent<LoanDTO> implements OnIn
 
     public user?: IUser;
     public dot = true;
+
     public fee: number = 0;
     public exchangeValue: number = 0;
 

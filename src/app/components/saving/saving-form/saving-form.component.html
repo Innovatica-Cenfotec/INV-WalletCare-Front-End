@@ -1,0 +1,135 @@
+<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()"
+    [nzCancelLoading]="isLoading" nzWidth="600px">
+    <div *nzModalContent>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
+            <!-- name -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="name">Nombre del ahorro</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorNameTpl">
+                    <nz-input-group>
+                        <input type="text" nz-input formControlName="name">
+                        <ng-template #errorNameTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            El nombre del ahorro no puede tener más de 100 caracteres
+                            } @else if (control.errors?.['minlength']) {
+                            El nombre del ahorro debe tener al menos 4 caracteres
+                            } @else if (control.errors?.['required']) {
+                            Por favor ingrese el nombre del ahorro
+                            } @else if(control.errors?.['duplicated']) {
+                            El nombre del ahorro ya existe
+                            } @else if (control.errors?.['pattern']) {
+                            El nombre del ahorro solo puede contener letras y números
+                            } @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- description -->
+            <nz-form-item>
+                <nz-form-label nzFor="description">Descripción</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorDescriptionTpl">
+                    <nz-textarea-count [nzMaxCharacterCount]="200">
+                        <textarea rows="3" formControlName="description" nz-input></textarea>
+                        <ng-template #errorDescriptionTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            La descripción no puede tener más de 200 caracteres
+                            } @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-textarea-count>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div nz-row nzSpan="24">
+                <div nz-col nzSpan="13">
+                    @if (type == ITypeForm.create) {
+                    <!-- amount -->
+
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzFor="amount">Monto</nz-form-label>
+                        <nz-form-control [nzErrorTip]="errorAmountTpl">
+                            <nz-input-group>
+                                <nz-input-number class="input-number" [nzMin]="1" formControlName="amount"
+                                    [nzFormatter]="formatterConlon" [nzParser]="parserConlon">
+                                </nz-input-number>
+                                <ng-template #errorAmountTpl let-control>
+                                    @if (control.errors?.['required']) {
+                                    Por favor ingrese el monto
+                                    } @else if (control.errors?.['min']) {
+                                    El monto debe ser mayor a 0
+                                    } @else {
+                                    {{control.errors?.['message']}}
+                                    }
+                                </ng-template>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    }
+                </div>
+            </div>
+
+            <div *ngIf="savingType === IIncomeExpenseSavingType.recurrence">
+                <div nz-row nzSpan="24">
+                    <!-- frequency -->
+                    <div nz-col nzSpan="13">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzFor="frequency">Frecuencia</nz-form-label>
+                            <nz-form-control [nzErrorTip]="errorFrequencyTpl">
+                                <nz-radio-group formControlName="frequency" (ngModelChange)="onSelectFrequency($event)">
+                                    <label nz-radio nzValue="{{IFrequencyType.daily}}">Diario</label>
+                                    <label nz-radio nzValue="{{IFrequencyType.weekly}}">Semanal</label>
+                                    <label nz-radio nzValue="{{IFrequencyType.biweekly}}">Quincenal</label>
+                                    <label nz-radio nzValue="{{IFrequencyType.monthly}}">Mensual</label>
+                                    <label nz-radio nzValue="{{IFrequencyType.annual}}">Anual</label>
+                                    <label nz-radio nzValue="{{IFrequencyType.other}}">Personalizado</label>
+                                </nz-radio-group>
+                                <ng-template #errorFrequencyTpl let-control>
+                                    @if (control.errors?.['required']) {
+                                    Por favor seleccione la frecuencia
+                                    } @else {
+                                    {{control.errors?.['message']}}
+                                    }
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div *ngIf="this.scheduledDayVisible" nz-col nzSpan="11">
+                        <!-- scheduledDay -->
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzFor="scheduledDay">Día programado</nz-form-label>
+                            <nz-form-control [nzErrorTip]="errorScheduledDayTpl">
+                                <nz-select formControlName="scheduledDay"
+                                    (ngModelChange)="onSelectScheduledDay($event)">
+                                    <nz-option *ngFor="let day of days" [nzLabel]="day" [nzValue]="day"></nz-option>
+                                </nz-select>
+                                <ng-template #errorScheduledDayTpl let-control>
+                                    @if (control.errors?.['required']) {
+                                    Por favor seleccione el día programado
+                                    } @else {
+                                    {{control.errors?.['message']}}
+                                    }
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div *ngIf="this.scheduledDay === 31">
+                    <span nz-typography nzType="warning">Los meses del año que tienen menos de 31 días, el día
+                        programado se ajustará al último día del mes</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmit()">
+            {{ type === ITypeForm.create ? 'Crear' : 'Actualizar' }}
+        </button>
+    </div>
+</nz-modal>
