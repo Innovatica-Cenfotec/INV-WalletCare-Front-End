@@ -18,7 +18,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom elements
-import { IExpense, IIncomeExpenceType, ITypeForm } from '../../interfaces/index';
+import { IExpense, IIncomeExpenceSavingType, ITypeForm } from '../../interfaces/index';
 import { ExpenseService } from '../../services/expense.service';
 import { TaxService } from '../../services/tax.service';
 import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
@@ -52,7 +52,7 @@ import { ExpenseListComponent } from '../../components/expense/expense-list/expe
 export class ExpensesComponent implements OnInit {
 
     public router = inject(Router);
-    public IIncomeExpenceType = IIncomeExpenceType;
+    public IIncomeExpenceType = IIncomeExpenceSavingType;
     // Services
     private nzNotificationService = inject(NzNotificationService);
     private nzModalService = inject(NzModalService);
@@ -74,7 +74,7 @@ export class ExpensesComponent implements OnInit {
     public isVisibleCreate = signal(false); 
 
     public expense = signal<IExpense>({ amount: 0 });
-    public expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+    public expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
     public title: string = '';
     public TypeForm: ITypeForm = ITypeForm.create;
 
@@ -91,8 +91,8 @@ export class ExpensesComponent implements OnInit {
     /**
      * Shows the modal to create the expense
      */
-    showModalCreate(ExpenseType: IIncomeExpenceType): void {
-        this.title = ExpenseType === IIncomeExpenceType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
+    showModalCreate(ExpenseType: IIncomeExpenceSavingType): void {
+        this.title = ExpenseType === IIncomeExpenceSavingType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
         this.expense.set({amount: 0});

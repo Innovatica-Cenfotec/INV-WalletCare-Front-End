@@ -16,6 +16,10 @@
                         <nz-option *ngFor="let option of optionsExpense" [nzLabel]="option.name"
                             [nzValue]="option"></nz-option>
                         }
+                        @if (type=="saving") {
+                            <nz-option *ngFor="let option of optionsExpense" [nzLabel]="option.name"
+                                [nzValue]="option"></nz-option>
+                            }
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
@@ -50,11 +54,21 @@
                 <nz-form-control>
                 <nz-space nzDirection="vertical">
                     <button *nzSpaceItem nz-button nzType="default" nzBlock (click)="handleAddItem()">
-                        {{this.type == 'income' ? 'Agregar ingreso' : 'Agregar gasto'}}
+                        {{  
+                            this.type == 'income' ? 'Agregar ingreso' : 
+                            this.type == 'expense' ? 'Agregar gasto' :
+                            this.type == 'saving' ? 'Agregar ahorro' :
+                            'Tipo no válido'
+                        }}
                     </button>
 
                     <button *nzSpaceItem nz-button nzType="default" nzBlock (click)="handleAddRecurrentItem()">
-                        {{this.type == 'income' ? 'Agregar ingreso recurrente' : 'Agregar gasto recurrente'}}
+                        {{
+                            this.type == 'income' ? 'Agregar ingreso recurrente' : 
+                            this.type == 'expense' ?'Agregar gasto recurrente' :
+                            this.type == 'saving' ? 'Agregar ahorro recurrente' :
+                            'Tipo no válido'
+                        }}
                     </button>
                 </nz-space>
             </nz-form-control>
@@ -72,6 +86,9 @@
             @if ( type=="expense" ) {
             {{this.selectedItem?.frequency == null ? 'Agregar' : 'Activar gasto recurrente'}}
             }
+            @if ( type=="saving" ) {
+                {{this.selectedItem?.frequency == null ? 'Agregar' : 'Activar ahorro recurrente'}}
+                }
         </button>
         }
     </div>
