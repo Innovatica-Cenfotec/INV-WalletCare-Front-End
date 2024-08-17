@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -297,6 +298,41 @@ export interface INotificationOTP {
     title?: string;
     message?: string;
 }
+
+export interface LoanDTO {
+    currecy?: ICurrencyType | null,
+    amount?: 0 | number | null,
+    paymentDeadline?: 0 | number | null,
+    interestRate?: 0 | number | null,
+    fee?: 0 | number | null
+}
+
+export enum ICurrencyType {
+    colones = "COLONES",
+    dollars = "DOLLARS"
+}
+
+export interface CurrencyCodesDTO{
+    currencyCode?: string;
+    currencyName?: string;
+}
+
+export interface CurrencyExchangeDTO{
+    currencyFrom?: string | null;
+    currencyTo?: string | null;
+    amount?: 0 | number | null,
+}
+
+export type ChartOptions = {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    xaxis: ApexXAxis;
+    dataLabels: ApexDataLabels;
+    colors: Array<string>;
+    grid: ApexGrid;
+    stroke: ApexStroke;
+    title: ApexTitleSubtitle;
+  };
 
 export interface ISaving {
     id?: number;

@@ -1,1 +1,16 @@
-<p>savings works!</p>
+<nz-page-header>
+    <nz-page-header-title>Mis Ahorros</nz-page-header-title>
+    <nz-page-header-extra>
+        <nz-space [nzWrap]="true">
+        </nz-space>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+
+        <nz-divider></nz-divider>
+        <app-saving-list [savingList]="savingService.savings$()" (deleteSaving)="deleteSaving($event)" (editSaving)="showModalEdit($event)">
+        </app-saving-list>
+
+    </nz-page-header-content>
+</nz-page-header>
+
+<app-saving-form #form [isVisible]="isVisible()" [item]="saving()" [type]="TypeForm" [title]="title" (onCanceled)="onCanceled()" (onUpdated)="updateSaving($event)"></app-saving-form>

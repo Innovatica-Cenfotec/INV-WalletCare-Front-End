@@ -13,9 +13,11 @@
         <a class="header-calculator" (click)="openCalculator()">
             <span nz-icon nzType="calculator" nzTheme="outline"></span>
         </a>
-        <a class="header-notification">
-            <app-notification-display [(visibleNotifications)]="visibleNotifications"></app-notification-display>
-        </a>
+        <nz-badge [nzDot]="dot">
+            <a class="header-notification">
+                <app-notification-display [(visibleNotifications)]="visibleNotifications"></app-notification-display>
+            </a>
+        </nz-badge>
         <div>
             <a class="header-user" nz-dropdown [nzDropdownMenu]="menu">
                 <span nz-icon nzType="user" nzTheme="outline"></span> {{user?.nickname}}
@@ -36,10 +38,148 @@
     </div>
 </nz-header>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visibleCalculator" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="closeCalculator()">
+<nz-drawer [nzClosable]="false" [nzVisible]="visibleCalculator" nzPlacement="right"
+    nzTitle="Herramientas y calculadoras" (nzOnClose)="closeCalculator()">
     <ng-container *nzDrawerContent>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <button nz-button nzType="primary" (click)="showModal()" nzBlock><span nz-icon nzType="credit-card"
+                nzTheme="outline"></span>Calculadora de Crédito</button>
+        <nz-divider></nz-divider>
+        <button nz-button nzType="primary" (click)="showModalExchange()" nzBlock><span nz-icon nzType="credit-card"
+                nzTheme="outline"></span>Cambio de Moneda</button>
     </ng-container>
 </nz-drawer>
+
+
+<!--Calculadora de Crédito-->
+<nz-modal nzTitle="Calculadora de Crédito" [nzVisible]="isVisible" [nzOkLoading]="isLoading"
+    (nzOnCancel)="handleCancel()" [nzCancelLoading]="isLoading">
+    <div *nzModalContent>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
+            <!--Currency-->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="currency">Moneda del Crédito</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorcurrencyTpl">
+                    <nz-radio-group formControlName="currency">
+                        <label nz-radio nzValue="{{ICurrency.colones}}">Colones</label>
+                        <label nz-radio nzValue="{{ICurrency.dollars}}">Dólares</label>
+                    </nz-radio-group>
+                    <ng-template #errorcurrencyTpl let-control>
+                        @if (control.errors?.['required']) { Por favor seleccione el tipo de moneda } @else {
+                        {{control.errors?.['message']}} }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="amount">Monto</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorAmountTpl">
+                    <nz-input-group>
+                        <input type="number" nz-input formControlName="amount">
+                        <ng-template #errorAmountTpl let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese Monto }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="paymentDeadline">Plazo estimado (Meses)</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorPaymentDeadlineTpl">
+                    <nz-input-group>
+                        <input type="number" nz-input formControlName="paymentDeadline">
+                        <ng-template #errorPaymentDeadlineTpl let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese plazo a pagar }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="interestRate">Tasa (% de Interés)</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorInterestRate">
+                    <nz-input-group>
+                        <input type="number" nz-input formControlName="interestRate">
+                        <ng-template #errorInterestRate let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese la tasa de interés }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-divider></nz-divider>
+            <h3 nz-typography> Cuota mensual: {{currencyIcon}} {{fee | currency:'':'':'1.2-2'}}</h3>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmit()">
+            Calcular
+        </button>
+    </div>
+</nz-modal>
+
+<!--Tipo de cambio-->
+<nz-modal nzTitle="Tipo de Cambio" [nzVisible]="isVisibleExchange" [nzOkLoading]="isLoading"
+    (nzOnCancel)="handleCancelExchange()" [nzCancelLoading]="isLoading">
+    <div *nzModalContent>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroupExchange">
+            <!--Currency-->
+            <nz-form-item>
+                <nz-form-label nzFor="currencyFrom">Moneda de Origen</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorCurrencyFromTpl">
+                    <nz-input-group>
+                        <nz-select class="select" formControlName="currencyFrom" nzAllowClear
+                            nzPlaceHolder="Selecciona la Moneda de Origen">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                [nzValue]="cc.currencyCode">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #errorCurrencyFromTpl let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese una moneda de origen }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzFor="currencyTo">Moneda de Destino</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
+                    <nz-input-group>
+                        <nz-select class="select" formControlName="currencyTo" nzAllowClear
+                            nzPlaceHolder="Selecciona la Moneda de Destino">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                [nzValue]="cc.currencyCode">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #errorCurrencyToTpl let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese una moneda de destino }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="amount">Monto a Convertir</nz-form-label>
+                <nz-form-control [nzErrorTip]="erroAmountTpl">
+                    <nz-input-group>
+                        <input type="number" nz-input formControlName="amount">
+                        <ng-template #erroAmountTpl let-control>
+                            @if (control.errors?.['required']) { Por favor
+                            ingrese un monto a convertir }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-divider></nz-divider>
+            <h3 nz-typography> El valor de
+                {{this.formGroupExchange.value.amount | currency:'':'':'1.2-2'}}
+                {{this.formGroupExchange.value.currencyFrom}} es de
+                {{exchangeValue | currency:'':'':'1.2-2'}} {{this.formGroupExchange.value.currencyTo}}</h3>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancelExchange()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmitExchange()">
+            Calcular
+        </button>
+    </div>
+</nz-modal>

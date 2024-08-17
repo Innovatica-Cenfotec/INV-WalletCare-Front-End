@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 // Importing Ng-Zorro modules
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -7,9 +7,13 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NotificationService } from '../../../services/notification.service';
 
 // Custom elements
 import { INotification, INotificationType } from '../../../interfaces';
+
 
 @Component({
     selector: 'app-notification-list',
@@ -20,7 +24,9 @@ import { INotification, INotificationType } from '../../../interfaces';
         NzDividerModule,
         NzIconModule,
         NzButtonModule,
-        NzSpaceModule
+        NzSpaceModule,
+        NzModalModule,
+        NzCardModule
     ],
     providers: [DatePipe],
     templateUrl: './notification-list.component.html',
@@ -32,13 +38,18 @@ export class NotificationListComponent {
      * Input property to accept an array of notifications to be displayed.
      */
     @Input() notificationList: INotification[] = [];
-    
+
     /**
      * Input property to accept a boolean value for the modal visibility.
      * True - Show modal.
      * False - Hide modal.
      */
     @Input() showDetailsModal: boolean = false;
+
+    /**
+     * Array of notifications sorted by selected column.
+     */
+    sortedExpenses: INotification[] = [];
 
     /**
      * Output event emitter to notify when the notification details are show.
@@ -51,13 +62,11 @@ export class NotificationListComponent {
      * Emits the notification object that was selected.
      */
     @Output() deleteNotification = new EventEmitter<INotification>();
-    
-    /**
-     * Array of notifications sorted by selected column.
-     */
-    sortedExpenses: INotification[] = [];
 
     private datePipe = inject(DatePipe);
+    public isVisible = false;
+    public notification: INotification = {};
+    public notificationService = inject(NotificationService);
 
     /**
      * Execute when component is called
@@ -65,7 +74,7 @@ export class NotificationListComponent {
     ngOnChanges() {
         this.sortedExpenses = [...this.notificationList];
     }
-    
+
     /**
      * Get type of notification.
      * @param notification Notification object.
@@ -88,7 +97,7 @@ export class NotificationListComponent {
                 return '-';
         }
     }
-    
+
     /**
      * Set the date format
      * @param date is the date
@@ -98,9 +107,9 @@ export class NotificationListComponent {
         return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
     }
 
+
     // PAGINATION FUNCTIONS --------------------------------------------------------------------
     // Change row number with [nzPageSize] property on nx-table
-
     // SORT FUNCTIONS --------------------------------------------------------------------------
 
     /**
@@ -112,7 +121,7 @@ export class NotificationListComponent {
     sortByTitle(a: INotification, b: INotification): number {
         return (a.title?.toLowerCase() ?? '').localeCompare(b.title?.toLowerCase() ?? '');
     }
-    
+
     /**
      * Sort notifications by type.
      * @param a Notification a to campare with b.
@@ -132,4 +141,31 @@ export class NotificationListComponent {
     sortByDate(a: INotification, b: INotification): number {
         return new Date(a.createdAt ?? new Date).getTime() - new Date(b.createdAt ?? new Date).getTime();
     }
+
+    /**
+     * shows the modal
+     * @param data is the selected notification
+     */
+    showModal(data: INotification | undefined): void {
+        if (data !== undefined) {
+            this.notification = data;
+        }
+        this.isVisible = true;
+        this.detailsNotification.emit(data);
+    }
+
+    /**
+     * close the modal
+     */
+    handleOk(): void {
+        this.isVisible = false;
+    }
+
+    /**
+     * close the modal
+     */
+    handleCancel(): void {
+        this.isVisible = false;
+    }
+
 }
