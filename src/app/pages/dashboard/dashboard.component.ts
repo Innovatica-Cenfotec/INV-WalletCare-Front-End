@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
+import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { TransactionService } from '../../services/transaction.service';
 
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -13,8 +14,9 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     CommonModule,
     NzCardModule,
     NzGridModule,
-    IncomesVsExpensesChartComponent
-  ],
+    IncomesVsExpensesChartComponent,
+    EstimatedExpenseVsTotalExpenseChartComponent
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
