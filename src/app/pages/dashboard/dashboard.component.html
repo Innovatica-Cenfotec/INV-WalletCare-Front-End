@@ -1,0 +1,17 @@
+
+
+<div style="background: #ECECEC;padding:30px;">
+    <div nz-row [nzGutter]="8">
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos vs Ingresos del Año Actual">
+            <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
+            [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gradico">
+          <p>Inserte componente con chart</p>
+        </nz-card>
+      </div>
+    </div>
+  </div>
