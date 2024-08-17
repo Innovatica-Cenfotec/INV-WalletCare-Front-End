@@ -11,7 +11,8 @@ export class ToolsService extends BaseService<LoanDTO> {
   private loansSignal = signal<LoanDTO>({});
   private currencyCodesListSignal = signal<CurrencyCodesDTO>({});
   private currencyExchangeSignal = signal<CurrencyExchangeDTO>({});
-
+  private daysSignal = signal<number[]>([]);
+  private monthlyCurrencyExchangeSignal = signal<number[]>([]);
   get loans$() {
     return this.loansSignal;
   }
@@ -22,6 +23,15 @@ export class ToolsService extends BaseService<LoanDTO> {
 
   get currecyExchanges$() {
     return this.currencyExchangeSignal;
+  }
+
+  get days$(){
+    return this.daysSignal;
+  }
+
+
+  get monthlyCurrencyExchange$(){
+    return this.monthlyCurrencyExchangeSignal;
   }
 
   /**
@@ -66,6 +76,24 @@ export class ToolsService extends BaseService<LoanDTO> {
     return this.http.post<CurrencyCodesDTO[]>(`${this.source}/exchange`, currencyExchange).pipe(
       tap((response: any) => {
         this.currencyExchangeSignal.set(response);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * sends the request to api getting the currency exchamge calculation
+   * @param currencyExchange is the exchange information
+   * @returns the currency exchange 
+   */
+  monthlyCurencyExchange(currencyExchange: CurrencyExchangeDTO | undefined) {
+    return this.http.post<CurrencyCodesDTO[]>(`${this.source}/exchange-monthly`, currencyExchange).pipe(
+      tap((response: any) => {
+        this.daysSignal.set(response[0]);
+        this.monthlyCurrencyExchangeSignal.set(response[1]);
       }),
       catchError(error => {
         console.error('Error updating account', error);
