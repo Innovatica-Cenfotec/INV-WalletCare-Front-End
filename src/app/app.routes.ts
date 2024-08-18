@@ -21,6 +21,7 @@ import { IncomeComponent } from './pages/income/income.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
 import { GoalsComponent } from './pages/goals/goals.component';
 import { SavingsComponent } from './pages/savings/savings.component';
+import { UsersComponent } from './pages/users/users.component';
 
 export const routes: Routes = [
   {
@@ -170,6 +171,21 @@ export const routes: Routes = [
             icon: 'fund-view',
             breadcrumb: ['Metas'],
             name: 'Metas',
+          },
+        }
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
+       data: {
+          authorities: [
+            IRole.admin         
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'usergroup-add',
+            breadcrumb: ['Usuarios'],
+            name: 'Usuarios',
           },
         }
       },

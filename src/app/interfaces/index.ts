@@ -17,8 +17,8 @@ export interface IUser {
     nickname?: string;
     email?: string;
     password?: string;
-    active?: boolean;
-    createdAt?: string;
+    enabled?: boolean;
+    createdAt?: Date;
     updatedAt?: string;
     authorities?: IAuthority[];
 }
