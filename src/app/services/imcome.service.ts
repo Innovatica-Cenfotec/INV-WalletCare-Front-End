@@ -148,7 +148,8 @@ export class IncomeService extends BaseService<IIncome> {
      * @returns List of BarchartData.
      */
     reportAnualAmountByCategory(year: number) {
-        return this.http.get<IBarchartData[]>(`${this.source}/report/${year}`).subscribe({
+        return this.http.get<IBarchartData[]>(`${this.source}/report/by-category/${year}`)
+        .subscribe({
             next: (response: any) => {
                 this.incomeReportSignal.set(response);
             },

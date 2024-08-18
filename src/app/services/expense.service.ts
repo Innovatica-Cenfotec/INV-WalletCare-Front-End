@@ -178,7 +178,8 @@ export class ExpenseService extends BaseService<IExpense> {
      * @returns List of BarchartData.
      */
     reportAnualAmountByCategory(year: number) {
-        return this.http.get<IBarchartData[]>(`${this.source}/report/${year}`).subscribe({
+        return this.http.get<IBarchartData[]>(`${this.source}/report/by-category/${year}`)
+        .subscribe({
             next: (response: any) => {
                 this.expenseReportSignal.set(response);
             },
