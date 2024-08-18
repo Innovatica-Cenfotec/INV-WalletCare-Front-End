@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -156,7 +157,7 @@ export interface IAllocation {
 /**
  * Enum that represents the type of income or expense.
  */
-export enum IIncomeExpenceType {
+export enum IIncomeExpenceSavingType {
     unique = "UNIQUE",
     recurrence = "RECURRENCE"
 }
@@ -215,7 +216,7 @@ export interface IIncome {
     name?: string;
     description?: string;
     isTemplate?: boolean;
-    type?: IIncomeExpenceType;
+    type?: IIncomeExpenceSavingType;
     amount?: 0 | string;
     amountType?: IAmountType;
     scheduledDay?: number;
@@ -238,7 +239,7 @@ export interface IExpense {
     name?: string;
     description?: string;
     isTemplate?: boolean;
-    type?: IIncomeExpenceType;
+    type?: IIncomeExpenceSavingType;
     amount?: 0 | string;
     amountType?: IAmountType;
     scheduledDay?: number;
@@ -296,4 +297,91 @@ export interface INotificationOTP {
     type?: string;
     title?: string;
     message?: string;
+}
+
+export interface LoanDTO {
+    currecy?: ICurrencyType | null,
+    amount?: 0 | number | null,
+    paymentDeadline?: 0 | number | null,
+    interestRate?: 0 | number | null,
+    fee?: 0 | number | null
+}
+
+export enum ICurrencyType {
+    colones = "COLONES",
+    dollars = "DOLLARS"
+}
+
+export interface CurrencyCodesDTO{
+    currencyCode?: string;
+    currencyName?: string;
+}
+
+export interface CurrencyExchangeDTO{
+    currencyFrom?: string | null;
+    currencyTo?: string | null;
+    amount?: 0 | number | null,
+}
+
+export type ChartOptions = {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    xaxis: ApexXAxis;
+    dataLabels: ApexDataLabels;
+    colors: Array<string>;
+    grid: ApexGrid;
+    stroke: ApexStroke;
+    title: ApexTitleSubtitle;
+  };
+
+export interface ISaving {
+    id?: number;
+    name?: string;
+    description?: string;
+    amount?: 0 | string;
+    frequency?: IFrequencyType;
+    scheduledDay?: number;
+    type?: IIncomeExpenceSavingType;
+    addTransaction?: boolean;
+    account?: IAccount;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deleted?: boolean;
+}
+
+/**
+ * Enumerates the possible types of goal.
+ */
+export enum GoalTypeEnum {
+    saving = "SAVING",
+    expense_reduction = "EXPENSE_REDUCTION",
+}
+
+/**
+ * Enumerates the possible status of goal.
+ */
+export enum GoalStatusEnum {
+    goal_pending = "GOAL_PENDING",
+    goal_rejected = "GOAL_REJECTED",
+    active = "ACTIVE",
+    completed = "COMPLETED",
+    failed = "FAILED",
+}
+
+/**
+ * Interface for goal
+ */
+export interface IGoal {
+    id?: number;//
+    owner?: IUser;//
+    account?: IAccount;//
+    saving?: ISaving;//
+    name?: string;
+    description?: string;
+    recommendation?: string;
+    type?: GoalTypeEnum;
+    status?: GoalStatusEnum;
+    createdAt?: Date;
+    targetDate?: Date;
+    targetAmount?: number;
 }

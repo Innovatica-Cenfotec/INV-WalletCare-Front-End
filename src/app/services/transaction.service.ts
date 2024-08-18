@@ -12,13 +12,22 @@ export class TransactionService extends BaseService<ITransaction> {
   private transactionListSignal = signal<ITransaction[]>([]);
   private responseSignal = signal<IGenericResponse>({});
   private balancesSignal = signal<IBalanceDTO>({});
+  private annuallyExpensesSignal = signal<number[]>([]);
+  private annuallyIncomesSignal = signal<number[]>([]);
 
   get transactions$() {
     return this.transactionListSignal;
   }
 
-  get balances$(){
+  get balances$() {
     return this.balancesSignal;
+  }
+  get annuallyExpenses$(){
+    return this.annuallyExpensesSignal;
+  }
+
+  get annuallyIncomes$(){
+    return this.annuallyIncomesSignal;
   }
 
   /**
@@ -56,12 +65,12 @@ export class TransactionService extends BaseService<ITransaction> {
    * @param transaction is the transaction that needs a rollback
    * @returns A message with the status of the rollback
    */
-  rollbackTransaction(transaction: ITransaction){
+  rollbackTransaction(transaction: ITransaction) {
 
     return this.http.post(`${this.source}/rollback/${transaction.id}`, transaction).pipe(
 
       tap((response: any) => {
-        this.responseSignal.set({message: response.message});
+        this.responseSignal.set({ message: response.message });
       }),
       catchError(error => {
         console.error('Error updating account', error);
@@ -71,7 +80,7 @@ export class TransactionService extends BaseService<ITransaction> {
 
   }
 
-  getBalancesByAccount(id: number){
+  getBalancesByAccount(id: number) {
     return this.http.get(`${this.source}/balances-account/${id}`).pipe(
       tap((response: any) => {
         this.balancesSignal.set(response);
@@ -83,7 +92,7 @@ export class TransactionService extends BaseService<ITransaction> {
     );
   }
 
-  getBalancesByOwner(){
+  getBalancesByOwner() {
     return this.http.get<IBalanceDTO>(this.source + '/balances-user').pipe(
       tap((response: any) => {
         this.balancesSignal.set(response);
@@ -94,4 +103,19 @@ export class TransactionService extends BaseService<ITransaction> {
       })
     );
   }
+
+
+  getBalancesAnnually() {
+    return this.http.get<Array<Array<number>>>(`${this.source}/balances-annually`).pipe(
+      tap((response: any) => {
+        this.annuallyExpensesSignal.set(response[0]);
+        this.annuallyIncomesSignal.set(response[1]);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
+  }
+
 }

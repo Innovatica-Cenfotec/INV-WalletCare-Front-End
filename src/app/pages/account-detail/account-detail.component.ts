@@ -8,7 +8,7 @@ import { AccountTabTransactionsComponent } from '../../components/account/accoun
 import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction, IExpense, IIncomeExpenceType, ITypeForm, } from '../../interfaces';
+import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction, IExpense, IIncomeExpenceSavingType, ITypeForm, } from '../../interfaces';
 import { AccountTabRecurrenceComponent } from '../../components/account/account-detail/account-tab-recurrence/account-tab-recurrence.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseService } from '../../services/expense.service';
@@ -100,7 +100,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
 
   // Expenses modal
   @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
-  public expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  public expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
   public title: string = '';
   public TypeForm: ITypeForm = ITypeForm.create;
 
