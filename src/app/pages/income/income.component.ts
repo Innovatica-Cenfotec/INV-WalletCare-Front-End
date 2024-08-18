@@ -18,7 +18,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 import { IncomeService } from '../../services/imcome.service';
-import { IIncome, IIncomeExpenceType, ITypeForm } from '../../interfaces';
+import { IIncome, IIncomeExpenceSavingType, ITypeForm } from '../../interfaces';
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
 import { AccountService } from '../../services/account.service';
@@ -58,7 +58,7 @@ export class IncomeComponent {
   private nzNotificationService = inject(NzNotificationService);
   public acccountService = inject(AccountService);
   public taxService = inject(TaxService);
-  public IIncomeExpenceType = IIncomeExpenceType;
+  public IIncomeExpenceType = IIncomeExpenceSavingType;
 
   @ViewChild(IncomeFormComponent) form!: IncomeFormComponent;
 
@@ -80,7 +80,7 @@ export class IncomeComponent {
   /*
   * Income type
   */
-  public incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  public incomeType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
 
   /*
   * Title of the modal
@@ -112,7 +112,7 @@ export class IncomeComponent {
    */
   showModalEdit(income: IIncome): void {
     this.title = 'Editar ingreso';
-    this.incomeType = income.type || IIncomeExpenceType.unique;
+    this.incomeType = income.type || IIncomeExpenceSavingType.unique;
     this.TypeForm = ITypeForm.update;
     this.income.set(income);
     this.isVisible.set(true);
@@ -121,8 +121,8 @@ export class IncomeComponent {
   /**
    * Show modal to create income 
    */
-  showModalCreate(IncomeType: IIncomeExpenceType): void {
-    this.title = IncomeType === IIncomeExpenceType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
+  showModalCreate(IncomeType: IIncomeExpenceSavingType): void {
+    this.title = IncomeType === IIncomeExpenceSavingType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
     this.incomeType = IncomeType;
     this.TypeForm = ITypeForm.create;
     this.income.set({ amount: 0 });

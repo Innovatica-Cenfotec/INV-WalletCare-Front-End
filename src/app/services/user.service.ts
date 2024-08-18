@@ -23,10 +23,10 @@ export class UserService extends BaseService<IUser> {
       }
     });
   }
-  saveUserSignal (user: IUser): Observable<any>{
+  saveUserSignal(user: IUser): Observable<any> {
     return this.add(user).pipe(
       tap((response: any) => {
-        this.userListSignal.update( users => [response, ...users]);
+        this.userListSignal.update(users => [response, ...users]);
       }),
       catchError(error => {
         console.error('Error saving user', error);
@@ -34,7 +34,7 @@ export class UserService extends BaseService<IUser> {
       })
     );
   }
-  updateUserSignal (user: IUser): Observable<any>{
+  updateUserSignal(user: IUser): Observable<any> {
     return this.edit(user.id, user).pipe(
       tap((response: any) => {
         const updatedUsers = this.userListSignal().map(u => u.id === user.id ? response : u);
@@ -46,7 +46,7 @@ export class UserService extends BaseService<IUser> {
       })
     );
   }
-  deleteUserSignal (user: IUser): Observable<any>{
+  deleteUserSignal(user: IUser): Observable<any> {
     return this.del(user.id).pipe(
       tap((response: any) => {
         const updatedUsers = this.userListSignal().filter(u => u.id !== user.id);

@@ -9,7 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 // Custom elements
-import { IExpense, IIncomeExpenceType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
+import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
 
 @Component({
     selector: 'app-expense-list',
@@ -71,9 +71,9 @@ export class ExpenseListComponent {
             return '';
         }
         switch (expense.type) {
-            case IIncomeExpenceType.recurrence:
+            case IIncomeExpenceSavingType.recurrence:
                 return 'Recurrente';
-            case IIncomeExpenceType.unique:
+            case IIncomeExpenceSavingType.unique:
                 return 'Unico';
             default:
                 return '-';

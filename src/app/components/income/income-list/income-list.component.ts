@@ -1,6 +1,6 @@
 import { CommonModule,DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Inject, inject,Component, EventEmitter, Input, Output } from '@angular/core';
-import {IAmountType, IIncome, IIncomeExpenceType} from '../../../interfaces';
+import {IAmountType, IIncome, IIncomeExpenceSavingType} from '../../../interfaces';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -59,10 +59,12 @@ export class IncomeListComponent {
           }
       
           switch (income.type) {
-            case IIncomeExpenceType.recurrence:
+            case IIncomeExpenceSavingType.recurrence:
               return 'Recurrente';
+
             case IIncomeExpenceType.unique:
               return 'Único';
+
             default:
               return '';
           }
