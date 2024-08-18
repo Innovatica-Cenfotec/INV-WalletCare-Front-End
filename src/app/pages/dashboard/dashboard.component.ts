@@ -1,12 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
+import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { TransactionService } from '../../services/transaction.service';
 
+import { IAccount, IBalance, IBalanceDTO, ITransaction } from '../../interfaces';
+import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
+import { error } from '@ant-design/icons-angular';
 
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -16,6 +23,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
 
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -24,11 +32,13 @@ import { CurrenciesChartComponent } from '../../components/dashboard/charts/curr
     ReactiveFormsModule,
     NzCardModule,
     NzGridModule,
+    NzStatisticModule,
+    IncomesVsExpensesChartComponent,
+    EstimatedExpenseVsTotalExpenseChartComponent,
     NzFormModule,
     NzInputModule,
     NzSelectModule,
     NzButtonModule,
-    IncomesVsExpensesChartComponent,
     CurrenciesChartComponent
   ],
   templateUrl: './dashboard.component.html',
@@ -53,6 +63,12 @@ export class DashboardComponent implements OnInit {
     currencyTo: ['', [Validators.required]],
   });
 
+  public totalExpenses: number[] = [];
+  public recurringExpenses: number[] = [];
+
+  public generalBalance = 0;
+  public generalBalanceColor = '';
+
   ngOnInit(): void {
     this.loadData();
   }
@@ -68,6 +84,32 @@ export class DashboardComponent implements OnInit {
       })
     });
 
+    this.transactionService.getBalancesByOwner().subscribe({
+      next: (balances: IBalanceDTO) => {
+        this.totalExpenses = [balances.monthlyExpenseBalance || 0];
+        this.recurringExpenses = [balances.recurrentExpensesBalance || 0];
+      },
+      error: (error => {
+        console.log(error);
+      })
+    });
+
+    this.transactionService.getBalancesByOwner().subscribe({
+      next: (balances: IBalanceDTO) => {
+        this.generalBalance = (balances.monthlyIncomeBalance || 0) - (balances.monthlyExpenseBalance || 0);
+
+        if (this.generalBalance > 0) {
+          this.generalBalanceColor = IBalance.surplus;
+        } else if (this.generalBalance < 0) {
+          this.generalBalanceColor = IBalance.deficit;
+        } else {
+          this.generalBalanceColor = IBalance.balance;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
 
     this.toolsService.currencyCodes().subscribe({
       next: (response: any) => {
