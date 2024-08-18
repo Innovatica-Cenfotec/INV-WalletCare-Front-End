@@ -24,6 +24,7 @@ import { IncomeAllocationsComponent } from "../../components/income/income-alloc
 import { AccountService } from '../../services/account.service';
 import { TaxService } from '../../services/tax.service';
 import { IncomeListComponent } from '../../components/income/income-list/income-list.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-income',
@@ -85,7 +86,7 @@ export class IncomeComponent {
   * Title of the modal
   */
   public title: string = '';
-
+  public nzModalService=inject(NzModalService)
   /*
   * Type of form
   */
@@ -159,6 +160,24 @@ export class IncomeComponent {
   }
 
   deleteIncome(income: IIncome): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar el ingreso?',
+      nzContent: 'Si eliminas el ingreso, se eliminarán todos los datos relacionados con el.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.incomeService.deleteIncomeSignal(income.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'El ingreso se ha eliminado correctamente');
+            
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
+    });
 
   }
 

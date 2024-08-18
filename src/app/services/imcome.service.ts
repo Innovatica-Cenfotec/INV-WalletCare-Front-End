@@ -49,8 +49,11 @@ export class IncomeService extends BaseService<IIncome> {
     */
     findAllSignal() {
         return this.findAll().subscribe({
-            next: (response: any) => {                
-                this.incomeListSignal.set(response);
+            next: (response: any) => {           
+                const sortedResponse = response.sort((a: any, b: any) => {
+                    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+                });
+                this.incomeListSignal.set(sortedResponse);
             }, error: (error: any) => {
                 console.error('Error fetching incomes', error);
                 throw error;
@@ -100,7 +103,7 @@ export class IncomeService extends BaseService<IIncome> {
      */
     deleteIncomeSignal(id: number | undefined): Observable<any> {
         if (!id) {
-            throw new Error('Invalid account ID');
+            throw new Error('Invalid Income ID');
         }
 
         return this.del(id).pipe(

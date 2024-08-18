@@ -82,19 +82,12 @@ export class ProfileComponent implements OnInit {
    */
   changePasswordConfirmation(): void {
     this.modal.confirm({
-      nzTitle: 'Seguro que desea cambiar su contraseña?',
-      nzContent: '<b style="color: red;">Proceder enviará un código OTP a su correo</b>',
+      nzTitle: '¿Seguro que desea cambiar su contraseña?',
+      nzContent: '<b style="color: red;">Cambiar su contraseña cerrará la sesión actúal.</b>',
       nzOkText: 'Sí',
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzOnOk: () => this.changePasswordService.sendOTPChange().subscribe({
-        next: (response:any) => {
-        this.message.success('OTP enviado a tu correo electrónico. Proceda con la verificación.')
-        this.isVisible = true; // Mostrar el modal
-        }
-        ,
-        error: (error:any) => this.message.error('Error al enviar OTP, por favor intente más tarde.')
-    }),
+      nzOnOk: () => this.isVisible=true,
       nzCancelText: 'No',
       nzOnCancel: () => console.log('Cancelado')
     });

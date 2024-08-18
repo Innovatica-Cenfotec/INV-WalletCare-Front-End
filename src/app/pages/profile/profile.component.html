@@ -65,9 +65,9 @@
     </form>
   </nz-page-header-content>
 </nz-page-header>
-<nz-modal nzTitle="Recuperar contraseña" [nzVisible]="isVisible">
-  <div *nzModalContent>
-    <app-forgot-password-reset className=""></app-forgot-password-reset>
+<nz-modal nzTitle="Recuperar contraseña" [nzVisible]="isVisible" (nzOnCancel)="closeModal()">
+  <div *nzModalContent >
+    <app-forgot-password-reset  className=""></app-forgot-password-reset>
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="primary" (click)="closeModal()">
