@@ -65,7 +65,6 @@ export class InviteAccountComponent implements OnInit {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id');
             this.accountId = id ? +id : null;  // Convert to number if exists
-            console.log('ID de cuenta extraído de la URL:', this.accountId);  // Debug message
         });
     }
 

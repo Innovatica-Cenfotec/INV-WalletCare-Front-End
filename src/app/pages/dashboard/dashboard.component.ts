@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 
-
 import { IAccount, IBalance, IBalanceDTO, ITransaction } from '../../interfaces';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { error } from '@ant-design/icons-angular';
@@ -37,7 +36,7 @@ import { CurrenciesChartComponent } from '../../components/dashboard/charts/curr
     CommonModule,
     NzIconModule,
     NzPopoverModule,
-    BarchartComponent
+    BarchartComponent,
     ReactiveFormsModule,
     NzCardModule,
     NzGridModule,

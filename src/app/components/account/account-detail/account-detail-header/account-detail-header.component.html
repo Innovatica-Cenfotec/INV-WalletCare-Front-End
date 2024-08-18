@@ -59,6 +59,6 @@
     (onCreated)="createSaving($event)">
 </app-saving-form>
 
-<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType" [listIncome]="incomeService.incomes$()" [listExpense]="expenseService.expenses$()" (onCancel)="closeModal()" (onSelected)="addSelectedTransaction($event)"
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType" [listIncome]="incomeService.incomes$()" [listExpense]="expenseService.expenses$()" [listSaving]="savingService.savings$()" (onCancel)="closeModal()" (onSelected)="addSelectedTransaction($event)"
     (onCreated)="showModalIncomeOrExpense($event)">
 </app-transaction-form>

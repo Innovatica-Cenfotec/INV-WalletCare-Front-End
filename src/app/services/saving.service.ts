@@ -46,9 +46,6 @@ export class SavingService extends BaseService<ISaving> {
 
   addSavingToAccountSignal(saving: ISaving): Observable<any> {
     return this.http.post(`${this.source}/add-to-account`, saving).pipe(
-      tap((response: any) => {
-        this.savingListSignal.update(saving => [response, ...saving]);
-      }),
       catchError(error => {
         console.error('Error adding saving to account', error);
         throw error;

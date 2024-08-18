@@ -132,9 +132,6 @@ export class IncomeService extends BaseService<IIncome> {
      */
     addIncomeToAccountSignal(income: IIncome): Observable<any> {
         return this.http.post(`${this.source}/add-to-account`, income).pipe(
-            tap((response: any) => {
-                this.incomeListSignal.update(income => [response, ...income]);
-            }),
             catchError(error => {
                 console.error('Error adding income to account', error);
                 throw error;

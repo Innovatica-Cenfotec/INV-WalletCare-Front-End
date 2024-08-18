@@ -123,9 +123,6 @@ export class ExpenseService extends BaseService<IExpense> {
 
     addExpenseToAccountSignal(expense: IExpense): Observable<IExpense> {
         return this.http.post(`${this.source}/add-to-account`, expense).pipe(
-            tap((response: any) => {
-                this.expenseListSignal.update(expense => [response, ...expense]);
-            }),
             catchError(error => {
                 console.error('Error adding expense to account', error);
                 throw error;

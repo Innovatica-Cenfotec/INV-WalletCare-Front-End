@@ -349,20 +349,10 @@ export interface CurrencyExchangeDTO{
     amount?: 0 | number | null,
 }
 
-export type ChartOptions = {
-    series: ApexAxisChartSeries;
-    chart: ApexChart;
-    xaxis: ApexXAxis;
-    dataLabels: ApexDataLabels;
-    colors: Array<string>;
-    grid: ApexGrid;
-    stroke: ApexStroke;
-    title: ApexTitleSubtitle;
-  };
-
 export interface ISaving {
     id?: number;
     name?: string;
+    owner?: IUser;
     description?: string;
     amount?: 0 | string;
     frequency?: IFrequencyType;

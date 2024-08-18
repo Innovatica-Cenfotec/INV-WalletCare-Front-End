@@ -69,10 +69,6 @@ export class FormModalComponent<T> {
                 this.formGroup.patchValue(this.item);
             }
         }
-
-        if (changes['isLoading']?.currentValue === false) {
-            console.log('isLoading', this.isLoading);
-        }
     }
 
     /**
