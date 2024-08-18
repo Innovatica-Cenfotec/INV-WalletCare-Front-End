@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartOptions } from '../../../../interfaces';
 import { CommonModule } from '@angular/common';
 
@@ -24,24 +24,14 @@ import {
   templateUrl: './estimated-expense-vs-total-expense-chart.component.html',
   styleUrl: './estimated-expense-vs-total-expense-chart.component.scss'
 })
-export class EstimatedExpenseVsTotalExpenseChartComponent implements OnInit {
+export class EstimatedExpenseVsTotalExpenseChartComponent implements OnChanges {
 
-  public chartOptions: any;
   @ViewChild("chart") chart: ChartComponent | undefined;
-  @Input() TotalExpensesData: number[] = [];
-  @Input() EstimatedExpensesData: number[] = [];
+  @Input() totalExpensesData: number[] = [];
+  @Input() recurringExpensesData: number[] = [];
+  public chartOptions: Partial<ChartOptions>
 
-  ngOnInit(): void {
-      this.initializeChartOptions();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['TotalExpensesData'] || changes['EstimatedExpensesData']) {
-      	this.updateChartSeries();  
-    }
-  }
-
-  private initializeChartOptions(): void {
+  constructor() {
     this.chartOptions = {
       series: [],
       chart: {
@@ -51,41 +41,55 @@ export class EstimatedExpenseVsTotalExpenseChartComponent implements OnInit {
           enabled: false
         }
       },
-      title: {
-        text: "Comparación de Gastos",
-        align: "left"
-      },
-      xaxis: {
-        categories: [
-          "ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
-          "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"
-        ]
-      },
       dataLabels: {
         enabled: true
+      },
+      stroke: {
+        curve: "straight"
+      },
+      title: {
+        text: "",
+        align: "left"
       },
       grid: {
         row: {
           colors: ["#f3f3f3", "transparent"],
           opacity: 0.5
         }
+      },
+      xaxis: {
+        categories: [
+          "ENE",
+          "FEB",
+          "MAR",
+          "ABR",
+          "MAY",
+          "JUN",
+          "JUL",
+          "AGO",
+          "SEP",
+          "OCT",
+          "NOV",
+          "DIC"
+        ]
       }
     };
   }
 
-  private updateChartSeries(): void {
-    this.chartOptions.series = [
-      {
-        name: "Gastos Totales",
-        data: this.TotalExpensesData,
-        color: "#FF4560"
-      },
-      {
-        name: "Gastos Recurrentes",
-        data: this.EstimatedExpensesData,
-        color: "#008FFB"
-      }
-    ]
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['totalExpensesData'] || changes['recurringExpensesData']) {
+      this.chartOptions.series = [
+        {
+          name: "Gastos Totales",
+          data: this.totalExpensesData,
+          color: "#FF4560"
+        },
+        {
+          name: "Gastos Estimados",
+          data: this.recurringExpensesData,
+          color: "#008FFB"
+        }
+      ]
+    }
   }
-
 }
