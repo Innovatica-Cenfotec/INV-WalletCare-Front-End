@@ -1,15 +1,21 @@
 <div style="background: #ECECEC;padding:30px;">
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="24">
-            <nz-card nzTitle="Gastos mensuales por categoria">
+            <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory">
                 <app-barchart [data]="expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
             </nz-card>
+            <ng-template #tmpYearlyExpenseCategory>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+            </ng-template>
         </div>
 
         <div nz-col [nzSpan]="24">
-            <nz-card nzTitle="Ingresos mensuales por categoria">
+            <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory">
                 <app-barchart [data]="incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
             </nz-card>
+            <ng-template #tmpYearlyIncomeCategory>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+            </ng-template>
         </div>
     </div>
 </div>

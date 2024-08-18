@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from "@angular/core";
 
 // Importing Ng-Zorro modules
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // CUSTOM COMPONENT
 import { BarchartComponent } from '../../components/chart/barchart/barchart.component';
@@ -15,8 +17,10 @@ import { IncomeService } from '../../services/imcome.service';
   standalone: true,
   imports: [
     CommonModule,
+    NzIconModule,
     NzCardModule,
     NzGridModule,
+    NzPopoverModule,
     BarchartComponent
   ],
   templateUrl: './dashboard.component.html',
@@ -34,7 +38,7 @@ export class DashboardComponent implements OnInit {
      * Execute when component is called
      */
     ngOnInit(): void {
-        this.expenseService.reportAnualAmountByCategory(2024);
-        this.incomeService.reportAnualAmountByCategory(2024);
+        this.expenseService.reportAnualAmountByCategory(new Date().getFullYear());
+        this.incomeService.reportAnualAmountByCategory(new Date().getFullYear());
     }
 }

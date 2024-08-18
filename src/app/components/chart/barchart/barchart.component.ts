@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, ViewChild, Input } from "@angular/core";
+import { Component, OnInit, OnChanges, ViewChild, Input } from "@angular/core";
 
 // Importing Ng-Zorro modules
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
@@ -43,6 +43,13 @@ export class BarchartComponent implements OnChanges {
     public chartOptions: Partial<ChartOptions> = {};
 
     /**
+     * Load chart when data is call.
+     */
+    ngOnInit(): void {
+        this.loadChart();
+    }
+
+    /**
      * Load chart when data is change.
      */
     ngOnChanges(): void {
@@ -55,9 +62,9 @@ export class BarchartComponent implements OnChanges {
     loadChart(): void {
         const xAxisLabels = this.getXAxisLabels(this.data);
         const series = this.data.map(item => ({
-            name: item.category.toUpperCase(),
+            name: this.getCategory(item.category),
             data: xAxisLabels.map(date => {
-                const expense = item.data.find(e => e.month.toUpperCase() === date);
+                const expense = item.data.find(e => this.getMonth(e.month) === date);
                 return expense ? expense.amount : 0;
             })
         }));
@@ -97,6 +104,56 @@ export class BarchartComponent implements OnChanges {
     }
 
     /**
+     * Get category name. Capitalized.
+     * @param category String with the category value.
+     * @returns The value of the category.
+     */
+    private getCategory(category: string) {
+        switch (category.toLowerCase()) {
+            case 'uncategorized' || '' || null:
+                return this.toCapitalCase('sin categoría');
+            default:
+                return this.toCapitalCase(category);
+        }
+    }
+
+    /**
+     * Get month name. Spanish equivalent.
+     * @param month String with the month value.
+     * @returns The value of the month.
+     */
+    private getMonth(month: string) {
+        switch (month.toLowerCase()) {
+            case 'jan':
+                return 'Ene';
+            case 'feb':
+                return 'Feb';
+            case 'mar':
+                return 'Mar';
+            case 'apr':
+                return 'Abr';
+            case 'may':
+                return 'May';
+            case 'jun':
+                return 'Jun';
+            case 'jul':
+                return 'Jul';
+            case 'aug':
+                return 'Ago';
+            case 'sep' || 'sept':
+                return 'Sep';
+            case 'oct':
+                return 'Oct';
+            case 'nov':
+                return 'Nov';
+            case 'dec':
+                return 'Dic';
+            default:
+                return this.toCapitalCase(month);
+        }
+    }
+
+    /**
      * Get array of labels for x axis. Compare values with uppercase.
      * Sort labels if xAxisOrder is set.
      * @param data Data to fill grapt.
@@ -108,7 +165,7 @@ export class BarchartComponent implements OnChanges {
         data.forEach(item => {
             item.data.forEach(
                 // This will set how the label is view in grapt
-                exp => datesSet.add(exp.month.toUpperCase())
+                exp => datesSet.add(this.getMonth(exp.month))
             );
         });
 
@@ -122,5 +179,14 @@ export class BarchartComponent implements OnChanges {
         } else {
             return axisLabels;
         }
+    }
+
+    /**
+     * Capitalize a string.
+     * @param msj message to capitalize.
+     * @returns capitalized messaje.
+     */
+    private toCapitalCase(msj: string) {
+        return msj ? msj.charAt(0).toUpperCase() + msj.substr(1).toLowerCase() : '';
     }
 }
