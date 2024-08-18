@@ -5,7 +5,7 @@ import { Component, OnChanges, ViewChild, Input } from "@angular/core";
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 
 // CUSTOM COMPONENT
-import { ChartOptions, IBarchartData, IBarcharItem } from '../../../interfaces';
+import { ChartOptions, IBarchartData } from '../../../interfaces';
 
 @Component({
     selector: 'app-barchart',

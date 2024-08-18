@@ -11,6 +11,7 @@ export class ExpenseService extends BaseService<IExpense> {
     private responseSignal = signal<IGenericResponse>({});
     private expenseListSignal = signal<IExpense[]>([]);
     private expenseSignal = signal<IExpense | undefined>(undefined);
+    private expenseReportSignal = signal<IBarchartData[]>([]);
 
     /*
     * Get the expenses.
@@ -24,6 +25,13 @@ export class ExpenseService extends BaseService<IExpense> {
     */
     get expense$() {
         return this.expenseSignal.asReadonly();
+    }
+
+    /*
+    * Get the expenses report.
+    */
+    get expenseReport$() {
+        return this.expenseReportSignal.asReadonly();
     }
 
     /**
@@ -165,39 +173,13 @@ export class ExpenseService extends BaseService<IExpense> {
     }
 
     reportAnualAmountByCategory() {
-        return [
-            {
-                category: 'comida',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Dic' },
-                    { amount: 110000.50, month: 'Mar' }
-                ],
+        return this.http.get<IBarchartData[]>(`${this.source}/report/2020`).subscribe({
+            next: (response: any) => {
+                this.expenseReportSignal.set(response);
             },
-            {
-                category: 'juegos',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Feb' },
-                    { amount: 110000.50, month: 'Mar' }
-                ],
-            },
-            {
-                category: 'mascota',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Jul' },
-                    { amount: 110000.50, month: 'Jun' }
-                ],
-            },
-            {
-                category: 'deporte',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Feb' },
-                    { amount: 110000.50, month: 'Mar' }
-                ],
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
             }
-        ];
+        });
     }
 }

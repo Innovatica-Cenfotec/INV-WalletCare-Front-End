@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 
 // Importing Ng-Zorro modules
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -22,15 +22,19 @@ import { IncomeService } from '../../services/imcome.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   
     public expenseService = inject(ExpenseService);
     public incomeService = inject(IncomeService);
 
-    monthOrder = ['ene', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 
-      'aug', 'sep', 'oct', 'nov', 'dic'];
+    monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 
+      'ago', 'sep', 'oct', 'nov', 'dic'];
     
-    chartExpense = this.expenseService.reportAnualAmountByCategory();
-
-    chartIncome = this.incomeService.reportAnualAmountByCategory();
+    /**
+     * Execute when component is called
+     */
+    ngOnInit(): void {
+        this.expenseService.reportAnualAmountByCategory();
+        this.incomeService.reportAnualAmountByCategory();
+    }
 }

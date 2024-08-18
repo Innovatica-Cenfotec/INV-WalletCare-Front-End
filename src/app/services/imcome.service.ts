@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IIncome } from '../interfaces';
+import { IAccount, IIncome, IBarchartData, IBarcharItem } from '../interfaces';
 import { Observable, catchError, tap } from 'rxjs';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class IncomeService extends BaseService<IIncome> {
     protected override source: string = 'incomes';
     private incomeListSignal = signal<IIncome[]>([]);
     private incomeSignal = signal<IIncome | undefined>(undefined);
+    private incomeReportSignal = signal<IBarchartData[]>([]);
 
     /*
     * Gets the incomes.
@@ -23,6 +24,13 @@ export class IncomeService extends BaseService<IIncome> {
     */
     get income$() {
         return this.incomeSignal;
+    }
+
+    /*
+    * Get the incomes report.
+    */
+    get incomeReport$() {
+        return this.incomeReportSignal.asReadonly();
     }
     
     /**
@@ -135,39 +143,13 @@ export class IncomeService extends BaseService<IIncome> {
     }
     
     reportAnualAmountByCategory() {
-        return [
-            {
-                category: 'salario',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Dic' },
-                    { amount: 110000.50, month: 'Mar' }
-                ],
+        return this.http.get<IBarchartData[]>(`${this.source}/report/2020`).subscribe({
+            next: (response: any) => {
+                this.incomeReportSignal.set(response);
             },
-            {
-                category: 'reposteria',
-                data: [
-                  { amount: 132000.34, month: 'Ene' },
-                  { amount: 120000.00, month: 'Dic' },
-                  { amount: 110000.50, month: 'Mar' }
-                ],
-            },
-            {
-                category: 'teletrabajo',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Jul' },
-                    { amount: 110000.50, month: 'Jun' }
-                ],
-            },
-            {
-                category: 'regalos',
-                data: [
-                    { amount: 132000.34, month: 'Ene' },
-                    { amount: 120000.00, month: 'Feb' },
-                    { amount: 110000.50, month: 'Mar' }
-                ],
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
             }
-        ];
+        });
     }
 }
