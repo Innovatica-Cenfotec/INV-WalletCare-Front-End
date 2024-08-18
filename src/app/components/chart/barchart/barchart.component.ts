@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnChanges, ViewChild, Input } from "@angular/core";
+
+// Importing Ng-Zorro modules
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
-import { ChartOptions } from '../../../interfaces';
+
+// CUSTOM COMPONENT
+import { ChartOptions, IBarchartData, IBarcharItem } from '../../../interfaces';
 
 @Component({
     selector: 'app-barchart',
@@ -13,67 +17,32 @@ import { ChartOptions } from '../../../interfaces';
     templateUrl: './barchart.component.html',
     styleUrl: './barchart.component.scss'
 })
-export class BarchartComponent {
+export class BarchartComponent implements OnChanges {
     @ViewChild("chart")
     chart!: ChartComponent;
+
+    // Json structure expected by the chart
+    @Input() data: IBarchartData[] = [];
     
-    public chartOptions: Partial<ChartOptions>;
+    public chartOptions: Partial<ChartOptions> = {};
 
-    constructor() {
-        // Example JSON data
-        const jsonData = [
-            {
-                category: 'comida',
-                expense: [
-                    { amount: 132000.34, date: new Date('2024-01-10') },
-                    { amount: 120000.00, date: new Date('2024-05-15') },
-                    { amount: 110000.50, date: new Date('2024-10-20') }
-                ],
-            },
-            {
-                category: 'transporte',
-                expense: [
-                    { amount: 15000.00, date: new Date('2024-06-12') },
-                    { amount: 102000.00, date: new Date('2024-05-20') },
-                    { amount: 70000.00, date: new Date('2024-01-25') }
-                ],
-            },
-            {
-                category: 'dibujo',
-                expense: [
-                    { amount: 50000.00, date: new Date('2024-01-12') },
-                    { amount: 60000.00, date: new Date('2024-12-20') },
-                    { amount: 70000.00, date: new Date('2024-03-25') }
-                ],
-            },
-            {
-                category: 'pintura',
-                expense: [
-                    { amount: 50000.00, date: new Date('2024-11-12') },
-                    { amount: 60000.00, date: new Date('2024-10-20') },
-                    { amount: 70000.00, date: new Date('2024-09-25') }
-                ],
-            }
-        ];
+    ngOnChanges(): void {
+        this.loadChart();
+    }
 
-        // Process the data
-        const categories = ["Ene", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
-        const seriesData = jsonData.map((item) => {
-            const monthlyTotals = new Array(12).fill(0);
-
-            item.expense.forEach(expense => {
-                const month = new Date(expense.date).getMonth();
-                monthlyTotals[month] += expense.amount;
-            });
-
-            return {
-                name: item.category,
-                data: monthlyTotals
-            };
-        });
+    // Fill chart with data receivet
+    loadChart(): void {
+        const categories = this.getUniqueDates(this.data);
+        const series = this.data.map(item => ({
+            name: item.category,
+            data: categories.map(date => {
+                const expense = item.data.find(e => e.month === date);
+                return expense ? expense.amount : 0;
+            })
+        }));
 
         this.chartOptions = {
-            series: seriesData,
+            series: series,
             chart: {
                 type: "bar",
                 height: 350
@@ -106,4 +75,95 @@ export class BarchartComponent {
             }
         };
     }
+
+    /**
+     * 
+     * @param data 
+     * @returns 
+     */
+    private getUniqueDates(data: IBarchartData[]): string[] {
+        const datesSet = new Set<string>();
+        data.forEach(item => {
+            item.data.forEach(
+                exp => {
+                    datesSet.add(exp.month);
+                }
+            );
+        });
+        return Array.from(datesSet);
+    }
 }
+
+
+
+        // Example JSON data
+        /*
+        const jsonData = [
+            {
+                category: 'comida',
+                expense: [
+                    { amount: 132000.34, date: 'Ene' },
+                    { amount: 120000.00, date: 'Feb' },
+                    { amount: 110000.50, date: 'Mar' }
+                ],
+            },
+            {
+                category: 'transporte',
+                expense: [
+                    { amount: 15000.00, date: 'Dic' },
+                    { amount: 102000.00, date: 'Ene' },
+                    { amount: 70000.00, date: 'Feb' }
+                ],
+            },
+            {
+                category: 'dibujo',
+                expense: [
+                    { amount: 15000.00, date: 'Jul' },
+                    { amount: 102000.00, date: 'Aug' },
+                    { amount: 70000.00, date: 'Jun' }
+                ],
+            },
+            {
+                category: 'pintura',
+                expense: [
+                    { amount: 15000.00, date: 'Dic' },
+                    { amount: 102000.00, date: 'Ene' },
+                    { amount: 70000.00, date: 'Feb' }
+                ],
+            },
+            {
+                category: 'dibujo',
+                expense: [
+                    { amount: 15000.00, date: 'Apr' },
+                    { amount: 102000.00, date: 'Mar' },
+                    { amount: 70000.00, date: 'Sep' }
+                ],
+            },
+            {
+                category: 'pintura',
+                expense: [
+                    { amount: 15000.00, date: 'Jul' },
+                    { amount: 102000.00, date: 'Aug' },
+                    { amount: 70000.00, date: 'Jun' }
+                ],
+            }
+        ];
+        */
+
+        // Process the data
+        /*
+        const categories = ["Ene", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
+        const seriesData = jsonData.map((item) => {
+            const monthlyTotals = new Array(12).fill(0);
+
+            item.expense.forEach(expense => {
+                const month = new Date(expense.date).getMonth();
+                monthlyTotals[month] += expense.amount;
+            });
+
+            return {
+                name: item.category,
+                data: monthlyTotals
+            };
+        });
+        */

@@ -21,5 +21,74 @@ import { BarchartComponent } from '../../components/chart/barchart/barchart.comp
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+    chartExpense = [
+      {
+          category: 'comida',
+          data: [
+              { amount: 132000.34, month: 'Ene' },
+              { amount: 120000.00, month: 'Dic' },
+              { amount: 110000.50, month: 'Mar' }
+          ],
+      },
+      {
+          category: 'juegos',
+          data: [
+              { amount: 132000.34, month: 'Ene' },
+              { amount: 120000.00, month: 'Feb' },
+              { amount: 110000.50, month: 'Mar' }
+          ],
+      },
+      {
+          category: 'mascota',
+          data: [
+              { amount: 132000.34, month: 'Ene' },
+              { amount: 120000.00, month: 'Jul' },
+              { amount: 110000.50, month: 'Jun' }
+          ],
+      },
+      {
+          category: 'deporte',
+          data: [
+              { amount: 132000.34, month: 'Ene' },
+              { amount: 120000.00, month: 'Feb' },
+              { amount: 110000.50, month: 'Mar' }
+          ],
+      }
+  ];
 
+  
+  chartIncome = [
+    {
+        category: 'salario',
+        data: [
+            { amount: 132000.34, month: 'Ene' },
+            { amount: 120000.00, month: 'Dic' },
+            { amount: 110000.50, month: 'Mar' }
+        ],
+    },
+    {
+        category: 'reposteria',
+        data: [
+          { amount: 132000.34, month: 'Ene' },
+          { amount: 120000.00, month: 'Dic' },
+          { amount: 110000.50, month: 'Mar' }
+        ],
+    },
+    {
+        category: 'teletrabajo',
+        data: [
+            { amount: 132000.34, month: 'Ene' },
+            { amount: 120000.00, month: 'Jul' },
+            { amount: 110000.50, month: 'Jun' }
+        ],
+    },
+    {
+        category: 'regalos',
+        data: [
+            { amount: 132000.34, month: 'Ene' },
+            { amount: 120000.00, month: 'Feb' },
+            { amount: 110000.50, month: 'Mar' }
+        ],
+    }
+];
 }

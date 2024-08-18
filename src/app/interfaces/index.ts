@@ -11,7 +11,7 @@ export interface IResponse<T> {
     data: T;
 }
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     yaxis: ApexYAxis;
@@ -25,6 +25,16 @@ export type ChartOptions = {
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
 };
+
+export interface IBarchartData {
+    category: string;
+    data: IBarcharItem[];
+}
+
+export interface IBarcharItem {
+    month: string;
+    amount: number;
+}
 
 export interface IUser {
     id?: number;

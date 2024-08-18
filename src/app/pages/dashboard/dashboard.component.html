@@ -2,7 +2,13 @@
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="24">
             <nz-card nzTitle="Gastos mensuales por categoria">
-                <app-barchart></app-barchart>
+                <app-barchart [data]="chartExpense"></app-barchart>
+            </nz-card>
+        </div>
+
+        <div nz-col [nzSpan]="24">
+            <nz-card nzTitle="Gastos mensuales por categoria">
+                <app-barchart [data]="chartIncome"></app-barchart>
             </nz-card>
         </div>
     </div>
