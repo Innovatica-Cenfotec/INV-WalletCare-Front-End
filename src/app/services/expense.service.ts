@@ -43,20 +43,20 @@ export class ExpenseService extends BaseService<IExpense> {
         );
     }
 
-    /**
-     * Retreives all the expenses owned by the user
-     */
-    findAllSignal() {
-        return this.findAll().subscribe({
-            next: (response: any) => {
-                this.expenseListSignal.set(response);
-            }, error: (error: any) => {
-                console.error('Error fetching expenses', error);
-                throw error;
-            }
-        });
-    }
 
+  /**
+   * Retreives all the texpenses owned by the user
+   */
+  findAllSignal() {
+    return this.findAll().subscribe({
+      next: (response: any) => {
+        const sortedResponse = response.sort((a: any, b: any) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+        this.expenseListSignal.set(sortedResponse);
+      }, error: (error: any) => {
+        console.error('Error fetching expenses', error);
+        throw error;
     /**
      * Get list of expenses by account signal.
      * @param id - The account id to search.

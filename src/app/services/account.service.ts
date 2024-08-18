@@ -58,7 +58,10 @@ export class AccountService extends BaseService<IAccount> {
     findAllSignal() {
         return this.findAll().subscribe({
             next: (response: any) => {
-                this.accountListSignal.set(response);
+                const sortedResponse = response.sort((a: any, b: any) => {
+                    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+                });
+                this.accountListSignal.set(sortedResponse);
             }, error: (error: any) => {
                 console.error('Error  fectching accounts', error);
                 throw error;
