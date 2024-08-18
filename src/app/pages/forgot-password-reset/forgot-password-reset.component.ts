@@ -13,6 +13,7 @@ import { NzFormItemComponent, NzFormModule } from 'ng-zorro-antd/form';
 import { IForgotResetPassword } from '../../interfaces';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -53,15 +54,18 @@ export class ForgotPasswordResetComponent implements OnInit {
     private route: ActivatedRoute,
     private passwordRecoveryService: PasswordRecoveryService,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.validateForm = this.fb.group({
       otp: ['', [Validators.required]],
-      newPassword: ['', [Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])/)]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/)
+      ]],
       confirmPassword: ['', [Validators.required]]
-    });
+    });    
   }
 
   ngOnInit(): void {
@@ -72,20 +76,25 @@ export class ForgotPasswordResetComponent implements OnInit {
   }
 
   submitForm(): void {
+    if(this.className==''){
+      this.validateForm.get('otp')?.clearValidators();
+      this.validateForm.get('otp')?.updateValueAndValidity();
+    }
     if (this.validateForm.valid) {
       const forgotPasswordReset = this.validateForm.value as IForgotResetPassword;
       forgotPasswordReset.email = this.email;
       const { newPassword, confirmPassword } = this.validateForm.value;
 
       if (newPassword !== confirmPassword) {
-        this.message.error('Las contraseñas no coinciden');
+        this.message.error('Las contraseñas no coinciden, intente de nuevo');
         return;
       }
       if (this.className == '') {
         this.passwordRecoveryService.changePassword(forgotPasswordReset).subscribe({
           next:()=>{
-            this.message.success('Contraseña actualizada correctamente');
-            this.router.navigate(['app/profile'])
+            this.message.success('Contraseña actualizada correctamente, inicie sesión con su nueva contraseña');
+            this.authService.logout();
+            this.router.navigate(['/login']); // Redirige al inicio de sesión
           },
           error:(error)=>{
             this.message.error('Error al cambiar la contraseña, porfavor intente más tarde')
