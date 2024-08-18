@@ -20,61 +20,90 @@ export class BarchartComponent {
     public chartOptions: Partial<ChartOptions>;
 
     constructor() {
-          this.chartOptions = {
-              series: [
-                  {
-                      name: "Net Profit",
-                      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-                  },
-                  {
-                      name: "Revenue",
-                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                  },
-                  {
-                      name: "Free Cash Flow",
-                      data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-                  }
-              ],
-              chart: {
-                  type: "bar",
-                  height: 350
-              },
-              dataLabels: {
-                  enabled: false
-              },
-              stroke: {
-                  show: true,
-                  width: 2,
-                  colors: ["transparent"]
-              },
-              xaxis: {
-                  categories: [
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct"
-                  ]
-              },
-              yaxis: {
-                  title: {
-                      text: "$ (thousands)"
-                  }
-              },
-              fill: {
-                  opacity: 1
-              },
-              tooltip: {
-                  y: {
-                      formatter: function(val) {
-                          return "$ " + val + " thousands";
-                      }
-                  }
-              }
-          };
-      }
+        // Example JSON data
+        const jsonData = [
+            {
+                category: 'comida',
+                expense: [
+                    { amount: 132000.34, date: new Date('2024-01-10') },
+                    { amount: 120000.00, date: new Date('2024-05-15') },
+                    { amount: 110000.50, date: new Date('2024-10-20') }
+                ],
+            },
+            {
+                category: 'transporte',
+                expense: [
+                    { amount: 15000.00, date: new Date('2024-06-12') },
+                    { amount: 102000.00, date: new Date('2024-05-20') },
+                    { amount: 70000.00, date: new Date('2024-01-25') }
+                ],
+            },
+            {
+                category: 'dibujo',
+                expense: [
+                    { amount: 50000.00, date: new Date('2024-01-12') },
+                    { amount: 60000.00, date: new Date('2024-12-20') },
+                    { amount: 70000.00, date: new Date('2024-03-25') }
+                ],
+            },
+            {
+                category: 'pintura',
+                expense: [
+                    { amount: 50000.00, date: new Date('2024-11-12') },
+                    { amount: 60000.00, date: new Date('2024-10-20') },
+                    { amount: 70000.00, date: new Date('2024-09-25') }
+                ],
+            }
+        ];
+
+        // Process the data
+        const categories = ["Ene", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
+        const seriesData = jsonData.map((item) => {
+            const monthlyTotals = new Array(12).fill(0);
+
+            item.expense.forEach(expense => {
+                const month = new Date(expense.date).getMonth();
+                monthlyTotals[month] += expense.amount;
+            });
+
+            return {
+                name: item.category,
+                data: monthlyTotals
+            };
+        });
+
+        this.chartOptions = {
+            series: seriesData,
+            chart: {
+                type: "bar",
+                height: 350
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ["transparent"]
+            },
+            xaxis: {
+                categories: categories
+            },
+            yaxis: {
+                title: {
+                    text: "$ (amount)"
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return "$ " + val;
+                    }
+                }
+            }
+        };
+    }
 }
