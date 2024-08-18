@@ -1,0 +1,18 @@
+<nz-page-header>
+    <nz-page-header-title>Metas Propuestas</nz-page-header-title>
+    <nz-page-header-extra>
+        @if (!authService.isAdmin()){
+        <button nz-button nzType="primary" (click)="proposeGoal()" [nzLoading]="goalService.isProposingGoal$()">
+            <i nz-icon nzType="plus"></i>
+             Proponer Meta por AI
+        </button>
+        }
+    </nz-page-header-extra>
+    <nz-page-header-content>
+        <app-goals-list [goalsList]="goalService.goals$()" 
+        (acceptGoal)="acceptGoal($event)"
+        (rejectGoal)="rejectGoal($event)"
+        (deleteGoal)="deleteGoal($event)"        
+        />
+    </nz-page-header-content>
+</nz-page-header>

@@ -17,8 +17,8 @@ export interface IUser {
     nickname?: string;
     email?: string;
     password?: string;
-    active?: boolean;
-    createdAt?: string;
+    enabled?: boolean;
+    createdAt?: Date;
     updatedAt?: string;
     authorities?: IAuthority[];
 }
@@ -347,4 +347,41 @@ export interface ISaving {
     createdAt?: Date;
     updatedAt?: Date;
     deleted?: boolean;
+}
+
+/**
+ * Enumerates the possible types of goal.
+ */
+export enum GoalTypeEnum {
+    saving = "SAVING",
+    expense_reduction = "EXPENSE_REDUCTION",
+}
+
+/**
+ * Enumerates the possible status of goal.
+ */
+export enum GoalStatusEnum {
+    goal_pending = "GOAL_PENDING",
+    goal_rejected = "GOAL_REJECTED",
+    active = "ACTIVE",
+    completed = "COMPLETED",
+    failed = "FAILED",
+}
+
+/**
+ * Interface for goal
+ */
+export interface IGoal {
+    id?: number;//
+    owner?: IUser;//
+    account?: IAccount;//
+    saving?: ISaving;//
+    name?: string;
+    description?: string;
+    recommendation?: string;
+    type?: GoalTypeEnum;
+    status?: GoalStatusEnum;
+    createdAt?: Date;
+    targetDate?: Date;
+    targetAmount?: number;
 }

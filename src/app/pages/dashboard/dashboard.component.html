@@ -25,6 +25,35 @@
           ></app-estimated-expense-vs-total-expense-chart>
       </nz-card>
     </div>
+    <div nz-col [nzSpan]="12">
+            <nz-card nzTitle="Tipos de Cambio del Mes">
+                <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
+                    <nz-form-item>
+                        <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
+
+                            <nz-select class="select" formControlName="currencyTo" nzAllowClear
+                                nzPlaceHolder="Selecciona la Moneda de Destino">
+                                <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                    [nzValue]="cc.currencyCode">
+                                </nz-option>
+                            </nz-select>
+                            <ng-template #errorCurrencyToTpl let-control>
+                                @if (control.errors?.['required']) { Por favor
+                                ingrese una moneda de destino }
+                            </ng-template>
+
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control>
+                            <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
+                                Filtrar Divisas
+                            </button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+                <app-currencies-chart [days]="this.days" [exchangeRate]="this.exchangeRate"></app-currencies-chart>
+            </nz-card>
+        </div>
   </div>
-  
 </div>
