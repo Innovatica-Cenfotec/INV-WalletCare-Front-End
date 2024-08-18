@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGenericResponse, IExpense } from '../interfaces';
+import { IGenericResponse, IExpense, IBarchartData, IBarcharItem } from '../interfaces';
 import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -162,5 +162,42 @@ export class ExpenseService extends BaseService<IExpense> {
                 throw error;
             })
         );
+    }
+
+    reportAnualAmountByCategory() {
+        return [
+            {
+                category: 'comida',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Dic' },
+                    { amount: 110000.50, month: 'Mar' }
+                ],
+            },
+            {
+                category: 'juegos',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Feb' },
+                    { amount: 110000.50, month: 'Mar' }
+                ],
+            },
+            {
+                category: 'mascota',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Jul' },
+                    { amount: 110000.50, month: 'Jun' }
+                ],
+            },
+            {
+                category: 'deporte',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Feb' },
+                    { amount: 110000.50, month: 'Mar' }
+                ],
+            }
+        ];
     }
 }

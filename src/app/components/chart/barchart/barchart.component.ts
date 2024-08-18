@@ -17,26 +17,47 @@ import { ChartOptions, IBarchartData, IBarcharItem } from '../../../interfaces';
     templateUrl: './barchart.component.html',
     styleUrl: './barchart.component.scss'
 })
+/**
+ * Reusable component for bar grapts. Receive a yAxisLabel, xAxisLabel and amount.
+ */
 export class BarchartComponent implements OnChanges {
+    /**
+     * Chart context.
+     */
     @ViewChild("chart")
     chart!: ChartComponent;
 
-    // Json structure expected by the chart
+    /**
+     * Json structure expected by the chart.
+     */
     @Input() data: IBarchartData[] = [];
-    
+
+    /**
+     * Variable with the expected order for the x axis labels.
+     */
+    @Input() xAxisOrder: string[] = [];
+
+    /**
+     * Config of the chart data (ex: labels y axis, labels x axis, ₡ amounts).
+     */
     public chartOptions: Partial<ChartOptions> = {};
 
+    /**
+     * Load chart when data is change.
+     */
     ngOnChanges(): void {
         this.loadChart();
     }
 
-    // Fill chart with data receivet
+    /**
+     * Load the chart data.
+     */
     loadChart(): void {
-        const categories = this.getUniqueDates(this.data);
+        const xAxisLabels = this.getXAxisLabels(this.data);
         const series = this.data.map(item => ({
-            name: item.category,
-            data: categories.map(date => {
-                const expense = item.data.find(e => e.month === date);
+            name: item.category.toUpperCase(),
+            data: xAxisLabels.map(date => {
+                const expense = item.data.find(e => e.month.toUpperCase() === date);
                 return expense ? expense.amount : 0;
             })
         }));
@@ -50,120 +71,56 @@ export class BarchartComponent implements OnChanges {
             dataLabels: {
                 enabled: false
             },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ["transparent"]
-            },
             xaxis: {
-                categories: categories
+                categories: xAxisLabels
             },
             yaxis: {
-                title: {
-                    text: "$ (amount)"
+                labels: {
+                    formatter: (val) => {
+                        return val / 1000 + "K";
+                    }
                 }
-            },
-            fill: {
-                opacity: 1
             },
             tooltip: {
                 y: {
                     formatter: function(val) {
-                        return "$ " + val;
+                        return "₡ " + val;
                     }
                 }
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ["transparent"]
             }
         };
     }
 
     /**
-     * 
-     * @param data 
-     * @returns 
+     * Get array of labels for x axis. Compare values with uppercase.
+     * Sort labels if xAxisOrder is set.
+     * @param data Data to fill grapt.
+     * @returns List of labels in uppercase.
      */
-    private getUniqueDates(data: IBarchartData[]): string[] {
+    private getXAxisLabels(data: IBarchartData[]): string[] {
         const datesSet = new Set<string>();
+
         data.forEach(item => {
             item.data.forEach(
-                exp => {
-                    datesSet.add(exp.month);
-                }
+                // This will set how the label is view in grapt
+                exp => datesSet.add(exp.month.toUpperCase())
             );
         });
-        return Array.from(datesSet);
+
+        const axisLabels = Array.from(datesSet);
+
+        if (this.xAxisOrder.length != 0) {
+            return axisLabels.sort(
+                // Order the xAxis labels
+                (a, b) => this.xAxisOrder.indexOf(a.toLowerCase()) - this.xAxisOrder.indexOf(b.toLowerCase())
+            );
+        } else {
+            return axisLabels;
+        }
     }
 }
-
-
-
-        // Example JSON data
-        /*
-        const jsonData = [
-            {
-                category: 'comida',
-                expense: [
-                    { amount: 132000.34, date: 'Ene' },
-                    { amount: 120000.00, date: 'Feb' },
-                    { amount: 110000.50, date: 'Mar' }
-                ],
-            },
-            {
-                category: 'transporte',
-                expense: [
-                    { amount: 15000.00, date: 'Dic' },
-                    { amount: 102000.00, date: 'Ene' },
-                    { amount: 70000.00, date: 'Feb' }
-                ],
-            },
-            {
-                category: 'dibujo',
-                expense: [
-                    { amount: 15000.00, date: 'Jul' },
-                    { amount: 102000.00, date: 'Aug' },
-                    { amount: 70000.00, date: 'Jun' }
-                ],
-            },
-            {
-                category: 'pintura',
-                expense: [
-                    { amount: 15000.00, date: 'Dic' },
-                    { amount: 102000.00, date: 'Ene' },
-                    { amount: 70000.00, date: 'Feb' }
-                ],
-            },
-            {
-                category: 'dibujo',
-                expense: [
-                    { amount: 15000.00, date: 'Apr' },
-                    { amount: 102000.00, date: 'Mar' },
-                    { amount: 70000.00, date: 'Sep' }
-                ],
-            },
-            {
-                category: 'pintura',
-                expense: [
-                    { amount: 15000.00, date: 'Jul' },
-                    { amount: 102000.00, date: 'Aug' },
-                    { amount: 70000.00, date: 'Jun' }
-                ],
-            }
-        ];
-        */
-
-        // Process the data
-        /*
-        const categories = ["Ene", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
-        const seriesData = jsonData.map((item) => {
-            const monthlyTotals = new Array(12).fill(0);
-
-            item.expense.forEach(expense => {
-                const month = new Date(expense.date).getMonth();
-                monthlyTotals[month] += expense.amount;
-            });
-
-            return {
-                name: item.category,
-                data: monthlyTotals
-            };
-        });
-        */

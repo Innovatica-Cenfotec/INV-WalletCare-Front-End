@@ -133,4 +133,41 @@ export class IncomeService extends BaseService<IIncome> {
             })
         );
     }
+    
+    reportAnualAmountByCategory() {
+        return [
+            {
+                category: 'salario',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Dic' },
+                    { amount: 110000.50, month: 'Mar' }
+                ],
+            },
+            {
+                category: 'reposteria',
+                data: [
+                  { amount: 132000.34, month: 'Ene' },
+                  { amount: 120000.00, month: 'Dic' },
+                  { amount: 110000.50, month: 'Mar' }
+                ],
+            },
+            {
+                category: 'teletrabajo',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Jul' },
+                    { amount: 110000.50, month: 'Jun' }
+                ],
+            },
+            {
+                category: 'regalos',
+                data: [
+                    { amount: 132000.34, month: 'Ene' },
+                    { amount: 120000.00, month: 'Feb' },
+                    { amount: 110000.50, month: 'Mar' }
+                ],
+            }
+        ];
+    }
 }
