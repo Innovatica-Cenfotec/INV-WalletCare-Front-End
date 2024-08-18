@@ -1,5 +1,6 @@
 import { FormControl } from '@angular/forms';
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip,
+    ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -8,6 +9,31 @@ export interface ILoginResponse {
 
 export interface IResponse<T> {
     data: T;
+}
+
+export interface ChartOptions {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    yaxis: ApexYAxis;
+    xaxis: ApexXAxis;
+    fill: ApexFill;
+    tooltip: ApexTooltip;
+    dataLabels: ApexDataLabels;
+    plotOptions: ApexPlotOptions;
+    colors: Array<string>;
+    grid: ApexGrid;
+    stroke: ApexStroke;
+    title: ApexTitleSubtitle;
+};
+
+export interface IBarchartData {
+    category: string;
+    data: IBarcharItem[];
+}
+
+export interface IBarcharItem {
+    month: string;
+    amount: number;
 }
 
 export interface IUser {
