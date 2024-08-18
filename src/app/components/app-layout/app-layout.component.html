@@ -1,29 +1,29 @@
 <nz-layout class="app-layout">
-  <app-layout-header [isCollapsed]="isCollapsed" (toggleCollapsedEvent)="toggleCollapsed()"/>
-  <nz-layout>
-    <nz-sider nzWidth="150px" nzBreakpoint="md" [nzCollapsed]="isCollapsed" [nzCollapsible]="isCollapsed" [nzCollapsedWidth]="50" [nzTrigger]="null">
-      <ul class="sider-menu" nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" [nzSelectable]="false">
-        @for (menu of menuSignal; track $index) {
-        <li nz-menu-item nz-tooltip nzTooltipPlacement="right" [nzTooltipTitle]="isCollapsed ? menu.name : ''" [nzSelected]="menu.isActive">
-          <a routerLink="{{menu.path}}"> 
-            <span nz-icon nzType="{{menu.icon}}"></span>
-            <span>{{menu.name}}</span>
-          </a>
-        </li>
-        }
-      </ul>
-    </nz-sider>
-    <nz-layout class="inner-layout">
-      <nz-breadcrumb>
-        @for (item of breadcrumb; track $index) {
-        <nz-breadcrumb-item>
-          {{ item }}
-        </nz-breadcrumb-item>
-        }
-      </nz-breadcrumb>
-      <nz-content>        
-        <router-outlet></router-outlet>
-      </nz-content>
+    <app-layout-header [isCollapsed]="isCollapsed" (toggleCollapsedEvent)="toggleCollapsed()" />
+    <nz-layout>
+        <nz-sider nzWidth="160px" nzBreakpoint="md" [nzCollapsed]="isCollapsed" [nzCollapsible]="isCollapsed" [nzCollapsedWidth]="50" [nzTrigger]="null">
+            <ul class="sider-menu" nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" [nzSelectable]="false">
+                @for (menu of menuSignal; track $index) {
+                <li nz-menu-item nz-tooltip nzTooltipPlacement="right" [nzTooltipTitle]="isCollapsed ? menu.name : ''" [nzSelected]="menu.isActive">
+                    <a routerLink="{{menu.path}}">
+                        <span nz-icon nzType="{{menu.icon}}"></span>
+                        <span>{{menu.name}}</span>
+                    </a>
+                </li>
+                }
+            </ul>
+        </nz-sider>
+        <nz-layout class="inner-layout">
+            <nz-breadcrumb>
+                @for (item of breadcrumb; track $index) {
+                <nz-breadcrumb-item>
+                    {{ item }}
+                </nz-breadcrumb-item>
+                }
+            </nz-breadcrumb>
+            <nz-content>
+                <router-outlet></router-outlet>
+            </nz-content>
+        </nz-layout>
     </nz-layout>
-  </nz-layout>
 </nz-layout>

@@ -1,0 +1,50 @@
+<!--
+<input nz-input placeholder="Filter by Name" [(ngModel)]="filters.name" (input)="applyFilters()" />
+-->
+<nz-table #fixedTable [nzData]="notificationList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }"
+    [nzWidthConfig]="['100px', '300px', '120px']">
+
+    <thead>
+        <tr>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
+            <th nzColumnKey="title" [nzSortFn]="sortByTitle">Asunto</th>
+            <th nzColumnKey="'message" *ngIf="showDetailsModal">Contenido</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortByDate" *ngIf="showDetailsModal">Fecha</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td>{{ getNotificationType(data) }}</td>
+            <td>{{ data.title }}</td>
+            <td *ngIf="showDetailsModal">{{ data.message }}</td>
+            <td *ngIf="showDetailsModal">{{ getDate(data.createdAt) }}</td>
+            <td nzRight>
+                <nz-space>
+                    @if (data.read) {
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="showModal(data)"><span nz-icon
+                            nzType="eye"></span></button>
+                    }@else{
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="showModal(data)"><span nz-icon
+                            nzType="eye-invisible"></span></button>
+                    }
+
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger
+                        (click)="deleteNotification.emit(data)"><span nz-icon nzType="delete"></span></button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="{{notification.title}} - {{getNotificationType(notification)}}"
+    (nzOnCancel)="handleCancel()" [nzFooter]="modalFooter">
+    <ng-template #modalFooter>
+        <button nz-button nzType="primary" (click)="handleOk()">Cerrar</button>
+    </ng-template>
+    <ng-container *nzModalContent>
+        <nz-card>
+            <p>{{notification.message}}</p>
+        </nz-card>
+    </ng-container>
+</nz-modal>
