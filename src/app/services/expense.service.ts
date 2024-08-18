@@ -172,8 +172,13 @@ export class ExpenseService extends BaseService<IExpense> {
         );
     }
 
-    reportAnualAmountByCategory() {
-        return this.http.get<IBarchartData[]>(`${this.source}/report/2020`).subscribe({
+    /**
+     * Get a report of expenses by category and month.
+     * @param year Year to search expenses.
+     * @returns List of BarchartData.
+     */
+    reportAnualAmountByCategory(year: number) {
+        return this.http.get<IBarchartData[]>(`${this.source}/report/${year}`).subscribe({
             next: (response: any) => {
                 this.expenseReportSignal.set(response);
             },

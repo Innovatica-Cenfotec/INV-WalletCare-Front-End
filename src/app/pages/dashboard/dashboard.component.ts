@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
      * Execute when component is called
      */
     ngOnInit(): void {
-        this.expenseService.reportAnualAmountByCategory();
-        this.incomeService.reportAnualAmountByCategory();
+        this.expenseService.reportAnualAmountByCategory(2024);
+        this.incomeService.reportAnualAmountByCategory(2024);
     }
 }

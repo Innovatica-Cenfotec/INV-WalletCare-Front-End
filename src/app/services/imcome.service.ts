@@ -142,8 +142,13 @@ export class IncomeService extends BaseService<IIncome> {
         );
     }
     
-    reportAnualAmountByCategory() {
-        return this.http.get<IBarchartData[]>(`${this.source}/report/2020`).subscribe({
+    /**
+     * Get a report of incomes by category and month.
+     * @param year Year to search incomes.
+     * @returns List of BarchartData.
+     */
+    reportAnualAmountByCategory(year: number) {
+        return this.http.get<IBarchartData[]>(`${this.source}/report/${year}`).subscribe({
             next: (response: any) => {
                 this.incomeReportSignal.set(response);
             },
