@@ -49,6 +49,9 @@ export class TransactionFormComponent implements OnChanges {
      */
     @Input() listExpense: any[] = [];
 
+    /**
+     * The list of saving.
+     */
     @Input() listSaving: any[] = [];
 
     /**

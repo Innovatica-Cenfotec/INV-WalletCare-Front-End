@@ -62,7 +62,7 @@ export class IncomeListComponent {
             case IIncomeExpenceSavingType.recurrence:
               return 'Recurrente';
 
-            case IIncomeExpenceType.unique:
+            case IIncomeExpenceSavingType.unique:
               return 'Único';
 
             default:

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGenericResponse, IExpense } from '../interfaces';
+import { IGenericResponse, IExpense, IBarchartData, IBarcharItem } from '../interfaces';
 import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class ExpenseService extends BaseService<IExpense> {
     private responseSignal = signal<IGenericResponse>({});
     private expenseListSignal = signal<IExpense[]>([]);
     private expenseSignal = signal<IExpense | undefined>(undefined);
+    private expenseReportSignal = signal<IBarchartData[]>([]);
 
     /*
     * Get the expenses.
@@ -24,6 +25,13 @@ export class ExpenseService extends BaseService<IExpense> {
     */
     get expense$() {
         return this.expenseSignal.asReadonly();
+    }
+
+    /*
+    * Get the expenses report.
+    */
+    get expenseReport$() {
+        return this.expenseReportSignal.asReadonly();
     }
 
     /**
@@ -115,9 +123,6 @@ export class ExpenseService extends BaseService<IExpense> {
 
     addExpenseToAccountSignal(expense: IExpense): Observable<IExpense> {
         return this.http.post(`${this.source}/add-to-account`, expense).pipe(
-            tap((response: any) => {
-                this.expenseListSignal.update(expense => [response, ...expense]);
-            }),
             catchError(error => {
                 console.error('Error adding expense to account', error);
                 throw error;
@@ -162,5 +167,22 @@ export class ExpenseService extends BaseService<IExpense> {
                 throw error;
             })
         );
+    }
+
+    /**
+     * Get a report of expenses by category and month.
+     * @param year Year to search expenses.
+     * @returns List of BarchartData.
+     */
+    reportAnualAmountByCategory(year: number) {
+        return this.http.get<IBarchartData[]>(`${this.source}/report/by-category/${year}`)
+        .subscribe({
+            next: (response: any) => {
+                this.expenseReportSignal.set(response);
+            },
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
+            }
+        });
     }
 }
