@@ -1,0 +1,43 @@
+<nz-modal nzTitle="{{ title }}" [nzVisible]="isVisible" [nzOkLoading]="isLoading" (nzOnCancel)="handleCancel()"
+    [nzCancelLoading]="isLoading">
+    <div *nzModalContent>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
+            <!-- name -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="name">Nombre de la categoría</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorNameTpl">
+                    <nz-input-group>
+                        <input type="text" nz-input formControlName="name">
+                        <ng-template #errorNameTpl let-control>
+                            @if (control.errors?.['maxlength']) {
+                            La categoría no puede tener más de 100 caracteres
+                            }
+                            @else if (control.errors?.['minlength']) {
+                            La categoría debe tener al menos 4 caracteres
+                            }
+                            @else if (control.errors?.['required']) {
+                            Por favor ingrese la categoría
+                            }
+                            @else if(control.errors?.['duplicated']){
+                            La categoría ya existe
+                            }
+                            @else if (control.errors?.['pattern']) {
+                            La categoría solo puede contener letras y números
+                            }
+                            @else {
+                            {{control.errors?.['message']}}
+                            }
+                        </ng-template>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+
+    <div *nzModalFooter>
+        <button nz-button nzType="default" [disabled]="isLoading" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="handleSubmit()">
+            {{ type === ITypeForm.create ? 'Crear' : 'Actualizar' }}
+        </button>
+    </div>
+</nz-modal>

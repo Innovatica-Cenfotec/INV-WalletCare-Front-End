@@ -26,6 +26,7 @@ import { IncomeService } from '../../../../services/imcome.service';
 import { IncomeFormComponent } from '../../../income/income-form/income-form.component';
 import { SavingFormComponent } from '../../../saving/saving-form/saving-form.component';
 import { SavingService } from '../../../../services/saving.service';
+import { CategoryService } from '../../../../services/category.service';
 
 @Component({
     selector: 'app-account-detail-header',
@@ -136,6 +137,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     public expenseService = inject(ExpenseService);
     public savingService = inject(SavingService);
     public taxService = inject(TaxService);
+    public CategoryService = inject(CategoryService);
     public IIncomeExpenceType = IIncomeExpenceSavingType;
     private authService = inject(AuthService);
     private nzModalService = inject(NzModalService);
@@ -382,6 +384,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
         if (expense.tax) {
             expense.tax = { id: expense.tax.id };
+        }
+
+        if (expense.expenseCategory) {
+            expense.expenseCategory = { id: expense.expenseCategory.id };
         }
 
         expense.addTransaction = true;

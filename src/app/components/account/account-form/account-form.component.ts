@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, TemplateRef, ViewChild, OnInit, OnChanges } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators,FormsModule } from '@angular/forms';
 
 // Importing Ng-Zorro modules
 import { NzModalModule } from 'ng-zorro-antd/modal';

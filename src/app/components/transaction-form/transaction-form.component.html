@@ -42,6 +42,10 @@
                 <nz-descriptions-item nzTitle="Porcentaje">{{this.selectedItem.Tax.percentage}}</nz-descriptions-item>
                 }
 
+                @if (this.selectedItem.expenseCategory != null){
+                <nz-descriptions-item nzTitle="Categoría">{{this.selectedItem.expenseCategory.name}}</nz-descriptions-item>
+                }
+
                 <nz-descriptions-item nzTitle="Descripción">
                     <p>{{this.selectedItem.description}}</p>
                 </nz-descriptions-item>
