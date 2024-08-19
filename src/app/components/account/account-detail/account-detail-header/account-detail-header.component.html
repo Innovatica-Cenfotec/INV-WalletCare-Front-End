@@ -48,6 +48,7 @@
 </app-invite-account>
 
 <app-expense-form #formExpense [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="incomeExpenceSavingType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()"
+    [categories]="CategoryService.categories$()"
     (onCreated)="createExpense($event)">
 </app-expense-form>
 
