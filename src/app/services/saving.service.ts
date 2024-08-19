@@ -46,9 +46,6 @@ export class SavingService extends BaseService<ISaving> {
 
   addSavingToAccountSignal(saving: ISaving): Observable<any> {
     return this.http.post(`${this.source}/add-to-account`, saving).pipe(
-      tap((response: any) => {
-        this.savingListSignal.update(saving => [response, ...saving]);
-      }),
       catchError(error => {
         console.error('Error adding saving to account', error);
         throw error;
@@ -56,20 +53,33 @@ export class SavingService extends BaseService<ISaving> {
     );
   }
 
+  updateSavingSignal(saving: ISaving): Observable<any> {
+    return this.edit(saving.id, saving).pipe(
+      tap((response: any) => {
+        this.savingListSignal.update(saving => saving.map(a => a.id === response.id ? response : a));
+        this.savingSignal.set(response);
+      }),
+      catchError(error => {
+        console.error('Error updating saving', error);
+        throw error;
+      })
+    );
+  }
+
   deleteSavingSignal(id: number | undefined): Observable<any> {
     if (!id) {
-        throw new Error('Invalid Saving ID');
+      throw new Error('Invalid Saving ID');
     }
 
     return this.del(id).pipe(
-        tap((response: any) => {
-            this.savingListSignal.update(income => income.filter(a => a.id !== id));
-        }),
-        catchError(error => {
-            console.error('Error deleting account', error);
-            throw error;
-        })
+      tap((response: any) => {
+        this.savingListSignal.update(income => income.filter(a => a.id !== id));
+      }),
+      catchError(error => {
+        console.error('Error deleting account', error);
+        throw error;
+      })
     );
-}
+  }
 
 }

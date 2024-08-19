@@ -258,11 +258,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Shows the transaction form.
      */
     addSelectedTransaction(item: IIncome | IExpense | ISaving): void {
-        const payload: IAccount = {
+        item.owner = undefined;       
+        item.account = {
             id: this.id
         }
 
-        item.account = payload;
         if (this.TransactionFormType === 'income') {
             this.incomeService.addIncomeToAccountSignal(item).subscribe({
                 next: (response: any) => {
@@ -301,10 +301,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
             this.savingService.addSavingToAccountSignal(item).subscribe({
                 next: (response: any) => {
                     if (item.type === IIncomeExpenceSavingType.unique) {
-                        this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', {nzDuration: 5000});
+                        this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', { nzDuration: 5000 });
                     }
                     else {
-                        this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, seagregará a las transacciones futuras según la configuración.', { nzDuration: 10000});
+                        this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, seagregará a las transacciones futuras según la configuración.', { nzDuration: 10000 });
                     }
                     this.isVisibleTransaction = false;
                     this.loadData.emit();

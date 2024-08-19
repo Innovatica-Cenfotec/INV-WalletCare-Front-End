@@ -17,17 +17,19 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { SavingService } from '../../services/saving.service';
-import {  IIncomeExpenceSavingType, ISaving} from '../../interfaces';
+import {  IIncomeExpenceSavingType, ISaving, ITypeForm} from '../../interfaces';
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
 import { AccountService } from '../../services/account.service';
 import { SavingListComponent } from '../../components/saving/saving-list/saving-list.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { error } from '@ant-design/icons-angular';
+import { SavingFormComponent } from '../../components/saving/saving-form/saving-form.component';
 
 @Component({
   selector: 'app-savings',
   standalone: true,
-  imports: [ CommonModule,
+  imports: [CommonModule,
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
@@ -42,7 +44,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
-    NzDropDownModule],
+    NzDropDownModule, SavingFormComponent],
   templateUrl: './savings.component.html',
   styleUrl: './savings.component.scss'
 })
@@ -53,9 +55,25 @@ export class SavingsComponent {
   public title: string = '';
   public nzModalService=inject(NzModalService)
   private nzNotificationService = inject(NzNotificationService);
+
+  @ViewChild(SavingFormComponent) form!: SavingFormComponent;
+
+  public isVisible = signal(false);
+
+  public isLoading = signal(false);
+
+  public saving = signal<ISaving | undefined>(undefined);
+
+  public TypeForm: ITypeForm = ITypeForm.create;
+
   ngOnInit(): void {
     this.savingService.findAllSignal();
 
+  }
+
+  onCanceled(): void {
+    this.isVisible.set(false);
+    this.isLoading.set(false);
   }
 
   viewSavingDetails(saving:ISaving):void{
@@ -84,5 +102,29 @@ export class SavingsComponent {
 
   }
 
+  showModalEdit(saving: ISaving): void {
+    this.title = 'Editar ahorro';
+    this.TypeForm = ITypeForm.update;
+    this.form.item = saving;
+    this.isVisible.set(true);
+  }
+
+  updateSaving(saving: ISaving): void {
+    this.savingService.updateSavingSignal(saving).subscribe({
+      next:(response: any) => {
+        this.isVisible.set(false);
+        this.nzNotificationService.create("success", "", 'Ahorro actualizado exitosamente', {nzDuration: 5000}); 
+      },
+      error: (error: any) => {
+        this.isLoading.set(false);
+        error.error.fieldErrors?.map((fieldError: any) => {
+          this.form.setControlError(fieldError.field, fieldError.message);
+        });
+        if (error.error.fieldErrors === undefined) {
+          this.nzNotificationService.error('Lo sentimos', error.error.detail);
+        }
+      }
+    })
+  }
 
 }
