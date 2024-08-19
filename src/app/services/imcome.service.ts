@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IIncome } from '../interfaces';
+import { IAccount, IIncome, IBarchartData, IBarcharItem } from '../interfaces';
 import { Observable, catchError, tap } from 'rxjs';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class IncomeService extends BaseService<IIncome> {
     protected override source: string = 'incomes';
     private incomeListSignal = signal<IIncome[]>([]);
     private incomeSignal = signal<IIncome | undefined>(undefined);
+    private incomeReportSignal = signal<IBarchartData[]>([]);
 
     /*
     * Gets the incomes.
@@ -23,6 +24,13 @@ export class IncomeService extends BaseService<IIncome> {
     */
     get income$() {
         return this.incomeSignal;
+    }
+
+    /*
+    * Get the incomes report.
+    */
+    get incomeReport$() {
+        return this.incomeReportSignal.asReadonly();
     }
     
     /**
@@ -124,13 +132,27 @@ export class IncomeService extends BaseService<IIncome> {
      */
     addIncomeToAccountSignal(income: IIncome): Observable<any> {
         return this.http.post(`${this.source}/add-to-account`, income).pipe(
-            tap((response: any) => {
-                this.incomeListSignal.update(income => [response, ...income]);
-            }),
             catchError(error => {
                 console.error('Error adding income to account', error);
                 throw error;
             })
         );
+    }
+    
+    /**
+     * Get a report of incomes by category and month.
+     * @param year Year to search incomes.
+     * @returns List of BarchartData.
+     */
+    reportAnualAmountByCategory(year: number) {
+        return this.http.get<IBarchartData[]>(`${this.source}/report/by-category/${year}`)
+        .subscribe({
+            next: (response: any) => {
+                this.incomeReportSignal.set(response);
+            },
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
+            }
+        });
     }
 }
