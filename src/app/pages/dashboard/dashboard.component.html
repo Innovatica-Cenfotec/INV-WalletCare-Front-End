@@ -1,18 +1,12 @@
 <div style="background: #ECECEC;padding:30px;">
   <nz-card [nzBordered]="false">
-    <nz-statistic
-      [nzValue]="generalBalance"
-      [nzTitle]="'Balance General'"
-      [nzPrefix]="'₡'"
-      [nzValueStyle]="{ color: generalBalanceColor }">
-    </nz-statistic>
-    <ng-template #prefixTplOne>
-      <span nz-icon nzType="arrow-up"></span>
-    </ng-template>
+    <app-account-cards [accountsList]="accountService.accounts$()"
+    [transactions]="transactionService.transactions$()"
+    [balances]="transactionService.balances$()"> </app-account-cards>
   </nz-card>
-  
+
   <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="12">
             <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory">
                 <app-barchart [data]="expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
             </nz-card>
@@ -21,7 +15,7 @@
             </ng-template>
         </div>
 
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="12">
             <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory">
                 <app-barchart [data]="incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
             </nz-card>
@@ -38,14 +32,16 @@
           [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
       </nz-card>
     </div>
+
     <div nz-col [nzSpan]="12">
       <nz-card nzTitle="Gastos Estimados vs Gastos Totales">
         <app-estimated-expense-vs-total-expense-chart 
           [totalExpensesData]="totalExpenses"
-          [recurringExpensesData]="recurringExpenses">
+          [recurringExpensesData]="recurringExpensesChart">
           ></app-estimated-expense-vs-total-expense-chart>
       </nz-card>
     </div>
+
     <div nz-col [nzSpan]="12">
             <nz-card nzTitle="Tipos de Cambio del Mes">
                 <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">

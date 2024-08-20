@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, SimpleChanges } from '@angular/core';
 
 import { ExpenseService } from '../../services/expense.service';
 import { IncomeService } from '../../services/imcome.service';
@@ -28,6 +28,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,7 +48,8 @@ import { CurrenciesChartComponent } from '../../components/dashboard/charts/curr
     NzInputModule,
     NzSelectModule,
     NzButtonModule,
-    CurrenciesChartComponent
+    CurrenciesChartComponent,
+    AccountCardsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -57,6 +59,7 @@ export class DashboardComponent implements OnInit {
   public transactionService = inject(TransactionService);
   public expenseService = inject(ExpenseService);
   public incomeService = inject(IncomeService);
+  public accountService = inject(AccountService);
 
   public incomes: number[] = [];
   public expenses: number[] = [];
@@ -67,16 +70,14 @@ export class DashboardComponent implements OnInit {
   public loading = false;
   public toolsService = inject(ToolsService);
   private nzNotificationService = inject(NzNotificationService);
-  
+
   public validateForm = this.fb.group({
     currencyTo: ['', [Validators.required]],
   });
 
   public totalExpenses: number[] = [];
-  public recurringExpenses: number[] = [];
+  public recurringExpensesChart: number[] = [];
 
-  public generalBalance = 0;
-  public generalBalanceColor = '';
 
   monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -84,6 +85,8 @@ export class DashboardComponent implements OnInit {
     this.loadData();
     this.expenseService.reportAnualAmountByCategory(new Date().getFullYear());
     this.incomeService.reportAnualAmountByCategory(new Date().getFullYear());
+    this.accountService.findAllSignal();
+    this.transactionService.getAllByOwnerSignal();
   }
 
   loadData() {
@@ -100,76 +103,59 @@ export class DashboardComponent implements OnInit {
     this.transactionService.getBalancesByOwner().subscribe({
       next: (balances: IBalanceDTO) => {
         this.totalExpenses = [balances.monthlyExpenseBalance || 0];
-        this.recurringExpenses = [balances.recurrentExpensesBalance || 0];
+        this.recurringExpensesChart = [balances.recurrentExpensesBalance || 0];
       },
       error: (error => {
         console.log(error);
       })
-    });
-
-    this.transactionService.getBalancesByOwner().subscribe({
-      next: (balances: IBalanceDTO) => {
-        this.generalBalance = (balances.monthlyIncomeBalance || 0) - (balances.monthlyExpenseBalance || 0);
-
-        if (this.generalBalance > 0) {
-          this.generalBalanceColor = IBalance.surplus;
-        } else if (this.generalBalance < 0) {
-          this.generalBalanceColor = IBalance.deficit;
-        } else {
-          this.generalBalanceColor = IBalance.balance;
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      }
     });
 
     this.toolsService.currencyCodes().subscribe({
       next: (response: any) => {
-          this.currencyCodes = response;
+        this.currencyCodes = response;
       },
       error: (error => {
-          this.nzNotificationService.error('Error', error.error.detail)
+        this.nzNotificationService.error('Error', error.error.detail)
       })
-  });
+    });
 
   }
 
-  handleSubmit(){
+  handleSubmit() {
     for (const key in this.validateForm.controls) {
       console.log(this.validateForm.get(key)?.value)
       if (typeof this.validateForm.get(key)?.value === 'string') {
-          // Trim the string
-          this.validateForm.get(key)?.setValue(this.validateForm.get(key)?.value?.trim());
+        // Trim the string
+        this.validateForm.get(key)?.setValue(this.validateForm.get(key)?.value?.trim());
       }
 
       // If the form control is invalid, mark it as dirty
       if (this.validateForm.get(key)?.invalid) {
-          this.validateForm.get(key)?.markAsDirty();
-          this.validateForm.get(key)?.updateValueAndValidity({ onlySelf: true });
+        this.validateForm.get(key)?.markAsDirty();
+        this.validateForm.get(key)?.updateValueAndValidity({ onlySelf: true });
       }
-  }
+    }
 
-  if (this.validateForm.invalid) {
+    if (this.validateForm.invalid) {
       return;
-  }
+    }
 
-  const exchange: CurrencyExchangeDTO = {
+    const exchange: CurrencyExchangeDTO = {
       currencyFrom: "USD",
       currencyTo: this.validateForm.value.currencyTo
-  }
+    }
 
-  this.loading = true;
+    this.loading = true;
 
-  this.toolsService.monthlyCurencyExchange(exchange).subscribe({
+    this.toolsService.monthlyCurencyExchange(exchange).subscribe({
       next: (response: any) => {
-          this.days = response[0];
-          this.exchangeRate = response[1];
-          this.loading = false;
+        this.days = response[0];
+        this.exchangeRate = response[1];
+        this.loading = false;
       },
       error: (error => {
-          this.nzNotificationService.error('Error', error.error.detail)
+        this.nzNotificationService.error('Error', error.error.detail)
       })
-  });
+    });
   }
 }

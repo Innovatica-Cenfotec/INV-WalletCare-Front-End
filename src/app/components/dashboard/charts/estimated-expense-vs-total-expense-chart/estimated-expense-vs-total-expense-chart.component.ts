@@ -1,18 +1,16 @@
+import { CommonModule } from "@angular/common";
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { ChartOptions } from '../../../../interfaces';
-import { CommonModule } from '@angular/common';
+
+import { ChartOptionsNonAxis } from "../../../../interfaces";
+
+import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 
 import {
-  ChartComponent,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexTitleSubtitle,
-  ApexStroke,
-  ApexGrid,
-  NgApexchartsModule
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart
 } from "ng-apexcharts";
+
 
 @Component({
   selector: 'app-estimated-expense-vs-total-expense-chart',
@@ -26,70 +24,52 @@ import {
 })
 export class EstimatedExpenseVsTotalExpenseChartComponent implements OnChanges {
 
-  @ViewChild("chart") chart: ChartComponent | undefined;
   @Input() totalExpensesData: number[] = [];
   @Input() recurringExpensesData: number[] = [];
-  public chartOptions: Partial<ChartOptions>
+  @ViewChild("chart") chart: ChartComponent | undefined;
+  public chartOptions: Partial<ChartOptionsNonAxis>;
 
   constructor() {
     this.chartOptions = {
       series: [],
       chart: {
-        height: 350,
-        type: "line",
-        zoom: {
-          enabled: false
+        width: 483,
+        type: "pie"
+      },
+      labels: [],
+      fill: {
+        colors: ['#FF4560', '#008FFB']
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
         }
-      },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        curve: "straight"
-      },
-      title: {
-        text: "",
-        align: "left"
-      },
-      grid: {
-        row: {
-          colors: ["#f3f3f3", "transparent"],
-          opacity: 0.5
-        }
-      },
-      xaxis: {
-        categories: [
-          "ENE",
-          "FEB",
-          "MAR",
-          "ABR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AGO",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DIC"
-        ]
-      }
+      ]
     };
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['totalExpensesData'] || changes['recurringExpensesData']) {
+      const total = this.totalExpensesData.reduce((a, b) => a + b, 0);
+      const recurring = this.recurringExpensesData.reduce((a, b) => a + b, 0);
       this.chartOptions.series = [
-        {
-          name: "Gastos Totales",
-          data: this.totalExpensesData,
-          color: "#FF4560"
-        },
-        {
-          name: "Gastos Estimados",
-          data: this.recurringExpensesData,
-          color: "#008FFB"
-        }
-      ]
+        Math.abs(total),
+        Math.abs(recurring)
+      ];
+
+      this.chartOptions.labels = ["Gastos Totales", "Gastos Estimados"];
+      this.chartOptions.fill = {
+        colors: ["#FF4560", "#008FFB"]
+      };
+      console.log('Chart options:', this.chartOptions);
     }
   }
 }
