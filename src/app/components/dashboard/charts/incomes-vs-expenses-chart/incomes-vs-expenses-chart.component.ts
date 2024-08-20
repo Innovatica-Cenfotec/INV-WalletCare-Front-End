@@ -74,6 +74,7 @@ export class IncomesVsExpensesChartComponent implements OnChanges {
             }
         };
     }
+    
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['IncomesData'] || changes['ExpensesData']) {
             this.chartOptions.series = [

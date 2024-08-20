@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnChanges, ViewChild, Input } from "@angular/core";
+import { Component, OnChanges, ViewChild, Input, SimpleChanges } from "@angular/core";
 
 // Importing Ng-Zorro modules
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 
 // CUSTOM COMPONENT
-import { ChartOptions, IBarchartData } from '../../../interfaces';
+import { ChartOptions, IBarchartData } from '../../../../interfaces';
 
 @Component({
     selector: 'app-barchart',
@@ -25,7 +25,7 @@ export class BarchartComponent implements OnChanges {
      * Chart context.
      */
     @ViewChild("chart")
-    chart!: ChartComponent;
+    chart: ChartComponent | undefined;
 
     /**
      * Json structure expected by the chart.
@@ -43,13 +43,6 @@ export class BarchartComponent implements OnChanges {
     public chartOptions: Partial<ChartOptions> = {};
 
     /**
-     * Load chart when data is call.
-     */
-    ngOnInit(): void {
-        this.loadChart();
-    }
-
-    /**
      * Load chart when data is change.
      */
     ngOnChanges(): void {
@@ -64,7 +57,7 @@ export class BarchartComponent implements OnChanges {
         const series = this.data.map(item => ({
             name: this.getCategory(item.category),
             data: xAxisLabels.map(date => {
-                const expense = item.data.find(e => this.getMonth(e.month) === date);
+                const expense = item.data.find(e => this.getMonth(e.month).toUpperCase() === date);
                 return expense ? expense.amount : 0;
             })
         }));
@@ -99,6 +92,16 @@ export class BarchartComponent implements OnChanges {
                 show: true,
                 width: 2,
                 colors: ["transparent"]
+            },
+            grid: {
+                row: {
+                    colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                }
+            },
+            title: {
+                text: "",
+                align: "left"
             }
         };
     }
@@ -165,7 +168,7 @@ export class BarchartComponent implements OnChanges {
         data.forEach(item => {
             item.data.forEach(
                 // This will set how the label is view in grapt
-                exp => datesSet.add(this.getMonth(exp.month))
+                exp => datesSet.add(this.getMonth(exp.month).toUpperCase())
             );
         });
 
@@ -174,7 +177,7 @@ export class BarchartComponent implements OnChanges {
         if (this.xAxisOrder.length != 0) {
             return axisLabels.sort(
                 // Order the xAxis labels
-                (a, b) => this.xAxisOrder.indexOf(a.toLowerCase()) - this.xAxisOrder.indexOf(b.toLowerCase())
+                (a, b) => this.xAxisOrder.indexOf(a.toUpperCase()) - this.xAxisOrder.indexOf(b.toUpperCase())
             );
         } else {
             return axisLabels;
