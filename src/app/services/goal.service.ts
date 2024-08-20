@@ -1,8 +1,6 @@
-import { Injectable, Signal, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IAccountUser, IGenericResponse, IGoal } from '../interfaces';
-import { Observable, Subscription, catchError, tap } from 'rxjs';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { IGoal } from '../interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -90,29 +88,29 @@ export class GoalService extends BaseService<IGoal> {
      * @throws If there is an error proposing the goal.
      */
     proposeGoal() {
-            this.isProposingGoalSignal.set(true);
-            this.http.post<IGoal>(`${this.source}/propose`, null).subscribe({
-                next: (response: any) => {
-                    this.goalListSignal.update(goals => [...goals, response]);
-                    this.SortListByDate();
-                    this.isProposingGoalSignal.set(false);
-                },
-                error: (error: any) => {
-                    this.isProposingGoalSignal.set(false);
-                    console.error('Error proposing goal', error);
-                    throw error;
-                }
-            });
-        }
+        this.isProposingGoalSignal.set(true);
+        this.http.post<IGoal>(`${this.source}/propose`, null).subscribe({
+            next: (response: any) => {
+                this.goalListSignal.update(goals => [...goals, response]);
+                this.SortListByDate();
+                this.isProposingGoalSignal.set(false);
+            },
+            error: (error: any) => {
+                this.isProposingGoalSignal.set(false);
+                console.error('Error proposing goal', error);
+                throw error;
+            }
+        });
+    }
 
     /**
      * Sorts the goals by date in descending order.
      */
     private SortListByDate() {
-            this.goalListSignal.update(goals => goals.sort((a, b) => {
-                const dateA = a.createdAt ? new Date(a.createdAt) : null;
-                const dateB = b.createdAt ? new Date(b.createdAt) : null;
-                return dateB && dateA ? dateB.getTime() - dateA.getTime() : 0;
-            }));
-        }
+        this.goalListSignal.update(goals => goals.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt) : null;
+            const dateB = b.createdAt ? new Date(b.createdAt) : null;
+            return dateB && dateA ? dateB.getTime() - dateA.getTime() : 0;
+        }));
+    }
 }

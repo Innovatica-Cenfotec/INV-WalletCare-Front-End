@@ -34,6 +34,11 @@ export interface IBarchartData {
     data: IBarcharItem[];
 }
 
+export interface IPiechartData {
+    category: string;
+    data: number;
+}
+
 export interface IBarcharItem {
     month: string;
     amount: number;

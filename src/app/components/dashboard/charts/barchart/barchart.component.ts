@@ -62,8 +62,6 @@ export class BarchartComponent implements OnChanges {
             })
         }));
 
-        console.log(series);
-
         this.chartOptions = {
             series: series,
             chart: {
