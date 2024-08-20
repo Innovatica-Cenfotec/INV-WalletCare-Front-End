@@ -6,7 +6,7 @@
             <th nzColumnKey="'description" [nzSortFn]="sortByDescription">Descripción</th>
             <th nzColumnKey="amount" [nzSortFn]="sortByAmount">Monto</th>
             <th nzColumnKey="typeAmount" [nzSortFn]="sortByAmountType">Tipo de monto</th>
-            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>    
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th nzColumnKey="frequency" [nzSortFn]="sortByFrequency">Frecuencia</th>
             <th nzColumnKey="timestamp" [nzSortFn]="sortByScheduledDay">Dia asignado</th>
             <th nzColumnKey="isTemplate">Es plantilla</th>
@@ -37,7 +37,7 @@
             </tr>
             <tr [nzExpand]="expandSet.has(data.id ?? 0)">
                 <h4 nz-typography>Más detalles</h4>
-                <p>                    
+                <p>
                     Fecha de creación: {{ getDate(data.createdAt) }}
                 </p>
                 <p>
@@ -45,36 +45,24 @@
                 </p>
                 <p>
                     Categoria: {{ data.expenseCategory?.name || '-' }}
-                </p>    
+                </p>
                 @if(data.tax != undefined){
-                    <h4 nz-typography>Impuesto</h4>
-                    <p>     
-                        Nombre: {{ getExpenseTax(data) }}
-                    </p>
-                    <p>
-                        Porcentaje: {{ data.tax?.percentage || 0 }}%
-                    </p>
-                    <p>
-                        Descripción: {{ data.tax?.description || '-' }}
-                    </p>
-                }                
+                <h4 nz-typography>Impuesto</h4>
+                <p>
+                    Nombre: {{ getExpenseTax(data) }}
+                </p>
+                <p>
+                    Porcentaje: {{ data.tax.percentage || 0 }}%
+                </p>
+                <p>
+                    Descripción: {{ data.tax.description || '-' }}
+                </p>
+                }
             </tr>
             <ng-template #expandIcon>
-                <span
-                  nz-icon
-                  *ngIf="!expandSet.has(data.id ?? 0)"
-                  nzType="plus-circle"
-                  nzTheme="outline"
-                  (click)="onExpandChange(data.id, true)"
-                ></span>
-                <span
-                  nz-icon
-                  *ngIf="expandSet.has(data.id ?? 0)"
-                  nzType="minus-circle"
-                  nzTheme="outline"
-                  (click)="onExpandChange(data.id, false)"
-                ></span>
-              </ng-template>
+                <span nz-icon *ngIf="!expandSet.has(data.id ?? 0)" nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(data.id, true)"></span>
+                <span nz-icon *ngIf="expandSet.has(data.id ?? 0)" nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(data.id, false)"></span>
+            </ng-template>
         </ng-container>
     </tbody>
 </nz-table>
