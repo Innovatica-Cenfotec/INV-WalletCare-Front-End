@@ -26,6 +26,7 @@ import { IncomeService } from '../../../../services/imcome.service';
 import { IncomeFormComponent } from '../../../income/income-form/income-form.component';
 import { SavingFormComponent } from '../../../saving/saving-form/saving-form.component';
 import { SavingService } from '../../../../services/saving.service';
+import { CategoryService } from '../../../../services/category.service';
 
 @Component({
     selector: 'app-account-detail-header',
@@ -136,6 +137,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     public expenseService = inject(ExpenseService);
     public savingService = inject(SavingService);
     public taxService = inject(TaxService);
+    public CategoryService = inject(CategoryService);
     public IIncomeExpenceType = IIncomeExpenceSavingType;
     private authService = inject(AuthService);
     private nzModalService = inject(NzModalService);
@@ -258,11 +260,11 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Shows the transaction form.
      */
     addSelectedTransaction(item: IIncome | IExpense | ISaving): void {
-        const payload: IAccount = {
+        item.owner = undefined;       
+        item.account = {
             id: this.id
         }
 
-        item.account = payload;
         if (this.TransactionFormType === 'income') {
             this.incomeService.addIncomeToAccountSignal(item).subscribe({
                 next: (response: any) => {
@@ -301,10 +303,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
             this.savingService.addSavingToAccountSignal(item).subscribe({
                 next: (response: any) => {
                     if (item.type === IIncomeExpenceSavingType.unique) {
-                        this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', {nzDuration: 5000});
+                        this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', { nzDuration: 5000 });
                     }
                     else {
-                        this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, seagregará a las transacciones futuras según la configuración.', { nzDuration: 10000});
+                        this.nzNotificationService.create("success", "", 'Ahorro recurrente agregado exitosamente, seagregará a las transacciones futuras según la configuración.', { nzDuration: 10000 });
                     }
                     this.isVisibleTransaction = false;
                     this.loadData.emit();
@@ -382,6 +384,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
 
         if (expense.tax) {
             expense.tax = { id: expense.tax.id };
+        }
+
+        if (expense.expenseCategory) {
+            expense.expenseCategory = { id: expense.expenseCategory.id };
         }
 
         expense.addTransaction = true;

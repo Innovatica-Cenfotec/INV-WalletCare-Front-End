@@ -1,7 +1,7 @@
 import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceSavingType, Itax, ITypeForm } from '../../../interfaces';
+import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceSavingType, Itax, ITypeForm, ICategory } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -54,6 +54,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
 
   @Input() taxList: any[] = [];
   @Input() expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
+  @Input() categories: ICategory[] = [];
   @Input() id: number = 0;
   @Input() enableTemplate: boolean = false;
 
@@ -68,6 +69,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     isTaxRelated: [this.item?.isTaxRelated],
     type: [this.item?.type],
     frequency: [this.item?.frequency],
+    expenseCategory: [this.item?.expenseCategory],
   });
 
   formatterConlon = (value: number): string => `₡ ${value}`;

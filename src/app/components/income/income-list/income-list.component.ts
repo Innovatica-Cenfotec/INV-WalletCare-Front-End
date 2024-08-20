@@ -37,8 +37,11 @@ export class IncomeListComponent {
     @Output() editIncome=new EventEmitter<IIncome>();
     public datePipe = inject(DatePipe);
 
-
-
+    /**
+     * Get the amount type of the income.
+     * @param income The income object.
+     * @returns The amount type of the income.
+     */
     getAmountType(income: IIncome): string {
         if (!income) {
           return '';
@@ -53,6 +56,12 @@ export class IncomeListComponent {
             return '';
         }
     }
+
+    /**
+     * Get the income type of the income.
+     * @param income The income object.
+     * @returns The income type of the income.
+     */
     getIncomeType(income:IIncome):string{
         if (!income) {
             return '';
@@ -61,12 +70,19 @@ export class IncomeListComponent {
           switch (income.type) {
             case IIncomeExpenceSavingType.recurrence:
               return 'Recurrente';
+
             case IIncomeExpenceSavingType.unique:
-              return 'Extraordinario';
+              return 'Único';
+
             default:
               return '';
           }
     }
+
+    /**
+     * Format the date of the income.
+     * @param income The income object.
+     */
     formatDate(date: Date | string | null | undefined): string {
         return this.datePipe.transform(date, 'dd-MM-yyyy') || '';
     }

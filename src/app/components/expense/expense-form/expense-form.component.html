@@ -56,6 +56,17 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+
+                    <!-- category -->
+                    <nz-form-item>
+                        <nz-form-label nzFor="expenseCategory">Categoría</nz-form-label>
+                        <nz-form-control>
+                            <nz-select class="select" formControlName="expenseCategory" nzAllowClear nzPlaceHolder="Seleccione categoría">
+                                <nz-option *ngFor="let category of categories" [nzLabel]="category.name || ''" [nzValue]="category">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
 
                 <!-- description -->
@@ -117,7 +128,7 @@
                     ajustará al último día del mes</span> }
             </div>
             }
-
+            
             <!-- Tax | show infor tax selected -->
             @if (TaxSelected != undefined) {
             <nz-descriptions nzTitle="Información del impuesto seleccionado" nzBordered nzLayout="vertical">

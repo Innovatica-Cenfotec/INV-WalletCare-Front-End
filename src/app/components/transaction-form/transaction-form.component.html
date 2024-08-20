@@ -17,7 +17,7 @@
                             [nzValue]="option"></nz-option>
                         }
                         @if (type=="saving") {
-                            <nz-option *ngFor="let option of optionsExpense" [nzLabel]="option.name"
+                            <nz-option *ngFor="let option of optionsSaving" [nzLabel]="option.name"
                                 [nzValue]="option"></nz-option>
                             }
                     </nz-select>
@@ -40,6 +40,10 @@
                 @if (this.selectedItem.Tax != null){
                 <nz-descriptions-item nzTitle="Impuesto">{{this.selectedItem.Tax.name}}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Porcentaje">{{this.selectedItem.Tax.percentage}}</nz-descriptions-item>
+                }
+
+                @if (this.selectedItem.expenseCategory != null){
+                <nz-descriptions-item nzTitle="Categoría">{{this.selectedItem.expenseCategory.name}}</nz-descriptions-item>
                 }
 
                 <nz-descriptions-item nzTitle="Descripción">

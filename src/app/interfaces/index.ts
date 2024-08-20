@@ -1,5 +1,6 @@
 import { FormControl } from '@angular/forms';
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip,
+    ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -8,6 +9,31 @@ export interface ILoginResponse {
 
 export interface IResponse<T> {
     data: T;
+}
+
+export interface ChartOptions {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    yaxis: ApexYAxis;
+    xaxis: ApexXAxis;
+    fill: ApexFill;
+    tooltip: ApexTooltip;
+    dataLabels: ApexDataLabels;
+    plotOptions: ApexPlotOptions;
+    colors: Array<string>;
+    grid: ApexGrid;
+    stroke: ApexStroke;
+    title: ApexTitleSubtitle;
+};
+
+export interface IBarchartData {
+    category: string;
+    data: IBarcharItem[];
+}
+
+export interface IBarcharItem {
+    month: string;
+    amount: number;
 }
 
 export interface IUser {
@@ -249,6 +275,7 @@ export interface IExpense {
     createdAt?: Date;
     updatedAt?: Date;
     account?: IAccount;
+    expenseCategory?: ICategory;
 }
 
 
@@ -323,20 +350,10 @@ export interface CurrencyExchangeDTO{
     amount?: 0 | number | null,
 }
 
-export type ChartOptions = {
-    series: ApexAxisChartSeries;
-    chart: ApexChart;
-    xaxis: ApexXAxis;
-    dataLabels: ApexDataLabels;
-    colors: Array<string>;
-    grid: ApexGrid;
-    stroke: ApexStroke;
-    title: ApexTitleSubtitle;
-  };
-
 export interface ISaving {
     id?: number;
     name?: string;
+    owner?: IUser;
     description?: string;
     amount?: 0 | string;
     frequency?: IFrequencyType;
@@ -372,10 +389,10 @@ export enum GoalStatusEnum {
  * Interface for goal
  */
 export interface IGoal {
-    id?: number;//
-    owner?: IUser;//
-    account?: IAccount;//
-    saving?: ISaving;//
+    id?: number;
+    owner?: IUser;
+    account?: IAccount;
+    saving?: ISaving;
     name?: string;
     description?: string;
     recommendation?: string;
@@ -384,4 +401,15 @@ export interface IGoal {
     createdAt?: Date;
     targetDate?: Date;
     targetAmount?: number;
+}
+
+/**
+ * Interface for category of expenses
+ */
+export interface ICategory {
+    id?: number;    
+    owner?: IUser;
+    name?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

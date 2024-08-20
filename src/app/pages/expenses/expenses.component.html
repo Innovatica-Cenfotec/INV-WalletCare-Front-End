@@ -6,7 +6,7 @@
     <nz-page-header-extra>
         <nz-space [nzWrap]="true">
             <button *nzSpaceItem nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
-            Crear Plantilla<span nz-icon nzType="down"></span>
+                Crear Plantilla <span nz-icon nzType="down"></span>
             </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
@@ -26,4 +26,5 @@
 </nz-page-header>
 
 <app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)"
+    [categories]="CategoryService.categories$()"
     (onUpdated)="updateExpense($event)"></app-expense-form>
