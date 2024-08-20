@@ -5,7 +5,7 @@ import { Component, OnChanges, ViewChild, Input, SimpleChanges } from "@angular/
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 
 // CUSTOM COMPONENT
-import { ChartOptions, IBarchartData } from '../../../../interfaces';
+import { ChartOptions, IBarcharItem, IBarchartData } from '../../../../interfaces';
 
 @Component({
     selector: 'app-barchart',
@@ -55,12 +55,14 @@ export class BarchartComponent implements OnChanges {
     loadChart(): void {
         const xAxisLabels = this.getXAxisLabels(this.data);
         const series = this.data.map(item => ({
-            name: this.getCategory(item.category),
+            name: this.getCategory(item),
             data: xAxisLabels.map(date => {
-                const expense = item.data.find(e => this.getMonth(e.month).toUpperCase() === date);
-                return expense ? expense.amount : 0;
+                const objI = item.data.find(i => this.getMonth(i).toUpperCase() === date);
+                return objI ? objI.amount : 0;
             })
         }));
+
+        console.log(series);
 
         this.chartOptions = {
             series: series,
@@ -95,7 +97,8 @@ export class BarchartComponent implements OnChanges {
             },
             grid: {
                 row: {
-                    colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                    // takes an array which will be repeated on columns
+                    colors: ["#f3f3f3", "transparent"],
                     opacity: 0.5
                 }
             },
@@ -108,25 +111,25 @@ export class BarchartComponent implements OnChanges {
 
     /**
      * Get category name. Capitalized.
-     * @param category String with the category value.
+     * @param item IBarcharData with the item to get category.
      * @returns The value of the category.
      */
-    private getCategory(category: string) {
-        switch (category.toLowerCase()) {
+    private getCategory(item: IBarchartData) {
+        switch (item.category?.toLowerCase()) {
             case 'uncategorized' || '' || null:
                 return this.toCapitalCase('sin categoría');
             default:
-                return this.toCapitalCase(category);
+                return this.toCapitalCase(item.category);
         }
     }
 
     /**
      * Get month name. Spanish equivalent.
-     * @param month String with the month value.
+     * @param item IBarcharData with the item to get month.
      * @returns The value of the month.
      */
-    private getMonth(month: string) {
-        switch (month.toLowerCase()) {
+    private getMonth(item: IBarcharItem) {
+        switch (item.month?.toLowerCase()) {
             case 'jan':
                 return 'Ene';
             case 'feb':
@@ -152,7 +155,7 @@ export class BarchartComponent implements OnChanges {
             case 'dec':
                 return 'Dic';
             default:
-                return this.toCapitalCase(month);
+                return this.toCapitalCase(item.month);
         }
     }
 
@@ -168,7 +171,7 @@ export class BarchartComponent implements OnChanges {
         data.forEach(item => {
             item.data.forEach(
                 // This will set how the label is view in grapt
-                exp => datesSet.add(this.getMonth(exp.month).toUpperCase())
+                i => datesSet.add(this.getMonth(i).toUpperCase())
             );
         });
 

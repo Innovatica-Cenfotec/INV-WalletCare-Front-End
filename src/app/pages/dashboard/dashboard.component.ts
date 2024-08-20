@@ -21,6 +21,7 @@ import { ToolsService } from '../../services/tools.service';
 import { ExpenseService } from '../../services/expense.service';
 import { IncomeService } from '../../services/imcome.service';
 import { BarchartComponent } from '../../components/dashboard/charts/barchart/barchart.component';
+import { PiechartComponent } from '../../components/dashboard/charts/piechart/piechart.component';
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
@@ -41,6 +42,7 @@ import { CurrenciesChartComponent } from '../../components/dashboard/charts/curr
         NzSelectModule,
         NzButtonModule,
         BarchartComponent,
+        PiechartComponent,
         IncomesVsExpensesChartComponent,
         EstimatedExpenseVsTotalExpenseChartComponent,
         CurrenciesChartComponent
