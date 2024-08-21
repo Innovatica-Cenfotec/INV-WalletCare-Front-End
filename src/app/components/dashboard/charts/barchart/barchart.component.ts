@@ -80,8 +80,11 @@ export class BarchartComponent implements OnChanges {
                 labels: {
                     formatter: (val) => {
                         if (val > 1000) {
-                            return (val / 1000).toString() + " K";
-                        } else {
+                            return (val / 1000).toString() + "K";
+                        } else if (val > 1000000) {
+                            return (val / 1000000).toString() + "M";
+                        }
+                        else {
                             return val.toString();
                         }
                     }
