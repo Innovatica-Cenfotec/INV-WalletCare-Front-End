@@ -79,7 +79,11 @@ export class BarchartComponent implements OnChanges {
             yaxis: {
                 labels: {
                     formatter: (val) => {
-                        return val / 1000 + "K";
+                        if (val > 1000) {
+                            return (val / 1000).toString() + " K";
+                        } else {
+                            return val.toString();
+                        }
                     }
                 }
             },
