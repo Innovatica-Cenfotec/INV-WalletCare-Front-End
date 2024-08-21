@@ -31,11 +31,6 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 })
 export class ExpenseListComponent {
     @Input() expensesList: IExpense[] = [];
-    @Input() showAccount: boolean = false;
-    @Input() showOwner: boolean = false;
-    @Input() showDetailsModal: boolean = false;
-    @Input() showTemplate: boolean = false;
-    @Input() showTax: boolean = false;
     expandSet = new Set<number>();
 
     // Sort and filter lists
@@ -203,6 +198,10 @@ export class ExpenseListComponent {
 
     sortByDate(a: IExpense, b: IExpense): number {
         return new Date(a.updatedAt ?? new Date).getTime() - new Date(b.updatedAt ?? new Date).getTime();
+    }
+
+    sortByCategory(a: IExpense, b: IExpense): number{
+        return (a.expenseCategory?.name ?? '').localeCompare(b.expenseCategory?.name ?? '');
     }
 
     // Filter
