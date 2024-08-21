@@ -52,8 +52,9 @@ export class BarchartComponent implements OnChanges {
         this.chartOptions = {
             series: [],
             chart: {
-                type: "bar",
-                height: 350
+                width: '100%',
+                height: 350,
+                type: "bar"
             },
             dataLabels: {
                 enabled: false
@@ -200,12 +201,12 @@ export class BarchartComponent implements OnChanges {
         // If xAxisOrder is not empty, add all its values to datesSet
         if (this.xAxisOrder.length > 0) {
             this.xAxisOrder.forEach(month => datesSet.add(month.toUpperCase()));
+        } else {
+            // Add the actual months from the data
+            data.forEach(item => {
+                item.data.forEach(i => datesSet.add(this.getMonth(i).toUpperCase()));
+            });
         }
-
-        // Add the actual months from the data
-        data.forEach(item => {
-            item.data.forEach(i => datesSet.add(this.getMonth(i).toUpperCase()));
-        });
 
         const axisLabels = Array.from(datesSet);
 

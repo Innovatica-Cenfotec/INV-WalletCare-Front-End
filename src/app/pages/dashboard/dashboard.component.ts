@@ -88,6 +88,24 @@ export class DashboardComponent implements OnInit {
     }
 
     loadData() {
+        this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
+            next: (response: any) => {
+            },
+            error: (error => {
+                this.nzNotificationService.error('Error', error.error.detail)
+            })
+        });
+
+        this.incomeService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
+            next: (response: any) => {
+            },
+            error: (error => {
+                this.nzNotificationService.error('Error', error.error.detail)
+            })
+        });
+
+        this.goalService.reportProgressByStatus();
+
         this.transactionService.getBalancesAnnually().subscribe({
             next: (response: any) => {
                 this.expenses = response[0];
@@ -128,29 +146,18 @@ export class DashboardComponent implements OnInit {
         this.toolsService.currencyCodes().subscribe({
             next: (response: any) => {
                 this.currencyCodes = response;
+        
+                /*
+                Only way found to load missing charts.
+                Always after services of charts that do not load unless you resize 
+                or change pages, ensure it is inside a subscription.
+                */
+                window.dispatchEvent(new Event("resize"));
             },
             error: (error => {
                 this.nzNotificationService.error('Error', error.error.detail)
             })
         });
-
-        this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
-            next: (response: any) => {
-            },
-            error: (error => {
-                this.nzNotificationService.error('Error', error.error.detail)
-            })
-        });
-
-        this.incomeService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
-            next: (response: any) => {
-            },
-            error: (error => {
-                this.nzNotificationService.error('Error', error.error.detail)
-            })
-        });
-
-        this.goalService.reportProgressByStatus();
     }
 
     handleSubmit() {

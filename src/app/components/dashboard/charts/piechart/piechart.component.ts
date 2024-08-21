@@ -58,7 +58,8 @@ export class PiechartComponent implements OnChanges {
         this.chartOptions = {
             series: [],
             chart: {
-                width: 380,
+                width: '100%',
+                height: 350,
                 type: this.type
             },
             labels: [],
@@ -148,7 +149,7 @@ export class PiechartComponent implements OnChanges {
             const labelsOrder = this.labelsOrder.map(label => label.toLowerCase());
             
             // Add all labels from labelsOrder, case-insensitive
-            labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
+            //labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
 
             // Only list labels found in data and in labelsOrder
             data.forEach(item => {
