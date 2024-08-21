@@ -170,7 +170,7 @@ export class ExpenseListComponent {
      * @returns formated date dd/MM/yyyy HH:mm
      */
     getDate(date: Date | undefined): string {
-        return this.datePipe.transform(date, 'dd-MM-yyyy hh:ss') || '';
+        return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
     }
 
     /**

@@ -48,6 +48,6 @@ export class CategoriesListComponent {
      * @param date The date to be formatted.
      */
     formatDate(date: Date | undefined): string {
-        return this.datePipe.transform(date, 'dd-MM-yyyy') || '';
+        return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
     }
  }

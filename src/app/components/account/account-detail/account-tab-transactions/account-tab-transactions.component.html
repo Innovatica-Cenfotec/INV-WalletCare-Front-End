@@ -1,4 +1,4 @@
-<nz-table #fixedTable [nzData]="transactions" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '1000px', y: null}">
+<nz-table #fixedTable [nzData]="transactions" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['150px','100px', '150px', '200px', '150px', '150px', '80px']">
     <thead>
         <tr>
             <th>Codigo Transacción</th>
@@ -7,7 +7,7 @@
             <th>Descripción</th>
             <th>Realizada por</th>
             <th>Fecha de Transcción </th>
-            <th>Acciones</th>
+            <th nzRight>Acciones</th>
         </tr>
     </thead>
     <tbody>

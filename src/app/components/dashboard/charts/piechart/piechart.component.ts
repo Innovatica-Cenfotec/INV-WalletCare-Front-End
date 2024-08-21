@@ -147,9 +147,6 @@ export class PiechartComponent implements OnChanges {
         if (this.labelsOrder.length > 0) {
             // Ensure case insensitivity by converting labelsOrder to lowercase
             const labelsOrder = this.labelsOrder.map(label => label.toLowerCase());
-            
-            // Add all labels from labelsOrder, case-insensitive
-            //labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
 
             // Only list labels found in data and in labelsOrder
             data.forEach(item => {

@@ -117,7 +117,7 @@ export class IncomeListComponent {
      * @param income The income object.
      */
     formatDate(date: Date | string | null | undefined): string {
-        return this.datePipe.transform(date, 'dd-MM-yyyy hh:ss') || '';
+        return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
     }
 
     /**
