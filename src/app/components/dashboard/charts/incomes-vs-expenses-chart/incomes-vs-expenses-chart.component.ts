@@ -1,16 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
-import {
-    ChartComponent,
-    ApexAxisChartSeries,
-    ApexChart,
-    ApexXAxis,
-    ApexDataLabels,
-    ApexTitleSubtitle,
-    ApexStroke,
-    ApexGrid,
-    NgApexchartsModule
-} from "ng-apexcharts";
+import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 import { ChartOptions, IBalance } from '../../../../interfaces';
 
 @Component({

@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
     public generalBalanceColor = '';
 
     monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-    goalStatusOrder = ["Completados", "En proceso"];
+    goalStatusOrder = ["completados", "en proceso"];
 
     ngOnInit(): void {
         this.loadData();

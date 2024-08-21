@@ -30,49 +30,38 @@ export class PiechartComponent implements OnChanges {
     /**
      * Json structure expected by the chart.
      */
-    @Input() data: IPiechartData[] = [];
+    @Input() data: IPiechartData[];
 
     /**
      * Variable with the expected order for the labels.
      */
-    @Input() labelsOrder: string[] = [];
+    @Input() labelsOrder: string[];
 
     /**
      * Json structure expected by the chart.
      */
-    @Input() type: ChartType = "pie";
+    @Input() type: ChartType;
 
     /**
      * Config of the chart data (ex: labels and amounts).
      */
-    public chartOptions: Partial<ChartOptions> = {};
+    public chartOptions: Partial<ChartOptions>;
 
     /**
-     * Load chart when data is change.
+     * Initialize default chart options
      */
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['data']) {
-            this.loadChart();
-        }
-    }
-
-    /**
-     * Load the chart data.
-     */
-    loadChart(): void{
-        const labels = this.getPieLabels(this.data);
-        const series = labels.map(label => {
-            const item = this.data.find(item => this.toCapitalCase(this.getGoalType(item.category)) === label);
-            return item ? item.data : 0;
-        });
+    constructor() {
+        this.data = [];
+        this.labelsOrder = [];
+        this.type = "pie";
 
         this.chartOptions = {
-            series: series,
+            series: [],
             chart: {
                 width: 380,
                 type: this.type
             },
-            labels: labels,
+            labels: [],
             responsive: [
                 {
                     breakpoint: 480,
@@ -87,6 +76,29 @@ export class PiechartComponent implements OnChanges {
                 }
             ]
         };
+    }
+    
+    /**
+     * Load the chart data.
+     */
+    loadChart(): void{
+        const labels = this.getPieLabels(this.data);
+        const series = labels.map(label => {
+            const item = this.data.find(item => this.toCapitalCase(this.getGoalType(item.category)) === label);
+            return item ? item.data : 0;
+        });
+
+        this.chartOptions.series = series;
+        this.chartOptions.labels = labels;
+    }
+
+    /**
+     * Load chart when data is change.
+     */
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['data']) {
+            this.loadChart();
+        }
     }
 
     /**
@@ -121,23 +133,27 @@ export class PiechartComponent implements OnChanges {
      */
     private getPieLabels(data: IPiechartData[]): string[] {
         const labelsSet = new Set<string>();
-        
-        if (this.labelsOrder.length > 0) {
-            
-            this.labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
 
-            // List only if label found in data
+        if (this.labelsOrder.length > 0) {
+            // Ensure case insensitivity by converting labelsOrder to lowercase
+            const labelsOrder = this.labelsOrder.map(label => label.toLowerCase());
+            
+            // Add all labels from labelsOrder, case-insensitive
+            labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
+
+            // Only list labels found in data and in labelsOrder
             data.forEach(item => {
-                const label = this.getGoalType(item.category);
-                if (this.labelsOrder.includes(this.toCapitalCase(label))) {
+                const label = this.getGoalType(item.category).toLowerCase();
+                if (labelsOrder.includes(label)) {
                     labelsSet.add(this.toCapitalCase(label));
                 }
             });
-            
+
             return Array.from(labelsSet).sort(
-                (a, b) => this.labelsOrder.indexOf(a) - this.labelsOrder.indexOf(b)
+                (a, b) => labelsOrder.indexOf(a.toLowerCase()) - labelsOrder.indexOf(b.toLowerCase())
             );
         } else {
+            // Just add all labels from data, case-insensitive
             data.forEach(item => {
                 const label = this.getGoalType(item.category);
                 labelsSet.add(this.toCapitalCase(label));

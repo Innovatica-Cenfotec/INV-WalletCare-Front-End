@@ -30,42 +30,27 @@ export class BarchartComponent implements OnChanges {
     /**
      * Json structure expected by the chart.
      */
-    @Input() data: IBarchartData[] = [];
+    @Input() data: IBarchartData[];
 
     /**
      * Variable with the expected order for the x axis labels.
      */
-    @Input() xAxisOrder: string[] = [];
+    @Input() xAxisOrder: string[];
 
     /**
      * Config of the chart data (ex: labels y axis, labels x axis, ₡ amounts).
      */
-    public chartOptions: Partial<ChartOptions> = {};
+    public chartOptions: Partial<ChartOptions>;
 
     /**
-     * Load chart when data is change.
+     * Initialize default chart options
      */
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['data']) {
-            this.loadChart();
-        }
-    }
-
-    /**
-     * Load the chart data.
-     */
-    loadChart(): void {
-        const xAxisLabels = this.getXAxisLabels(this.data);
-        const series = this.data.map(item => ({
-            name: this.getCategory(item),
-            data: xAxisLabels.map(date => {
-                const objI = item.data.find(i => this.getMonth(i).toUpperCase() === date);
-                return objI ? objI.amount : 0;
-            })
-        }));
+    constructor() {
+        this.data = [];
+        this.xAxisOrder = [];
 
         this.chartOptions = {
-            series: series,
+            series: [],
             chart: {
                 type: "bar",
                 height: 350
@@ -74,17 +59,16 @@ export class BarchartComponent implements OnChanges {
                 enabled: false
             },
             xaxis: {
-                categories: xAxisLabels
+                categories: []
             },
             yaxis: {
                 labels: {
                     formatter: (val) => {
-                        if (val > 1000) {
-                            return (val / 1000).toString() + "K";
-                        } else if (val > 1000000) {
+                        if (val >= 1000000) {
                             return (val / 1000000).toString() + "M";
-                        }
-                        else {
+                        } else if (val >= 1000) {
+                            return (val / 1000).toString() + "K";
+                        } else {
                             return val.toString();
                         }
                     }
@@ -104,7 +88,6 @@ export class BarchartComponent implements OnChanges {
             },
             grid: {
                 row: {
-                    // takes an array which will be repeated on columns
                     colors: ["#f3f3f3", "transparent"],
                     opacity: 0.5
                 }
@@ -114,6 +97,35 @@ export class BarchartComponent implements OnChanges {
                 align: "left"
             }
         };
+    }
+
+    /**
+     * Load the chart data.
+     */
+    loadChart(): void {
+        const xAxisLabels = this.getXAxisLabels(this.data);
+        
+        const series = this.data.map(item => ({
+            name: this.getCategory(item),
+            data: xAxisLabels.map(date => {
+                const objI = item.data.find(i => this.getMonth(i).toUpperCase() === date);
+                return objI ? objI.amount : 0;
+            })
+        }));
+
+        this.chartOptions.series = series;
+        this.chartOptions.xaxis = {
+            categories: xAxisLabels
+        };
+    }
+
+    /**
+     * Load chart when data is change.
+     */
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['data']) {
+            this.loadChart();
+        }
     }
 
     /**
