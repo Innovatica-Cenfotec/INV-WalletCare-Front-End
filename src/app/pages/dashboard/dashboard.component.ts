@@ -24,6 +24,7 @@ import { BarchartComponent } from '../../components/dashboard/charts/barchart/ba
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
+import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -43,7 +44,8 @@ import { CurrenciesChartComponent } from '../../components/dashboard/charts/curr
         BarchartComponent,
         IncomesVsExpensesChartComponent,
         EstimatedExpenseVsTotalExpenseChartComponent,
-        CurrenciesChartComponent
+        CurrenciesChartComponent,
+        IncomesVsExpensesMonthlyChartComponent
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -59,9 +61,11 @@ export class DashboardComponent implements OnInit {
     public toolsService = inject(ToolsService);
 
     // Var
-    public incomes: number[] = [];
-    public expenses: number[] = [];
-    public days: number[] = [];
+    public incomesAnnualy: number[] = [];
+    public expensesAnnualy: number[] = [];
+    public incomesMonthly: number[] = [];
+    public expensesMonthly: number[] = [];
+    public daysExchange: number[] = [];
     public exchangeRate: number[] = [];
     public currencyCodes: CurrencyCodesDTO[] = [];
     public incomeMonthByCategoryReport: IBarchartData[] = [];
@@ -87,8 +91,18 @@ export class DashboardComponent implements OnInit {
     loadData() {
         this.transactionService.getBalancesAnnually().subscribe({
             next: (response: any) => {
-                this.expenses = response[0];
-                this.incomes = response[1];
+                this.expensesAnnualy = response[0];
+                this.incomesAnnualy = response[1];
+            },
+            error: (error => {
+                console.log(error);
+            })
+        });
+
+        this.transactionService.getBalancesMonthly().subscribe({
+            next: (response: any) => {
+                this.expensesMonthly = response[1];
+                this.incomesMonthly = response[2];
             },
             error: (error => {
                 console.log(error);
@@ -178,7 +192,7 @@ export class DashboardComponent implements OnInit {
 
         this.toolsService.monthlyCurencyExchange(exchange).subscribe({
             next: (response: any) => {
-                this.days = response[0];
+                this.daysExchange = response[0];
                 this.exchangeRate = response[1];
                 this.loading = false;
             },
