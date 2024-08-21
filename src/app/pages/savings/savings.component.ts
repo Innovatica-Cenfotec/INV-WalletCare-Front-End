@@ -1,50 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { SavingService } from '../../services/saving.service';
 import {  IIncomeExpenceSavingType, ISaving, ITypeForm} from '../../interfaces';
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
-import { AccountService } from '../../services/account.service';
 import { SavingListComponent } from '../../components/saving/saving-list/saving-list.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { error } from '@ant-design/icons-angular';
 import { SavingFormComponent } from '../../components/saving/saving-form/saving-form.component';
 
 @Component({
   selector: 'app-savings',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
     NzIconModule,
-    NzDividerModule,
     NzModalModule,
     SavingListComponent,
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
-    NzDropDownModule, SavingFormComponent],
+    SavingFormComponent
+  ],
   templateUrl: './savings.component.html',
   styleUrl: './savings.component.scss'
 })

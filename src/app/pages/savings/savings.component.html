@@ -6,7 +6,6 @@
     </nz-page-header-extra>
     <nz-page-header-content>
 
-        <nz-divider></nz-divider>
         <app-saving-list [savingList]="savingService.savings$()" (deleteSaving)="deleteSaving($event)" (editSaving)="showModalEdit($event)">
         </app-saving-list>
 
