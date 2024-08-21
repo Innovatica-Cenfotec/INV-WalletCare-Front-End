@@ -74,7 +74,17 @@ export class PiechartComponent implements OnChanges {
                         }
                     }
                 }
-            ]
+            ],
+            noData: {
+                text: "No se encontraron registros",
+                align: 'center',
+                verticalAlign: 'middle',
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                  fontSize: '15px'
+                }
+            }
         };
     }
     
@@ -102,7 +112,7 @@ export class PiechartComponent implements OnChanges {
     }
 
     /**
-     * Get the goal type of a string
+     * Get the goal type of a string, case-insensitive
      * @param data String value with the category to get
      * @returns A string equivalent of inserted value
      */
@@ -126,9 +136,8 @@ export class PiechartComponent implements OnChanges {
     }
 
     /**
-     * Get array of labels. Compare values with uppercase.
-     * Filter and sort labels if labelsOrder is set.
-     * @param data Data to fill grapt.
+     * Get array of labels. Filter and sort labels if labelsOrder is set, case-insensitive.
+     * @param data Data to fill chart.
      * @returns List of labels capitalized.
      */
     private getPieLabels(data: IPiechartData[]): string[] {

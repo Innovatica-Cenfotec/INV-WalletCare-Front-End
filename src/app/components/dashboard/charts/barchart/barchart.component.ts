@@ -95,6 +95,16 @@ export class BarchartComponent implements OnChanges {
             title: {
                 text: "",
                 align: "left"
+            },
+            noData: {
+                text: "No se encontraron registros",
+                align: 'center',
+                verticalAlign: 'middle',
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                  fontSize: '15px'
+                }
             }
         };
     }

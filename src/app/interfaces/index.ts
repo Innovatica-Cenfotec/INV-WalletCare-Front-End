@@ -1,7 +1,8 @@
 import { FormControl } from '@angular/forms';
 import { ApexAxisChartSeries, ApexNonAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, 
     ApexFill, ApexTooltip,ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, 
-    ApexTitleSubtitle, ApexResponsive } from 'ng-apexcharts';
+    ApexTitleSubtitle, ApexResponsive, 
+    ApexNoData} from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -27,6 +28,7 @@ export interface ChartOptions {
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
     responsive: ApexResponsive[];
+    noData: ApexNoData;
 };
 
 export interface IBarchartData {
