@@ -25,6 +25,7 @@ import { SavingListComponent } from '../../components/saving/saving-list/saving-
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { error } from '@ant-design/icons-angular';
 import { SavingFormComponent } from '../../components/saving/saving-form/saving-form.component';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
   selector: 'app-savings',
@@ -44,7 +45,10 @@ import { SavingFormComponent } from '../../components/saving/saving-form/saving-
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
-    NzDropDownModule, SavingFormComponent],
+    NzDropDownModule,
+    SavingFormComponent,
+    NzPopoverModule
+  ],
   templateUrl: './savings.component.html',
   styleUrl: './savings.component.scss'
 })

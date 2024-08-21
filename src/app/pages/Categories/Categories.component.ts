@@ -22,6 +22,7 @@ import { AccountCardsComponent } from '../../components/account/account-cards/ac
 import { ICategory, ITypeForm } from '../../interfaces';
 import { CategoryFormComponent } from '../../components/category/CategoryForm/CategoryForm.component';
 import { CategoriesListComponent } from '../../components/category/CategoriesList/CategoriesList.component';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
     selector: 'app-categories',
@@ -42,7 +43,8 @@ import { CategoriesListComponent } from '../../components/category/CategoriesLis
     NzDividerModule,
     NzModalModule,
     CategoryFormComponent,
-    CategoriesListComponent
+    CategoriesListComponent,
+    NzPopoverModule
 ],
     templateUrl: './Categories.component.html',
     styleUrl: './Categories.component.scss',

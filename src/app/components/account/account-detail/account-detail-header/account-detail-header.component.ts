@@ -260,9 +260,19 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Shows the transaction form.
      */
     addSelectedTransaction(item: IIncome | IExpense | ISaving): void {
-        item.owner = undefined;       
+        item.owner = undefined;
         item.account = {
             id: this.id
+        }
+
+        // check if the item has a tax and set the tax id
+        if ('tax' in item && item.tax) {
+            item.tax = { id: item.tax.id };
+        }
+
+        // check if the item has a category and set the category id
+        if ('expenseCategory' in item && item.expenseCategory) {
+            item.expenseCategory = { id: item.expenseCategory.id };
         }
 
         if (this.TransactionFormType === 'income') {
@@ -313,6 +323,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.isLoadingTransaction = false;
                 }
             });
         }
@@ -338,7 +349,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
             this.TypeForm = ITypeForm.create;
             this.income.set({ amount: 0 });
             this.isVisibleIncome.set(true);
-        } if (this.TransactionFormType === 'saving') {
+        } else if (this.TransactionFormType === 'saving') {
             this.title = incomeOrExpenseType === IIncomeExpenceSavingType.unique ? 'Crear ahorro único' : 'Crear ahorro recurrente';
             this.incomeExpenceSavingType = incomeOrExpenseType;
             this.TypeForm = ITypeForm.create;

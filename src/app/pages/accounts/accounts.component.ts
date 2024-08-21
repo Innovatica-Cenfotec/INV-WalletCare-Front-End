@@ -23,6 +23,7 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { TransactionService } from '../../services/transaction.service';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
   selector: 'app-accounts',
@@ -42,6 +43,7 @@ import { TransactionService } from '../../services/transaction.service';
     NzIconModule,
     NzDividerModule,
     NzModalModule,
+    NzPopoverModule
   ],
   providers: [AccountService],
   templateUrl: './accounts.component.html',
