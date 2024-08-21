@@ -30,20 +30,7 @@ export class PiechartComponent implements OnChanges {
     /**
      * Json structure expected by the chart.
      */
-    @Input() data: IPiechartData[] = [
-        {
-            category: 'COMPLETED',
-            data: 23
-        },
-        {
-            category: 'ACTIVE',
-            data: 40
-        },
-        {
-            category: 'FAILED',
-            data: 2
-        }
-    ];;
+    @Input() data: IPiechartData[] = [];
 
     /**
      * Variable with the expected order for the labels.
@@ -115,6 +102,8 @@ export class PiechartComponent implements OnChanges {
                 return "completados";
             case "FAILED":
                 return "fallados";
+            case "NULL":
+                return "sin datos";
             default:
                 return "sin estado";
         }

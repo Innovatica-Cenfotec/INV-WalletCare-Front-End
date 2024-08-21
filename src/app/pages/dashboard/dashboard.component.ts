@@ -20,6 +20,7 @@ import { TransactionService } from '../../services/transaction.service';
 import { ToolsService } from '../../services/tools.service';
 import { ExpenseService } from '../../services/expense.service';
 import { IncomeService } from '../../services/imcome.service';
+import { GoalService } from '../../services/goal.service';
 import { BarchartComponent } from '../../components/dashboard/charts/barchart/barchart.component';
 import { PiechartComponent } from '../../components/dashboard/charts/piechart/piechart.component';
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
@@ -58,6 +59,7 @@ export class DashboardComponent implements OnInit {
     public transactionService = inject(TransactionService);
     public expenseService = inject(ExpenseService);
     public incomeService = inject(IncomeService);
+    public goalService = inject(GoalService);
     public toolsService = inject(ToolsService);
 
     // Var
@@ -66,8 +68,6 @@ export class DashboardComponent implements OnInit {
     public days: number[] = [];
     public exchangeRate: number[] = [];
     public currencyCodes: CurrencyCodesDTO[] = [];
-    public incomeMonthByCategoryReport: IBarchartData[] = [];
-    public expenseMonthByCategoryReport: IBarchartData[] = [];
     public loading = false;
 
     public validateForm = this.fb.group({
@@ -136,7 +136,6 @@ export class DashboardComponent implements OnInit {
 
         this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
             next: (response: any) => {
-                //this.expenseMonthByCategoryReport = response;
             },
             error: (error => {
                 this.nzNotificationService.error('Error', error.error.detail)
@@ -145,12 +144,13 @@ export class DashboardComponent implements OnInit {
 
         this.incomeService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
             next: (response: any) => {
-                //this.incomeMonthByCategoryReport = response;
             },
             error: (error => {
                 this.nzNotificationService.error('Error', error.error.detail)
             })
         });
+
+        this.goalService.reportProgress();
     }
 
     handleSubmit() {

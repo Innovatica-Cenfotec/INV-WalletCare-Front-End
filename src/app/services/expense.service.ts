@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGenericResponse, IExpense, IBarchartData, IBarcharItem } from '../interfaces';
+import { IGenericResponse, IExpense, IBarchartData } from '../interfaces';
 import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGoal } from '../interfaces';
+import { IGoal, IPiechartData } from '../interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -9,6 +9,7 @@ export class GoalService extends BaseService<IGoal> {
     protected override source: string = 'goals';
     private goalListSignal = signal<IGoal[]>([]);
     private isProposingGoalSignal = signal(false);
+    private goalReportSignal = signal<IPiechartData[]>([]);
 
     get goals$() {
         return this.goalListSignal;
@@ -16,6 +17,13 @@ export class GoalService extends BaseService<IGoal> {
 
     get isProposingGoal$() {
         return this.isProposingGoalSignal;
+    }
+
+    /*
+    * Get the goals report.
+    */
+    get goalReport$() {
+        return this.goalReportSignal.asReadonly();
     }
 
     /**
@@ -112,5 +120,17 @@ export class GoalService extends BaseService<IGoal> {
             const dateB = b.createdAt ? new Date(b.createdAt) : null;
             return dateB && dateA ? dateB.getTime() - dateA.getTime() : 0;
         }));
+    }
+    
+    reportProgress() {
+        return this.http.get<IPiechartData[]>(`${this.source}/report/progress`).subscribe({
+            next: (response: any) => {
+                this.goalReportSignal.set(response);
+            },
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
+                throw error;
+            }
+        });
     }
 }

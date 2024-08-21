@@ -70,7 +70,7 @@
 
     <div nz-col [nzSpan]="12">
         <nz-card nzTitle="Progreso de Metas">
-            <app-piechart [labelsOrder]="goalStatusOrder"></app-piechart>
+            <app-piechart [data]="this.goalService.goalReport$()" [labelsOrder]="goalStatusOrder"></app-piechart>
         </nz-card>
     </div>
 </div>
