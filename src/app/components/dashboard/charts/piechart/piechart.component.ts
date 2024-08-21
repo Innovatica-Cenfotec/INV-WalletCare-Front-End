@@ -51,7 +51,6 @@ export class PiechartComponent implements OnChanges {
      * Load chart when data is change.
      */
     ngOnChanges(changes: SimpleChanges): void {
-        this.loadData();
         if (changes['data']) {
             this.loadData();
         }
@@ -90,6 +89,11 @@ export class PiechartComponent implements OnChanges {
         };
     }
 
+    /**
+     * Get the goal type of a string
+     * @param data String value with the category to get
+     * @returns A string equivalent of inserted value
+     */
     getGoalType(data: string): string {
         switch (data.toUpperCase()) {
             case "GOAL_PENDING":

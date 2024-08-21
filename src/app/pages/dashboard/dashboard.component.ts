@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
             })
         });
 
-        this.goalService.reportProgress();
+        this.goalService.reportProgressByStatus();
     }
 
     handleSubmit() {

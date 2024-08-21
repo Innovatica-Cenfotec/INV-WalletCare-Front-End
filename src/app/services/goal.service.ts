@@ -122,8 +122,12 @@ export class GoalService extends BaseService<IGoal> {
         }));
     }
     
-    reportProgress() {
-        return this.http.get<IPiechartData[]>(`${this.source}/report/progress`).subscribe({
+    /**
+     * Get a count of goals by their status.
+     * @returns List of IPiecharData with the count by goal status.
+     */
+    reportProgressByStatus() {
+        return this.http.get<IPiechartData[]>(`${this.source}/report/progress-by-status`).subscribe({
             next: (response: any) => {
                 this.goalReportSignal.set(response);
             },
