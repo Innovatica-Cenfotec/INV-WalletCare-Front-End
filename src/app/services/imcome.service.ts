@@ -87,6 +87,22 @@ export class IncomeService extends BaseService<IIncome> {
     }
 
     /**
+     * Get list of income templates signal.
+     * @returns An Observable that emits the income templates.
+     */
+    findAllTemplatesSignal() {
+        return this.http.get<IIncome[]>(`${this.source}/templates`).subscribe({
+            next: (response: any) => {
+            response.reverse();
+            this.incomeListSignal.set(response);
+            },
+            error: (error: any) => {
+            console.error('Error fetching income templates', error);
+            }
+        });
+    }
+
+    /**
      * Updates an income signal.
      * @param income - The income signal to be updated.
      * @returns An Observable that emits the updated income signal.

@@ -82,7 +82,7 @@ export class IncomeComponent {
   public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
-    this.incomeService.findAllSignal();
+    this.incomeService.findAllTemplatesSignal();
     this.acccountService.findAllSignal();
     this.taxService.findAllSignal();
   }

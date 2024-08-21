@@ -88,9 +88,8 @@ export class ExpenseService extends BaseService<IExpense> {
     }
 
     /**
-     * Get list of expenses by account signal.
-     * @param id - The account id to search.
-     * @returns An Observable that emits the expenses.
+     * Get list of expense templates signal.
+     * @returns An Observable that emits the expense templates.
      */
     findAllTemplatesSignal() {
         return this.http.get<IExpense[]>(`${this.source}/templates`).subscribe({
@@ -99,7 +98,7 @@ export class ExpenseService extends BaseService<IExpense> {
             this.expenseListSignal.set(response);
             },
             error: (error: any) => {
-            console.error('Error fetching transacctions', error);
+            console.error('Error fetching expense templates', error);
             }
         });
     }
