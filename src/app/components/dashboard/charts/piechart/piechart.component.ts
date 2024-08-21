@@ -52,14 +52,14 @@ export class PiechartComponent implements OnChanges {
      */
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['data']) {
-            this.loadData();
+            this.loadChart();
         }
     }
 
     /**
      * Load the chart data.
      */
-    loadData(): void{
+    loadChart(): void{
         const labels = this.getPieLabels(this.data);
         const series = labels.map(label => {
             const item = this.data.find(item => this.toCapitalCase(this.getGoalType(item.category)) === label);
@@ -123,6 +123,7 @@ export class PiechartComponent implements OnChanges {
         const labelsSet = new Set<string>();
         
         if (this.labelsOrder.length > 0) {
+            // List only if label found in data
             data.forEach(item => {
                 const label = this.getGoalType(item.category);
                 if (this.labelsOrder.includes(this.toCapitalCase(label))) {

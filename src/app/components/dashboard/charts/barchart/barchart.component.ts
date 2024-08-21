@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, ViewChild, Input, SimpleChanges } from "@angular/core";
+import { Component, ViewChild, Input, OnChanges, SimpleChanges } from "@angular/core";
 
 // Importing Ng-Zorro modules
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
@@ -45,8 +45,10 @@ export class BarchartComponent implements OnChanges {
     /**
      * Load chart when data is change.
      */
-    ngOnChanges(): void {
-        this.loadChart();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['data']) {
+            this.loadChart();
+        }
     }
 
     /**
@@ -166,7 +168,7 @@ export class BarchartComponent implements OnChanges {
     private getXAxisLabels(data: IBarchartData[]): string[] {
         const datesSet = new Set<string>();
 
-        // If monthOrder is not empty, add all its values to datesSet
+        // If xAxisOrder is not empty, add all its values to datesSet
         if (this.xAxisOrder.length > 0) {
             this.xAxisOrder.forEach(month => datesSet.add(month.toUpperCase()));
         }
