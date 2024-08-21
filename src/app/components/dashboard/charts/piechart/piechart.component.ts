@@ -123,6 +123,9 @@ export class PiechartComponent implements OnChanges {
         const labelsSet = new Set<string>();
         
         if (this.labelsOrder.length > 0) {
+            
+            this.labelsOrder.forEach(label => labelsSet.add(this.toCapitalCase(label)));
+
             // List only if label found in data
             data.forEach(item => {
                 const label = this.getGoalType(item.category);

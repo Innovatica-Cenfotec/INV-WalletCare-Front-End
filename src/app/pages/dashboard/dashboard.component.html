@@ -69,8 +69,11 @@
     </div>
 
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Progreso de Metas">
+        <nz-card nzTitle="Progreso de Metas" [nzExtra]="tmpGoalProgressByCategory">
             <app-piechart [data]="this.goalService.goalReport$()" [labelsOrder]="goalStatusOrder"></app-piechart>
         </nz-card>
+        <ng-template #tmpGoalProgressByCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Toma en consideración todas las metas del usuario."></span>
+        </ng-template>
     </div>
 </div>
