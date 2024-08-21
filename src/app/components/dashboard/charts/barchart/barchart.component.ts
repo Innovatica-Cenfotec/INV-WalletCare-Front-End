@@ -166,16 +166,19 @@ export class BarchartComponent implements OnChanges {
     private getXAxisLabels(data: IBarchartData[]): string[] {
         const datesSet = new Set<string>();
 
+        // If monthOrder is not empty, add all its values to datesSet
+        if (this.xAxisOrder.length > 0) {
+            this.xAxisOrder.forEach(month => datesSet.add(month.toUpperCase()));
+        }
+
+        // Add the actual months from the data
         data.forEach(item => {
-            item.data.forEach(
-                // This will set how the label is view in grapt
-                i => datesSet.add(this.getMonth(i).toUpperCase())
-            );
+            item.data.forEach(i => datesSet.add(this.getMonth(i).toUpperCase()));
         });
 
         const axisLabels = Array.from(datesSet);
 
-        if (this.xAxisOrder.length != 0) {
+        if (this.xAxisOrder.length > 0) {
             return axisLabels.sort(
                 // Order the xAxis labels
                 (a, b) => this.xAxisOrder.indexOf(a.toUpperCase()) - this.xAxisOrder.indexOf(b.toUpperCase())
