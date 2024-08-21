@@ -7,10 +7,10 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 // Custom elements
 import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
     selector: 'app-expense-list',
@@ -170,7 +170,7 @@ export class ExpenseListComponent {
      * @returns formated date dd/MM/yyyy HH:mm
      */
     getDate(date: Date | undefined): string {
-        return this.datePipe.transform(date, 'dd/MM/yyyy hh:ss') || '';
+        return this.datePipe.transform(date, 'dd-MM-yyyy hh:ss') || '';
     }
 
     /**

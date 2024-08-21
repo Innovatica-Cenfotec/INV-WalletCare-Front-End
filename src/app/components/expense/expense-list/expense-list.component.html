@@ -1,12 +1,12 @@
-<nz-table #nzTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '150px', '135px', '100px', '150px', '120px']">
+<nz-table #nzTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '150px', '120px']">
     <thead>
         <tr>
-            <th nzWidth="50px"></th>
+            <th></th>
             <th nzColumnKey="name" [nzSortFn]="sortByName">Nombre</th>
             <th nzColumnKey="'description" [nzSortFn]="sortByDescription">Descripción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th nzColumnKey="amount" [nzSortFn]="sortByAmount">Monto</th>
             <th nzColumnKey="typeAmount" [nzSortFn]="sortByAmountType">Tipo de monto</th>
-            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th nzColumnKey="category" [nzSortFn]="sortByCategory">Categoría</th>
             <th nzRight>Acciones</th>
         </tr>
@@ -17,9 +17,9 @@
                 <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
                 <td>{{ data.name }}</td>
                 <td>{{ getExpenseDesc(data) }}</td>
+                <td>{{ getExpenseType(data) }}</td>
                 <td [style]="formatAmount(data.amount)"> ₡ -{{ data.amount | currency:'':'':'1.2-2' }}</td>
                 <td>{{ getAmountType(data) }}</td>
-                <td>{{ getExpenseType(data) }}</td>
                 <td>{{ data.expenseCategory?.name || '-' }}</td>
                 <td nzRight>
                     <nz-space>
