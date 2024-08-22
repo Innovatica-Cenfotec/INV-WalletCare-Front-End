@@ -1,3 +1,4 @@
+import { CategoryService } from './../../services/category.service';
 import { ChangeDetectionStrategy, Component, inject, signal, ViewChild, OnInit } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
@@ -58,6 +59,7 @@ export class ExpensesComponent implements OnInit {
     private nzModalService = inject(NzModalService);
     public expenseService = inject(ExpenseService);
     public taxService = inject(TaxService);
+    public CategoryService = inject(CategoryService);
 
     @ViewChild(ExpenseFormComponent) form!: ExpenseFormComponent;
 
@@ -81,6 +83,7 @@ export class ExpensesComponent implements OnInit {
     ngOnInit(): void {
       this.expenseService.findAllTemplatesSignal();
       this.taxService.findAllSignal();
+      this.CategoryService.getAllSignal();
     }
 
     closeModalForm(): void {
@@ -140,6 +143,11 @@ export class ExpensesComponent implements OnInit {
         if (expense.tax) {
             expense.tax = {id: expense.tax.id};
         }
+
+        if (expense.expenseCategory) {
+            expense.expenseCategory = { id: expense.expenseCategory.id };
+        }
+        
         expense.isTemplate = true;
         this.expenseService.saveExpenseSignal(expense).subscribe({
           next: (response: any) => {
@@ -162,6 +170,15 @@ export class ExpensesComponent implements OnInit {
     * Edit the expense
     */
     updateExpense(expense: IExpense): void {
+
+        if (expense.tax) {
+            expense.tax = {id: expense.tax.id};
+        }
+
+        if (expense.expenseCategory) {
+            expense.expenseCategory = { id: expense.expenseCategory.id };
+        }
+
         this.expenseService.updateExpenseSignal(expense).subscribe({
             next: (response: any) => {
                 this.isVisible.set(false);

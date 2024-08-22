@@ -10,6 +10,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 // Custom elements
 import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
     selector: 'app-expense-list',
@@ -20,7 +21,8 @@ import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountTy
         NzDividerModule,
         NzIconModule,
         NzButtonModule,
-        NzSpaceModule
+        NzSpaceModule,
+        NzTypographyModule
     ],
     providers: [DatePipe],
     templateUrl: './expense-list.component.html',
@@ -34,7 +36,7 @@ export class ExpenseListComponent {
     @Input() showDetailsModal: boolean = false;
     @Input() showTemplate: boolean = false;
     @Input() showTax: boolean = false;
-
+    expandSet = new Set<number>();
 
     // Sort and filter lists
     sortedExpenses: IExpense[] = [];
@@ -142,7 +144,9 @@ export class ExpenseListComponent {
      * @param amount is the amount
      * @returns the ammount whith the feedback color
      */
-    formatAmount(amount: number | undefined) {
+    formatAmount(amount: number | undefined | string): string {
+        isNaN(Number(amount)) ? amount = 0 : amount = Number(amount);
+        amount = amount * -1;
         let style = '';
         if (amount != undefined) {
             if (amount > 0) {
@@ -210,5 +214,13 @@ export class ExpenseListComponent {
                 (!this.filters.user || (expense.owner?.nickname ?? '').toLowerCase().includes(this.filters.user.toLowerCase())) &&
                 (!this.filters.date || this.getDate(expense.updatedAt).includes(this.filters.date));
         });
+    }
+
+    onExpandChange(id: number | undefined, checked: boolean): void {
+        if (checked) {
+            this.expandSet.add(id ?? 0);
+        } else {
+            this.expandSet.delete(id ?? 0);
+        }
     }
 }
