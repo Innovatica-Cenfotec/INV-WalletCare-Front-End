@@ -1,15 +1,13 @@
-<nz-table #nzTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['50px','100px','200px', '130px', '100px', '100px', '100px', '80px', '80px', '200px']">
+<nz-table #nzTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '150px', '120px']">
     <thead>
         <tr>
-            <th nzWidth="50px"></th>
+            <th></th>
             <th nzColumnKey="name" [nzSortFn]="sortByName">Nombre</th>
             <th nzColumnKey="'description" [nzSortFn]="sortByDescription">Descripción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
             <th nzColumnKey="amount" [nzSortFn]="sortByAmount">Monto</th>
             <th nzColumnKey="typeAmount" [nzSortFn]="sortByAmountType">Tipo de monto</th>
-            <th nzColumnKey="type" [nzSortFn]="sortByType">Tipo</th>
-            <th nzColumnKey="frequency" [nzSortFn]="sortByFrequency">Frecuencia</th>
-            <th nzColumnKey="timestamp" [nzSortFn]="sortByScheduledDay">Dia asignado</th>
-            <th nzColumnKey="isTemplate">Es plantilla</th>
+            <th nzColumnKey="category" [nzSortFn]="sortByCategory">Categoría</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
@@ -19,16 +17,12 @@
                 <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
                 <td>{{ data.name }}</td>
                 <td>{{ getExpenseDesc(data) }}</td>
+                <td>{{ getExpenseType(data) }}</td>
                 <td [style]="formatAmount(data.amount)"> ₡ -{{ data.amount | currency:'':'':'1.2-2' }}</td>
                 <td>{{ getAmountType(data) }}</td>
-                <td>{{ getExpenseType(data) }}</td>
-                <td>{{ getExpenseFrequency(data)}}</td>
-                <td>{{ data.scheduledDay || "-" }}</td>
-                <td>{{ data.isTemplate ? 'Si' : 'No' }}</td>
+                <td>{{ data.expenseCategory?.name || '-' }}</td>
                 <td nzRight>
                     <nz-space>
-                        <button nz-button nzType="default" [nzSize]="'large'" (click)="detailsExpense.emit(data)" *ngIf="showDetailsModal"><span nz-icon nzType="eye"></span></button>
-                        <nz-divider nzType="vertical" *ngIf="showDetailsModal"></nz-divider>
                         <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)"><span nz-icon nzType="edit"></span></button>
                         <nz-divider nzType="vertical"></nz-divider>
                         <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteExpense.emit(data)"><span nz-icon nzType="delete"></span></button>
@@ -43,11 +37,18 @@
                 <p>
                     Fecha de actualización: {{ getDate(data.updatedAt) }}
                 </p>
+
+                @if(getExpenseType(data) == 'Recurrente'){
+                <h5 nz-typography>Configuración de repetición</h5>
                 <p>
-                    Categoria: {{ data.expenseCategory?.name || '-' }}
+                    Frecuencia: {{ getExpenseFrequency(data) }}
                 </p>
-                @if(data.tax != undefined){
-                <h4 nz-typography>Impuesto</h4>
+                @if(getExpenseFrequency(data) == 'Personalizado'){
+                <p>
+                    Día asignado: {{ data.scheduledDay || "-" }}
+                </p>
+                } } @if(data.tax != undefined){
+                <h5 nz-typography>Impuesto</h5>
                 <p>
                     Nombre: {{ getExpenseTax(data) }}
                 </p>

@@ -9,6 +9,8 @@ import { IncomeService } from '../../services/imcome.service';
 import { TransactionService } from '../../services/transaction.service';
 import { ToolsService } from '../../services/tools.service';
 import { UserService } from '../../services/user.service';
+import { AccountService } from '../../services/account.service';
+import { GoalService } from '../../services/goal.service';
 
 // Interfaces
 import { IAccount, IBalance, IBalanceDTO, CurrencyCodesDTO, CurrencyExchangeDTO, IBarchartData, ITransaction } from '../../interfaces';
@@ -34,7 +36,8 @@ import { IncomesVsExpensesChartComponent } from '../../components/dashboard/char
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { NewUsersChartComponent } from '../../components/dashboard/charts/new-users-chart/new-users-chart.component';
 import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
-import { AccountService } from '../../services/account.service';
+import { PiechartComponent } from '../../components/dashboard/charts/piechart/piechart.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -44,6 +47,7 @@ import { AccountService } from '../../services/account.service';
     NzIconModule,
     NzPopoverModule,
     BarchartComponent,
+    ReactiveFormsModule,
     ReactiveFormsModule,
     NzCardModule,
     NzGridModule,
@@ -57,6 +61,7 @@ import { AccountService } from '../../services/account.service';
     CurrenciesChartComponent,
     AccountCardsComponent,
     IncomesVsExpensesMonthlyChartComponent,
+    PiechartComponent,
     NewUsersChartComponent        
   ],
   templateUrl: './dashboard.component.html',
@@ -74,6 +79,7 @@ export class DashboardComponent implements OnInit {
   public authService = inject(AuthService);
   public usersService = inject(UserService);
   public accountService = inject(AccountService);
+  public goalService = inject(GoalService);
   
   // Var
   public incomesAnnualy: number[] = [];
@@ -91,6 +97,7 @@ export class DashboardComponent implements OnInit {
   public generalBalance = 0;
   public generalBalanceColor = '';
   monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  goalStatusOrder = ["completados", "en proceso"];
 
   public validateForm = this.fb.group({
     currencyTo: ['', [Validators.required]],
@@ -107,6 +114,17 @@ export class DashboardComponent implements OnInit {
 
         this.accountService.findAllSignal();
         this.transactionService.getAllByOwnerSignal();
+        this.goalService.reportProgressByStatus();
+
+        this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
+            next: (response: any) => {
+                //this.expenseMonthByCategoryReport = response;
+            },
+            error: (error => {
+                console.log(error);
+                //this.nzNotificationService.error('Error', error.error.detail)
+            })
+        });
 
         this.toolsService.currencyCodes().subscribe({
             next: (response: any) => {
@@ -147,19 +165,17 @@ export class DashboardComponent implements OnInit {
             })
         });
     
-        this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
+        
+        this.toolsService.currencyCodes().subscribe({
             next: (response: any) => {
-                //this.expenseMonthByCategoryReport = response;
-            },
-            error: (error => {
-                console.log(error);
-                //this.nzNotificationService.error('Error', error.error.detail)
-            })
-        });
-
-        this.incomeService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
-            next: (response: any) => {
-                //this.incomeMonthByCategoryReport = response;
+                this.currencyCodes = response;
+        
+                /*
+                Only way found to load missing charts.
+                Always after services of charts that do not load unless you resize 
+                or change pages, ensure it is inside a subscription.
+                */
+                window.dispatchEvent(new Event("resize"));
             },
             error: (error => {
                 console.log(error);

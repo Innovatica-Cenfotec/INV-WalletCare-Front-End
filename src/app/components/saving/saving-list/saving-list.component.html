@@ -1,28 +1,23 @@
-<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }"
-    [nzWidthConfig]="['150px', '150px', '200px', '100px', '150px', '190px']">
+<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '150px', '150px', '120px']">
     <thead>
         <tr>
             <th>Nombre</th>
-            <TH>Fecha de creación</TH>
             <th>Descripción</th>
-            <TH>Tipo</TH>
+            <th>Tipo</th>
             <th>Monto del ahorro</th>
-            <th>Acciones</th>
+            <th>Fecha de creación</th>
+            <th nzRight>Acciones</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of fixedTable.data">
             <td>{{ data.name }}</td>
-            <td>{{formatDate(data.createdAt)}}</td>
-            <td>{{data.description}}</td>
-            <td>{{getSavingType(data)}}</td>
-            <td>{{"₡"+data.amount}}</td>
+            <td>{{ data.description }}</td>
+            <td>{{ getSavingType(data) }}</td>
+            <td>{{ "₡"+data.amount }}</td>
+            <td>{{ formatDate(data.createdAt) }}</td>
             <td nzRight>
                 <nz-space>
-                    <!-- <button nz-button nzType="default" [nzSize]="'large'" (click)="viewSavingDetails.emit(data)">
-                        <span nz-icon nzType="eye"></span>
-                    </button> -->
-                    <!-- <nz-divider nzType="vertical"></nz-divider> -->
                     <button nz-button nzType="default" [nzSize]="'large'" (click)="editSaving.emit(data)">
                         <span nz-icon nzType="edit"></span>
                     </button>

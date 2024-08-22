@@ -16,10 +16,8 @@
                 <nz-form-item>
                     <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
 
-                        <nz-select class="select" formControlName="currencyTo" nzAllowClear
-                            nzPlaceHolder="Selecciona la Moneda de Destino">
-                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
-                                [nzValue]="cc.currencyCode">
+                        <nz-select class="select" formControlName="currencyTo" nzAllowClear nzPlaceHolder="Selecciona la Moneda de Destino">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!" [nzValue]="cc.currencyCode">
                             </nz-option>
                         </nz-select>
                         <ng-template #errorCurrencyToTpl let-control>
@@ -31,8 +29,8 @@
                 <nz-form-item>
                     <nz-form-control>
                         <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
-                            Filtrar Divisas
-                        </button>
+                                Filtrar Divisas
+                            </button>
                     </nz-form-control>
                 </nz-form-item>
             </form>
@@ -88,29 +86,26 @@
 
 <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory"
+        <nz-card nzTitle="Gastos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyExpenseCategory"
             style="margin: 10px">
             <app-barchart [data]="this.expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
+
         </nz-card>
         <ng-template #tmpYearlyExpenseCategory>
-            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
-                nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
         </ng-template>
     </div>
 
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory"
+        <nz-card nzTitle="Ingresos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyIncomeCategory"
             style="margin: 10px">
             <app-barchart [data]="this.incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
         </nz-card>
         <ng-template #tmpYearlyIncomeCategory>
-            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
-                nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
         </ng-template>
     </div>
-</div>
 
-<div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="12">
         <nz-card nzTitle="Gastos e Ingresos del Año Actual" style="margin: 10px">
             <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
@@ -123,6 +118,15 @@
                 [recurringExpensesData]="recurringExpensesChart">
                 ></app-estimated-expense-vs-total-expense-chart>
         </nz-card>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Progreso de Metas" [nzExtra]="tmpGoalProgressByCategory" style="margin: 10px">
+            <app-piechart [data]="this.goalService.goalReport$()" [labelsOrder]="goalStatusOrder"></app-piechart>
+        </nz-card>
+        <ng-template #tmpGoalProgressByCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Toma en consideración todas las metas del usuario."></span>
+        </ng-template>
     </div>
 </div>
 }
