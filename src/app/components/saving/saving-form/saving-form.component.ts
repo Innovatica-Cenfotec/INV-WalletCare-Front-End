@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input , inject} from '@angular/core';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -15,9 +15,13 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { FormModalComponent } from '../../form-modal/form-modal.component';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { getISOWeek } from 'date-fns';
+
+import { en_US, NzI18nService, zh_CN } from 'ng-zorro-antd/i18n';
 
 import { ISaving } from '../../../interfaces';
 import { IIncomeExpenceSavingType, IFrequencyType } from '../../../interfaces/index';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-saving-form',
@@ -38,13 +42,27 @@ import { IIncomeExpenceSavingType, IFrequencyType } from '../../../interfaces/in
     NzSelectModule,
     NzDescriptionsModule,
     NzCalendarModule,
-    NzTypographyModule
+    NzTypographyModule,
+    NzDatePickerModule
   ],
   templateUrl: './saving-form.component.html',
   styleUrl: './saving-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SavingFormComponent extends FormModalComponent<ISaving> {
+  date: Date | null = null;
+  defaultPickerValue: Date;
+  isEnglish = false;
+  constructor() {
+    super();
+
+    // Calcula la fecha predeterminada para el date picker (un mes después de hoy)
+    const today = new Date();
+    this.defaultPickerValue = new Date(today.setMonth(today.getMonth() + 1));
+  }
+
+  private i18n= inject(NzI18nService);
+  
 
   IIncomeExpenseSavingType = IIncomeExpenceSavingType;
   IFrequencyType = IFrequencyType;
@@ -61,6 +79,7 @@ export class SavingFormComponent extends FormModalComponent<ISaving> {
     description: [this.item?.description, [Validators.maxLength(200)]],
     amount: [this.item?.amount, [Validators.required, Validators.min(1)]],
     scheduledDay: [this.item?.scheduledDay],
+    targetDate:[this.item?.targetDate],
     type: [this.item?.type],
     frequency: [this.item?.frequency],
   });
@@ -121,4 +140,14 @@ export class SavingFormComponent extends FormModalComponent<ISaving> {
   onSelectScheduledDay(scheduledDay: any): void {
     this.scheduledDay = scheduledDay;
   }
+  onChange(result: Date): void {
+    console.log('onChange: ', result);
+  }
+  disabledDate = (current: Date): boolean => {
+    const today = new Date();
+    const oneMonthFromToday = new Date(today.setMonth(today.getMonth() + 1));
+    return current <= oneMonthFromToday;
+  };
+
+  
 }
