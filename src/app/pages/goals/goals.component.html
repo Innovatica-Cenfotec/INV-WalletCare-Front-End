@@ -1,5 +1,8 @@
 <nz-page-header>
-    <nz-page-header-title>Metas Propuestas</nz-page-header-title>
+    <nz-page-header-title>
+        Metas Propuestas
+        <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de metas propuestas" nzPopoverContent="En esta página encontrará todas las metas propuestas por AI."></span>
+    </nz-page-header-title>
     <nz-page-header-extra>
         @if (!authService.isAdmin()){
         <button nz-button nzType="primary" (click)="proposeGoal()" [nzLoading]="goalService.isProposingGoal$()">

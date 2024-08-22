@@ -54,7 +54,7 @@ export class SignupComponent {
     email: ['', [Validators.required, Validators.email]],
     identificationNumber: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.minLength(8), Validators.maxLength(16)]],
     address: ['', [Validators.maxLength(225)]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+-={};':"|,.<>\/?]).{8,}$`)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/)]],
     confirmPassword: ['', [Validators.required]],
     accountName: ['', [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
     accountDescription: ['', [Validators.maxLength(200)]]

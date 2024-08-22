@@ -140,7 +140,7 @@ export class TransactionFormComponent implements OnChanges {
     handleAddItem(): void {
         if (this.type === 'income') {
             this.onCreated.emit(IIncomeExpenceSavingType.unique);
-        } if (this.type === 'expense') {
+        } else if (this.type === 'expense') {
             this.onCreated.emit(IIncomeExpenceSavingType.unique);
         } else {
             this.onCreated.emit(IIncomeExpenceSavingType.unique);
@@ -153,7 +153,7 @@ export class TransactionFormComponent implements OnChanges {
     handleAddRecurrentItem(): void {
         if (this.type === 'income') {
             this.onCreated.emit(IIncomeExpenceSavingType.recurrence);
-        } if(this.type === 'expense') {
+        } else if(this.type === 'expense') {
             this.onCreated.emit(IIncomeExpenceSavingType.recurrence);
         } else {
             this.onCreated.emit(IIncomeExpenceSavingType.recurrence);

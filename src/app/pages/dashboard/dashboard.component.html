@@ -1,100 +1,81 @@
-<div style="background: #ECECEC;padding:30px;">
-    <nz-card [nzBordered]="false">
-        <nz-statistic [nzValue]="generalBalance" [nzTitle]="'Balance General'" [nzPrefix]="'₡'"
-            [nzValueStyle]="{ color: generalBalanceColor }">
-        </nz-statistic>
-        <ng-template #prefixTplOne>
-            <span nz-icon nzType="arrow-up"></span>
-        </ng-template>
-    </nz-card>
+@if(authService.isAdmin()){
+<div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Tipos de Cambio del Mes" style="margin: 10px">
+            <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
+                <nz-form-item>
+                    <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
 
-    
-    <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="24">
-            <nz-card nzTitle="Nuevos Usuarios por Mes" [nzExtra]="tmpNewUsers">
-                <app-new-users-chart [NewUsersData]="this.usersService.newUsersData$()"></app-new-users-chart>
-            </nz-card>
-            <ng-template #tmpNewUsers>
-                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
-                    nzPopoverContent="Son los nueos usuarios registrados en el año actual"></span>
-            </ng-template>
-        </div>
-    </div>
-    
-    <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory">
-                <app-barchart [data]="this.expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
-            </nz-card>
-            <ng-template #tmpYearlyExpenseCategory>
-                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
-                    nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
-            </ng-template>
-        </div>
+                        <nz-select class="select" formControlName="currencyTo" nzAllowClear
+                            nzPlaceHolder="Selecciona la Moneda de Destino">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                [nzValue]="cc.currencyCode">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #errorCurrencyToTpl let-control>
+                            @if (control.errors?.['required']) { Por favor ingrese una moneda de destino }
+                        </ng-template>
 
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory">
-                <app-barchart [data]="this.incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
-            </nz-card>
-            <ng-template #tmpYearlyIncomeCategory>
-                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
-                    nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
-            </ng-template>
-        </div>
-    </div>
-
-    <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Gastos vs Ingresos del Año Actual">
-                <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
-                    [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
-            </nz-card>
-        </div>
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Gastos Estimados vs Gastos Totales">
-                <app-estimated-expense-vs-total-expense-chart [totalExpensesData]="totalExpenses"
-                    [recurringExpensesData]="recurringExpenses">
-                    ></app-estimated-expense-vs-total-expense-chart>
-            </nz-card>
-        </div>
-
-    </div>
-    <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Tipos de Cambio del Mes">
-                <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
-                    <nz-form-item>
-                        <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
-
-                            <nz-select class="select" formControlName="currencyTo" nzAllowClear
-                                nzPlaceHolder="Selecciona la Moneda de Destino">
-                                <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
-                                    [nzValue]="cc.currencyCode">
-                                </nz-option>
-                            </nz-select>
-                            <ng-template #errorCurrencyToTpl let-control>
-                                @if (control.errors?.['required']) { Por favor ingrese una moneda de destino }
-                            </ng-template>
-
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-control>
-                            <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
-                                Filtrar Divisas
-                            </button>
-                        </nz-form-control>
-                    </nz-form-item>
-                </form>
-                <app-currencies-chart [days]="this.daysExchange" [exchangeRate]="this.exchangeRate"></app-currencies-chart>
-            </nz-card>
-        </div>
-        <div nz-col [nzSpan]="12">
-            <nz-card nzTitle="Gastos vs Ingresos del Año Actual">
-                <app-incomes-vs-expenses-monthly-chart [DaysOfTheMonth]="this.transactionService.daysOfTheMonth$()"
-                [ExpensesData]="this.transactionService.monthlyExpenses$()"
-                [IncomesData]="this.transactionService.monthlyIncomes$()"></app-incomes-vs-expenses-monthly-chart>
-            </nz-card>
-        </div>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
+                            Filtrar Divisas
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+            <app-currencies-chart [days]="this.days" [exchangeRate]="this.exchangeRate"></app-currencies-chart>
+        </nz-card>
     </div>
 </div>
+} @else {
+
+<nz-card [nzBordered]="false">
+    <nz-statistic [nzValue]="generalBalance" [nzTitle]="'Balance General'" [nzPrefix]="'₡'"
+        [nzValueStyle]="{ color: generalBalanceColor }">
+    </nz-statistic>
+    <ng-template #prefixTplOne>
+        <span nz-icon nzType="arrow-up"></span>
+    </ng-template>
+</nz-card>
+
+<div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory" style="margin: 10px">
+            <app-barchart [data]="this.expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
+        </nz-card>
+        <ng-template #tmpYearlyExpenseCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+        </ng-template>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory" style="margin: 10px">
+            <app-barchart [data]="this.incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
+        </nz-card>
+        <ng-template #tmpYearlyIncomeCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+        </ng-template>
+    </div>
+</div>
+
+<div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos vs Ingresos del Año Actual" style="margin: 10px">
+            <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
+                [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos Estimados vs Gastos Totales" style="margin: 10px">
+            <app-estimated-expense-vs-total-expense-chart [totalExpensesData]="totalExpenses"
+                [recurringExpensesData]="recurringExpenses">
+                ></app-estimated-expense-vs-total-expense-chart>
+        </nz-card>
+    </div>
+</div>
+}

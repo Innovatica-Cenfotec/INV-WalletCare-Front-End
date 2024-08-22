@@ -86,7 +86,7 @@ export class IncomeComponent {
   * Title of the modal
   */
   public title: string = '';
-  public nzModalService=inject(NzModalService)
+  public nzModalService = inject(NzModalService)
   /*
   * Type of form
   */
@@ -138,14 +138,13 @@ export class IncomeComponent {
       income.tax = { id: income.tax.id };
     }
 
-    income.addTransaction     
+    income.addTransaction
     this.incomeService.saveIncomeSignal(income).subscribe({
       next: (response: any) => {
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Ingreso creado exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
-        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -155,6 +154,8 @@ export class IncomeComponent {
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
+
+        this.form.stopLoading();
       }
     });
   }
@@ -169,7 +170,6 @@ export class IncomeComponent {
         this.incomeService.deleteIncomeSignal(income.id).subscribe({
           next: () => {
             this.nzNotificationService.success('Éxito', 'El ingreso se ha eliminado correctamente');
-            
           },
           error: (error: any) => {
             this.nzNotificationService.error('Lo sentimos', error.error.detail);
@@ -192,7 +192,6 @@ export class IncomeComponent {
         this.nzNotificationService.create("success", "", 'Ingreso actualizado exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
-        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -202,6 +201,8 @@ export class IncomeComponent {
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
+
+        this.form.stopLoading();
       }
     });
   }
