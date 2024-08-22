@@ -75,7 +75,7 @@
 
 <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Progreso de Metas" [nzExtra]="tmpGoalProgressByCategory">
+        <nz-card nzTitle="Progreso de Metas" [nzExtra]="tmpGoalProgressByCategory" style="margin: 10px">
             <app-piechart [data]="this.goalService.goalReport$()" [labelsOrder]="goalStatusOrder"></app-piechart>
         </nz-card>
         <ng-template #tmpGoalProgressByCategory>
