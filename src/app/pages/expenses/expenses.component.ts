@@ -1,6 +1,6 @@
 import { CategoryService } from './../../services/category.service';
 import { ChangeDetectionStrategy, Component, inject, signal, ViewChild, OnInit } from '@angular/core';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
@@ -57,6 +57,8 @@ export class ExpensesComponent implements OnInit {
      */
     public isVisible = signal(false);
     public isLoading = signal(false);
+
+    /// ------- Details
     public isVisibleCreate = signal(false); 
 
     public expense = signal<IExpense>({ amount: 0 });
@@ -68,19 +70,19 @@ export class ExpensesComponent implements OnInit {
      * Execute when the comonent is call.
      */
     ngOnInit(): void {
-      this.expenseService.findAllTemplatesSignal();
-      this.taxService.findAllSignal();
-      this.CategoryService.getAllSignal();
+        this.expenseService.findAllTemplatesSignal();
+        this.taxService.findAllSignal();
+        this.CategoryService.getAllSignal();
     }
 
     /**
      * Close a modal form.
      */
     closeModalForm(): void {
-      this.isVisible.set(false);
-      this.isLoading.set(false);
+        this.isVisible.set(false);
+        this.isLoading.set(false);
     }
-    
+
     /**
      * Shows the modal to create the expense. Change modal form depending type.
      * @param ExpenseType IIncomeExpenceSavingType to select modal form.
@@ -89,7 +91,7 @@ export class ExpensesComponent implements OnInit {
         this.title = ExpenseType === IIncomeExpenceSavingType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
-        this.expense.set({amount: 0});
+        this.expense.set({ amount: 0 });
         this.isVisible.set(true);
     }
 
@@ -111,31 +113,35 @@ export class ExpensesComponent implements OnInit {
      */
     createExpense(expense: IExpense): void {
         if (expense.tax) {
-            expense.tax = {id: expense.tax.id};
+            expense.tax = { id: expense.tax.id };
         }
 
         if (expense.expenseCategory) {
             expense.expenseCategory = { id: expense.expenseCategory.id };
         }
-        
+
         expense.isTemplate = true;
         this.expenseService.saveExpenseSignal(expense).subscribe({
-          next: (response: any) => {
-              this.isVisible.set(false);
-              this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', {nzDuration: 5000});
-          },
-          error: (error: any) => {
-              this.isLoading.set(false);
-              error.error.fieldErrors?.map((fieldError: any) => {
-                  this.form.setControlError(fieldError.field, fieldError.message);
-              });
-              if (error.error.fieldErrors === undefined) {
-                  this.nzNotificationService.error('Lo sentimos', error.error.detail);
-              }
-          }
+            next: (response: any) => {
+                this.isVisible.set(false);
+                this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', { nzDuration: 5000 });
+            },
+            error: (error: any) => {
+                // Displaying the error message in the form
+                error.error.fieldErrors?.map((fieldError: any) => {
+                    this.form.setControlError(fieldError.field, fieldError.message);
+                });
+
+                // show other errors
+                if (error.error.fieldErrors === undefined) {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
+
+                this.form.stopLoading();
+            }
         });
     }
-    
+
     /**
      * Edit the expense
      * @param expense IExpense object to edit.
@@ -143,7 +149,7 @@ export class ExpensesComponent implements OnInit {
     updateExpense(expense: IExpense): void {
 
         if (expense.tax) {
-            expense.tax = {id: expense.tax.id};
+            expense.tax = { id: expense.tax.id };
         }
 
         if (expense.expenseCategory) {
@@ -156,7 +162,6 @@ export class ExpensesComponent implements OnInit {
                 this.nzNotificationService.create("success", "", 'Gasto editada exitosamente', { nzDuration: 5000 });
             },
             error: (error: any) => {
-                this.isLoading.set(false);
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
                     this.form.setControlError(fieldError.field, fieldError.message);
@@ -166,10 +171,12 @@ export class ExpensesComponent implements OnInit {
                 if (error.error.fieldErrors === undefined) {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
+
+                this.form.stopLoading();
             }
         });
     }
-    
+
     /**
      * Delete the expense
      * @param expense IExpense object to delete.

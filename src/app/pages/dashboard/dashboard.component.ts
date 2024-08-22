@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
     public incomeService = inject(IncomeService);
     public goalService = inject(GoalService);
     public toolsService = inject(ToolsService);
+    public authService = inject(AuthService);
 
     // Var
     public incomes: number[] = [];
@@ -88,6 +90,17 @@ export class DashboardComponent implements OnInit {
     }
 
     loadData() {
+        if(this.authService.isAdmin()) {
+            this.toolsService.currencyCodes().subscribe({
+                next: (response: any) => {
+                    this.currencyCodes = response;
+                },
+                error: (error => {
+                    this.nzNotificationService.error('Error', error.error.detail)
+                })
+            });
+        }
+
         this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
             next: (response: any) => {
             },

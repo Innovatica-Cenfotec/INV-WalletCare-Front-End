@@ -10,6 +10,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { catchError, tap } from 'rxjs';
 import { IGoal } from '../../interfaces';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
     selector: 'app-goals',
@@ -19,7 +20,8 @@ import { IGoal } from '../../interfaces';
         GoalsListComponent,
         NzPageHeaderModule,
         NzButtonComponent,
-        NzIconModule
+        NzIconModule,
+        NzPopoverModule
     ],
     templateUrl: './goals.component.html',
     styleUrl: './goals.component.scss',

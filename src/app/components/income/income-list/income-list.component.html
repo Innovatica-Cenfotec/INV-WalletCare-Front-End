@@ -1,4 +1,4 @@
-<nz-table #nzTable [nzData]="incomeList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '120px']">
+<nz-table #fixedTable [nzData]="incomeList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '120px']">
     <thead>
         <tr>
             <th></th>
@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        <ng-container *ngFor="let data of nzTable.data">
+        <ng-container *ngFor="let data of fixedTable.data">
             <tr>
                 <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
                 <td>{{ data.name }}</td>

@@ -23,6 +23,7 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { TransactionService } from '../../services/transaction.service';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
   selector: 'app-accounts',
@@ -42,6 +43,7 @@ import { TransactionService } from '../../services/transaction.service';
     NzIconModule,
     NzDividerModule,
     NzModalModule,
+    NzPopoverModule
   ],
   providers: [AccountService],
   templateUrl: './accounts.component.html',
@@ -141,7 +143,7 @@ export class AccountsComponent implements OnInit {
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
-      error: (error: any) => {   
+      error: (error: any) => {
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -152,8 +154,7 @@ export class AccountsComponent implements OnInit {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
 
-        this.isLoading.set(false);
-        //this.form.stopLoading();
+        this.form.stopLoading();
       }
     });
   }
@@ -164,7 +165,7 @@ export class AccountsComponent implements OnInit {
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
       },
-      error: (error: any) => {        
+      error: (error: any) => {
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -174,9 +175,8 @@ export class AccountsComponent implements OnInit {
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
-
-        this.isLoading.set(false);
         this.isVisible.set(false);
+        this.form.stopLoading();
       }
     });
   }
