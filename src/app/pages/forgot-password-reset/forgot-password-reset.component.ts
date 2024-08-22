@@ -62,7 +62,7 @@ export class ForgotPasswordResetComponent implements OnInit {
       newPassword: ['', [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/)
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/)
       ]],
       confirmPassword: ['', [Validators.required]]
     });    

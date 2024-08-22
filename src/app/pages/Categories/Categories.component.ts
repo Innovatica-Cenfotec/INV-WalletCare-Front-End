@@ -28,24 +28,24 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     selector: 'app-categories',
     standalone: true,
     imports: [
-    CommonModule,
-    AccountFormComponent,
-    AccountListComponent,
-    AccountCardsComponent,
-    NzPageHeaderModule,
-    NzButtonComponent,
-    NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
-    NzIconModule,
-    NzDividerModule,
-    NzModalModule,
-    CategoryFormComponent,
-    CategoriesListComponent,
-    NzPopoverModule
-],
+        CommonModule,
+        AccountFormComponent,
+        AccountListComponent,
+        AccountCardsComponent,
+        NzPageHeaderModule,
+        NzButtonComponent,
+        NzSpaceModule,
+        NzDescriptionsModule,
+        NzStatisticModule,
+        NzGridModule,
+        NzCardModule,
+        NzIconModule,
+        NzDividerModule,
+        NzModalModule,
+        CategoryFormComponent,
+        CategoriesListComponent,
+        NzPopoverModule
+    ],
     templateUrl: './Categories.component.html',
     styleUrl: './Categories.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,7 +138,7 @@ export class CategoriesComponent implements OnInit {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
             }
         });
     }
@@ -164,7 +164,7 @@ export class CategoriesComponent implements OnInit {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
             }
         });
     }
