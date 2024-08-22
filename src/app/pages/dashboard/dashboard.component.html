@@ -1,5 +1,3 @@
-
-
 @if(authService.isAdmin()){
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="12">
@@ -45,12 +43,9 @@
 } @else {
 
 <nz-card [nzBordered]="false">
-    <nz-statistic [nzValue]="generalBalance" [nzTitle]="'Balance General'" [nzPrefix]="'₡'"
-        [nzValueStyle]="{ color: generalBalanceColor }">
-    </nz-statistic>
-    <ng-template #prefixTplOne>
-        <span nz-icon nzType="arrow-up"></span>
-    </ng-template>
+    <app-account-cards [accountsList]="accountService.accounts$()"
+    [transactions]="transactionService.transactions$()"
+    [balances]="transactionService.balances$()"> </app-account-cards>
 </nz-card>
 
 <div nz-row [nzGutter]="8">
@@ -92,7 +87,6 @@
     </div>
 </div>
 
-
 <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="12">
         <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory" style="margin: 10px">
@@ -122,12 +116,13 @@
                 [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
         </nz-card>
     </div>
-    <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Gastos Estimados vs Gastos Totales" style="margin: 10px">
-            <app-estimated-expense-vs-total-expense-chart [totalExpensesData]="totalExpenses"
-                [recurringExpensesData]="recurringExpenses">
-                ></app-estimated-expense-vs-total-expense-chart>
-        </nz-card>
+   <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Gastos Estimados vs Gastos Totales">
+        <app-estimated-expense-vs-total-expense-chart 
+          [totalExpensesData]="totalExpenses"
+          [recurringExpensesData]="recurringExpensesChart">
+          ></app-estimated-expense-vs-total-expense-chart>
+      </nz-card>
     </div>
 </div>
 }

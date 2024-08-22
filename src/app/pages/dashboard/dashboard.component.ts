@@ -1,7 +1,17 @@
-import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+
+// Services
+import { AuthService } from './../../services/auth.service';
+import { ExpenseService } from '../../services/expense.service';
+import { IncomeService } from '../../services/imcome.service';
+import { TransactionService } from '../../services/transaction.service';
+import { ToolsService } from '../../services/tools.service';
+import { UserService } from '../../services/user.service';
+
+// Interfaces
+import { IAccount, IBalance, IBalanceDTO, CurrencyCodesDTO, CurrencyExchangeDTO, IBarchartData, ITransaction } from '../../interfaces';
 
 // Importing Ng-Zorro modules
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -14,87 +24,88 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { error } from '@ant-design/icons-angular';
 
 // Custom elements
-import { IBalance, IBalanceDTO, CurrencyCodesDTO, CurrencyExchangeDTO, IBarchartData } from '../../interfaces';
-import { TransactionService } from '../../services/transaction.service';
-import { ToolsService } from '../../services/tools.service';
-import { ExpenseService } from '../../services/expense.service';
-import { IncomeService } from '../../services/imcome.service';
+import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { BarchartComponent } from '../../components/dashboard/charts/barchart/barchart.component';
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
-import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
+import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
+import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { NewUsersChartComponent } from '../../components/dashboard/charts/new-users-chart/new-users-chart.component';
-import { UserService } from '../../services/user.service';
+import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
 
 @Component({
-    selector: 'app-dashboard',
-    standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        NzIconModule,
-        NzPopoverModule,
-        NzCardModule,
-        NzGridModule,
-        NzStatisticModule,
-        NzFormModule,
-        NzInputModule,
-        NzSelectModule,
-        NzButtonModule,
-        BarchartComponent,
-        IncomesVsExpensesChartComponent,
-        EstimatedExpenseVsTotalExpenseChartComponent,
-        CurrenciesChartComponent,
-        IncomesVsExpensesMonthlyChartComponent,
-        NewUsersChartComponent
-    ],
-    templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.scss'
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzIconModule,
+    NzPopoverModule,
+    BarchartComponent,
+    ReactiveFormsModule,
+    NzCardModule,
+    NzGridModule,
+    NzStatisticModule,
+    IncomesVsExpensesChartComponent,
+    EstimatedExpenseVsTotalExpenseChartComponent,
+    NzFormModule,
+    NzInputModule,
+    NzSelectModule,
+    NzButtonModule,
+    CurrenciesChartComponent,
+    AccountCardsComponent
+    IncomesVsExpensesMonthlyChartComponent,
+    NewUsersChartComponent        
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
 
-    // Services
-    private nzNotificationService = inject(NzNotificationService);
-    public fb = inject(FormBuilder);
-    public transactionService = inject(TransactionService);
-    public expenseService = inject(ExpenseService);
-    public incomeService = inject(IncomeService);
-    public toolsService = inject(ToolsService);
-    public authService = inject(AuthService);
-    public usersService = inject(UserService);
+  // Services
+  private nzNotificationService = inject(NzNotificationService);
+  public fb = inject(FormBuilder);
+  public transactionService = inject(TransactionService);
+  public expenseService = inject(ExpenseService);
+  public incomeService = inject(IncomeService);
+  public toolsService = inject(ToolsService);
+  public authService = inject(AuthService);
+  public usersService = inject(UserService);
+  public accountService = inject(AccountService);
+  
+  // Var
+  public incomesAnnualy: number[] = [];
+  public expensesAnnualy: number[] = [];
+  public incomesMonthly: number[] = [];
+  public expensesMonthly: number[] = [];
+  public daysExchange: number[] = [];
+  public exchangeRate: number[] = [];
+  public currencyCodes: CurrencyCodesDTO[] = [];
+  public incomeMonthByCategoryReport: IBarchartData[] = [];
+  public expenseMonthByCategoryReport: IBarchartData[] = [];
+  public totalExpenses: number[] = [];
+  public recurringExpensesChart: number[] = [];
+  public loading = false;
+  public generalBalance = 0;
+  public generalBalanceColor = '';
+  monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-    // Var
-    public incomesAnnualy: number[] = [];
-    public expensesAnnualy: number[] = [];
-    public incomesMonthly: number[] = [];
-    public expensesMonthly: number[] = [];
-    public daysExchange: number[] = [];
-    public exchangeRate: number[] = [];
-    public currencyCodes: CurrencyCodesDTO[] = [];
-    public incomeMonthByCategoryReport: IBarchartData[] = [];
-    public expenseMonthByCategoryReport: IBarchartData[] = [];
-    public loading = false;
+  public validateForm = this.fb.group({
+    currencyTo: ['', [Validators.required]],
+  });
 
-    public validateForm = this.fb.group({
-      currencyTo: ['', [Validators.required]],
-    });
-
-    public totalExpenses: number[] = [];
-    public recurringExpenses: number[] = [];
-
-    public generalBalance = 0;
-    public generalBalanceColor = '';
-
-    monthOrder = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-
-    ngOnInit(): void {
-        this.loadData();
-    }
-
-    loadData() {
+  ngOnInit(): void {
+    this.loadData();
+    this.expenseService.reportAnualAmountByCategory(new Date().getFullYear());
+    this.incomeService.reportAnualAmountByCategory(new Date().getFullYear());
+    this.accountService.findAllSignal();
+    this.transactionService.getAllByOwnerSignal();
+  }
+  
+  loadData() {
         if(this.authService.isAdmin()) {
             this.usersService.getNewUsersThisYear();
         }
@@ -131,28 +142,11 @@ export class DashboardComponent implements OnInit {
         this.transactionService.getBalancesByOwner().subscribe({
             next: (balances: IBalanceDTO) => {
                 this.totalExpenses = [balances.monthlyExpenseBalance || 0];
-                this.recurringExpenses = [balances.recurrentExpensesBalance || 0];
+                this.recurringExpensesChart = [balances.recurrentExpensesBalance || 0];
             },
             error: (error => {
                 console.log(error);
             })
-        });
-
-        this.transactionService.getBalancesByOwner().subscribe({
-            next: (balances: IBalanceDTO) => {
-                this.generalBalance = (balances.monthlyIncomeBalance || 0) - (balances.monthlyExpenseBalance || 0);
-
-                if (this.generalBalance > 0) {
-                    this.generalBalanceColor = IBalance.surplus;
-                } else if (this.generalBalance < 0) {
-                    this.generalBalanceColor = IBalance.deficit;
-                } else {
-                    this.generalBalanceColor = IBalance.balance;
-                }
-            },
-            error: (error) => {
-                console.log(error);
-            }
         });
     
         this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
@@ -173,8 +167,8 @@ export class DashboardComponent implements OnInit {
             })
         });
     }
-
-    handleSubmit() {
+  
+  handleSubmit() {
         for (const key in this.validateForm.controls) {
             console.log(this.validateForm.get(key)?.value)
             if (typeof this.validateForm.get(key)?.value === 'string') {

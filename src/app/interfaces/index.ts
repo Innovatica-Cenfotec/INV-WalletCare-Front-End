@@ -1,6 +1,11 @@
 import { FormControl } from '@angular/forms';
-import { ApexAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip,
-    ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
+import {
+    ApexAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip,
+    ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle,
+    ApexNonAxisChartSeries,
+    ApexResponsive,
+    ApexLegend
+} from 'ng-apexcharts';
 
 export interface ILoginResponse {
     accessToken: string;
@@ -24,6 +29,15 @@ export interface ChartOptions {
     grid: ApexGrid;
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
+};
+
+export interface ChartOptionsNonAxis {
+    series: ApexNonAxisChartSeries;
+    chart: ApexChart;
+    responsive: ApexResponsive[];
+    labels: any;
+    fill?: ApexFill;
+    legend?: ApexLegend;
 };
 
 export interface IBarchartData {
@@ -339,12 +353,12 @@ export enum ICurrencyType {
     dollars = "DOLLARS"
 }
 
-export interface CurrencyCodesDTO{
+export interface CurrencyCodesDTO {
     currencyCode?: string;
     currencyName?: string;
 }
 
-export interface CurrencyExchangeDTO{
+export interface CurrencyExchangeDTO {
     currencyFrom?: string | null;
     currencyTo?: string | null;
     amount?: 0 | number | null,
