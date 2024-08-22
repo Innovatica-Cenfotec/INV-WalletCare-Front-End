@@ -41,24 +41,37 @@
 </nz-space>
 
 
-<app-account-form #form [isVisible]="isVisibleEditAccount()" [type]="IITypeForm.update" [title]="'Editar cuenta'" (onCanceled)="closeModal()" (onUpdated)="editAccount($event)" [item]="accountService.account$()" [isLoading]="isLoading()">
+<app-account-form #form 
+    [isVisible]="isVisibleEditAccount()" 
+    [type]="IITypeForm.update"
+    [title]="'Editar cuenta'"
+    [item]="accountService.account$()"
+    [isLoading]="isLoading()"
+    (onCanceled)="closeModal()" 
+    (onUpdated)="editAccount($event)">
 </app-account-form>
 
-<app-invite-account [isVisible]="isVisibleInvite" (onClose)="closeModal()">
+<app-invite-account 
+    [isVisible]="isVisibleInvite" (onClose)="closeModal()">
 </app-invite-account>
 
-<app-expense-form #formExpense [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="incomeExpenceSavingType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()"
+<app-expense-form #formExpense [isVisible]="isVisibleExpense()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="expense()" [type]="TypeForm" [title]="title" 
+    [expenseType]="incomeExpenceSavingType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()"
+    [categories]="CategoryService.categories$()"
     (onCreated)="createExpense($event)">
 </app-expense-form>
 
-<app-income-form #formIncome [isVisible]="isVisibleIncome()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="income()" [type]="TypeForm" [title]="title" [incomeType]="incomeExpenceSavingType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()"
+<app-income-form #formIncome [isVisible]="isVisibleIncome()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="income()" [type]="TypeForm" [title]="title" 
+    [incomeType]="incomeExpenceSavingType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalIncomeOrExpense()"
     (onCreated)="createIncome($event)">
 </app-income-form>
 
-<app-saving-form #formSaving [isVisible]="isVisibleSaving()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="saving()" [type]="TypeForm" [title]="title" [savingType]="incomeExpenceSavingType" (onCanceled)="closeModalIncomeOrExpense()"
+<app-saving-form #formSaving [isVisible]="isVisibleSaving()" [isLoading]="isLoading()" [enableTemplate]="true" [item]="saving()" [type]="TypeForm" [title]="title" 
+    [savingType]="incomeExpenceSavingType" (onCanceled)="closeModalIncomeOrExpense()"
     (onCreated)="createSaving($event)">
 </app-saving-form>
 
-<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType" [listIncome]="incomeService.incomes$()" [listExpense]="expenseService.expenses$()" [listSaving]="savingService.savings$()" (onCancel)="closeModal()" (onSelected)="addSelectedTransaction($event)"
+<app-transaction-form [isVisible]="isVisibleTransaction" [isLoading]="isLoadingTransaction" [type]="TransactionFormType" [listIncome]="incomeService.incomes$()"
+    [listExpense]="expenseService.expenses$()" [listSaving]="savingService.savings$()" (onCancel)="closeModal()" (onSelected)="addSelectedTransaction($event)"
     (onCreated)="showModalIncomeOrExpense($event)">
 </app-transaction-form>

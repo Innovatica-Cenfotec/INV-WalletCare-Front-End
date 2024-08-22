@@ -22,6 +22,7 @@ import { ExpensesComponent } from './pages/expenses/expenses.component';
 import { GoalsComponent } from './pages/goals/goals.component';
 import { SavingsComponent } from './pages/savings/savings.component';
 import { UsersComponent } from './pages/users/users.component';
+import { CategoriesComponent } from './pages/Categories/Categories.component';
 
 export const routes: Routes = [
   {
@@ -43,7 +44,7 @@ export const routes: Routes = [
     canActivate: [GuestGuard],
   },
   {
-    path:'invitation',
+    path: 'invitation',
     component: AccountInvitationComponent
   },
   {
@@ -132,7 +133,6 @@ export const routes: Routes = [
         component: SavingsComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           showInSidebar: true,
@@ -146,7 +146,7 @@ export const routes: Routes = [
       {
         path: 'expense',
         component: ExpensesComponent,
-       data: {
+        data: {
           authorities: [
             IRole.user
           ],
@@ -159,12 +159,27 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'Categories',
+        component: CategoriesComponent,
+        data: {
+          authorities: [
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'reconciliation',
+            breadcrumb: ['Mis categorias'],
+            name: 'Mis categorias',
+          },
+        }
+      },
+      {
         path: 'goals',
         component: GoalsComponent,
-       data: {
+        data: {
           authorities: [
             IRole.admin,
-            IRole.user            
+            IRole.user
           ],
           showInSidebar: true,
           layout: <ILayout>{
@@ -177,9 +192,9 @@ export const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
-       data: {
+        data: {
           authorities: [
-            IRole.admin         
+            IRole.admin
           ],
           showInSidebar: true,
           layout: <ILayout>{

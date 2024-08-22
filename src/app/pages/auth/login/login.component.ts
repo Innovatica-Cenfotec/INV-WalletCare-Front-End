@@ -97,7 +97,12 @@ export class LoginComponent implements OnInit {
           if (err.status === 401) {
             this.message.remove();
             this.loginError = 'Usuario o contraseña incorrectos';
-          } else {
+          } 
+          if (err.status === 403) {
+            this.message.remove();
+            this.loginError = 'Lo sentimos, su cuenta ha sido deshabilitada por el administrador';
+          }          
+          else {
             this.loginError = 'Ocurrió un error inesperado, por favor intente más tarde';
           }
           this.isLoggingIn = false

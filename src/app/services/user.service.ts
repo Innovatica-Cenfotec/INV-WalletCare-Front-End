@@ -9,9 +9,14 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
+  private newUsersDataSignal = signal<number[]>([]);
   get users$() {
     return this.userListSignal;
   }
+  get newUsersData$() {
+    return this.newUsersDataSignal;
+  }
+
   getAllSignal() {
     this.findAll().subscribe({
       next: (response: any) => {
@@ -57,5 +62,16 @@ export class UserService extends BaseService<IUser> {
         return throwError(error);
       })
     );
+  }
+  getNewUsersThisYear() {
+    this.http.get(`${this.source}/new-users`).subscribe({
+      next: (response: any) => {
+        response.reverse();
+        this.newUsersDataSignal.set(response);
+      },
+      error: (error: any) => {
+        console.error('Error fetching users', error);
+      }
+    });
   }
 }

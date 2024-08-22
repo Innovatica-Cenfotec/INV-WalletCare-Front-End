@@ -289,6 +289,7 @@ export interface IExpense {
     createdAt?: Date;
     updatedAt?: Date;
     account?: IAccount;
+    expenseCategory?: ICategory;
 }
 
 
@@ -402,10 +403,10 @@ export enum GoalStatusEnum {
  * Interface for goal
  */
 export interface IGoal {
-    id?: number;//
-    owner?: IUser;//
-    account?: IAccount;//
-    saving?: ISaving;//
+    id?: number;
+    owner?: IUser;
+    account?: IAccount;
+    saving?: ISaving;
     name?: string;
     description?: string;
     recommendation?: string;
@@ -414,4 +415,15 @@ export interface IGoal {
     createdAt?: Date;
     targetDate?: Date;
     targetAmount?: number;
+}
+
+/**
+ * Interface for category of expenses
+ */
+export interface ICategory {
+    id?: number;    
+    owner?: IUser;
+    name?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

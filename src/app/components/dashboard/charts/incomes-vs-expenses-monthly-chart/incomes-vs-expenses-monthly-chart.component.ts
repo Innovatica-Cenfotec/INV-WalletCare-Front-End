@@ -14,20 +14,21 @@ import {
 import { ChartOptions, IBalance } from '../../../../interfaces';
 
 @Component({
-    selector: 'app-incomes-vs-expenses-chart',
+    selector: 'app-incomes-vs-expenses-monthly-chart',
     standalone: true,
     imports: [
         CommonModule,
         NgApexchartsModule
     ],
-    templateUrl: './incomes-vs-expenses-chart.component.html',
-    styleUrl: './incomes-vs-expenses-chart.component.scss',
+    templateUrl: './incomes-vs-expenses-monthly-chart.component.html',
+    styleUrl: './incomes-vs-expenses-monthly-chart.component.scss'
 })
-export class IncomesVsExpensesChartComponent implements OnChanges {
+export class IncomesVsExpensesMonthlyChartComponent implements OnChanges {
 
     @ViewChild("chart") chart: ChartComponent | undefined;
     @Input() IncomesData: number[] = [];
     @Input() ExpensesData: number[] = [];
+    @Input() DaysOfTheMonth: number[] = [];
     public chartOptions: Partial<ChartOptions>;
 
     constructor() {
@@ -58,25 +59,20 @@ export class IncomesVsExpensesChartComponent implements OnChanges {
             },
             xaxis: {
                 categories: [
-                    "ENE",
-                    "FEB",
-                    "MAR",
-                    "ABR",
-                    "MAY",
-                    "JUN",
-                    "JUL",
-                    "AGO",
-                    "SEP",
-                    "OCT",
-                    "NOV",
-                    "DIC"
                 ]
             }
         };
     }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['IncomesData'] || changes['ExpensesData']) {
+        if (changes['IncomesData'] || changes['ExpensesData'] || changes['DaysOfTheMonth']) {
+
+            let DaysOfTheMonthIntegers: number[] = [];
+            for (let  i = 0;  i < this.DaysOfTheMonth.length;  i++) {
+                DaysOfTheMonthIntegers[i] = Math.floor(this.DaysOfTheMonth[i]);
+            }
+
+            this.chartOptions.xaxis!.categories = DaysOfTheMonthIntegers;
             this.chartOptions.series = [
                 {
                     name: "Ingresos",
@@ -90,6 +86,6 @@ export class IncomesVsExpensesChartComponent implements OnChanges {
                 }
             ]
         }
-
     }
+
 }

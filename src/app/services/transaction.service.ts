@@ -14,6 +14,9 @@ export class TransactionService extends BaseService<ITransaction> {
   private balancesSignal = signal<IBalanceDTO>({});
   private annuallyExpensesSignal = signal<number[]>([]);
   private annuallyIncomesSignal = signal<number[]>([]);
+  private daysOfTheMonthSignal = signal<number[]>([]);
+  private monthlyExpensesSignal = signal<number[]>([]);
+  private monthlyIncomesSignal = signal<number[]>([]);
 
   get transactions$() {
     return this.transactionListSignal;
@@ -28,6 +31,19 @@ export class TransactionService extends BaseService<ITransaction> {
 
   get annuallyIncomes$(){
     return this.annuallyIncomesSignal;
+  }
+
+  get daysOfTheMonth$(){
+    return this.daysOfTheMonthSignal;
+  }
+
+  get monthlyExpenses$(){
+    return this.monthlyExpensesSignal;
+  }
+
+  
+  get monthlyIncomes$(){
+    return this.monthlyIncomesSignal;
   }
 
   /**
@@ -110,6 +126,21 @@ export class TransactionService extends BaseService<ITransaction> {
       tap((response: any) => {
         this.annuallyExpensesSignal.set(response[0]);
         this.annuallyIncomesSignal.set(response[1]);
+      }),
+      catchError(error => {
+        console.error('Error updating account', error);
+        throw error;
+      })
+    );
+  }
+
+  getBalancesMonthly(){
+    return this.http.get<Array<Array<number>>>(`${this.source}/balances-monthly`).pipe(
+      tap((response: any) => {
+        this.daysOfTheMonthSignal.set(response[0])
+        this.monthlyExpensesSignal.set(response[1]);
+        this.monthlyIncomesSignal.set(response[2]);
+
       }),
       catchError(error => {
         console.error('Error updating account', error);
