@@ -40,7 +40,7 @@
 
 <div nz-row [nzGutter]="8">
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory" style="margin: 10px">
+        <nz-card nzTitle="Gastos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyExpenseCategory" style="margin: 10px">
             <app-barchart [data]="this.expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
 
         </nz-card>
@@ -50,7 +50,7 @@
     </div>
 
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Ingresos mensuales por categoria (anual)" [nzExtra]="tmpYearlyIncomeCategory" style="margin: 10px">
+        <nz-card nzTitle="Ingresos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyIncomeCategory" style="margin: 10px">
             <app-barchart [data]="this.incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
         </nz-card>
         <ng-template #tmpYearlyIncomeCategory>
