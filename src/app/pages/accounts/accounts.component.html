@@ -1,5 +1,8 @@
 <nz-page-header class="site-page-header">
-  <nz-page-header-title>Mis Cuentas</nz-page-header-title>
+  <nz-page-header-title>
+    Mis Cuentas
+    <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de cuentas" nzPopoverContent="En esta página encontrará todas las cuentas que ha creado."> </span>
+  </nz-page-header-title>
   <nz-page-header-extra>
     <nz-space>
       <button *nzSpaceItem nz-button nzType="primary" (click)="showModalCreate()">

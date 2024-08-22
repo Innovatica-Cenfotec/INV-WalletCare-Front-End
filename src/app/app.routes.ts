@@ -133,7 +133,6 @@ export const routes: Routes = [
         component: SavingsComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           showInSidebar: true,

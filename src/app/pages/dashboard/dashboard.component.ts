@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -62,7 +63,7 @@ export class DashboardComponent implements OnInit {
     public expenseService = inject(ExpenseService);
     public incomeService = inject(IncomeService);
     public toolsService = inject(ToolsService);
-    public usersService = inject(UserService);
+    public authService = inject(AuthService);
 
     // Var
     public incomesAnnualy: number[] = [];
@@ -93,10 +94,17 @@ export class DashboardComponent implements OnInit {
     }
 
     loadData() {
-
-
-        this.usersService.getNewUsersThisYear();
-
+        if(this.authService.isAdmin()) {
+            this.toolsService.currencyCodes().subscribe({
+                next: (response: any) => {
+                    this.currencyCodes = response;
+                },
+                error: (error => {
+                    this.nzNotificationService.error('Error', error.error.detail)
+                })
+            });
+        }
+        
         this.transactionService.getBalancesAnnually().subscribe({
             next: (response: any) => {
                 this.expensesAnnualy = response[0];
@@ -143,16 +151,7 @@ export class DashboardComponent implements OnInit {
                 console.log(error);
             }
         });
-
-        this.toolsService.currencyCodes().subscribe({
-            next: (response: any) => {
-                this.currencyCodes = response;
-            },
-            error: (error => {
-                this.nzNotificationService.error('Error', error.error.detail)
-            })
-        });
-
+    
         this.expenseService.reportAnualAmountByCategory(new Date().getFullYear()).subscribe({
             next: (response: any) => {
                 //this.expenseMonthByCategoryReport = response;

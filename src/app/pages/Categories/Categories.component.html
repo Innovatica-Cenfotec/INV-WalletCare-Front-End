@@ -1,5 +1,9 @@
 <nz-page-header class="site-page-header">
-    <nz-page-header-title>Mis Categorias</nz-page-header-title>
+    <nz-page-header-title>
+        Mis Categorias
+        <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+            nzPopoverTitle="Lista de categorias" nzPopoverContent="En esta página encontrará todas las categorias que ha creado."> </span>
+    </nz-page-header-title>
     <nz-page-header-extra>
         <nz-space>
             <button *nzSpaceItem nz-button nzType="primary" (click)="showModalCreate()">

@@ -22,28 +22,30 @@ import { AccountCardsComponent } from '../../components/account/account-cards/ac
 import { ICategory, ITypeForm } from '../../interfaces';
 import { CategoryFormComponent } from '../../components/category/CategoryForm/CategoryForm.component';
 import { CategoriesListComponent } from '../../components/category/CategoriesList/CategoriesList.component';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
     selector: 'app-categories',
     standalone: true,
     imports: [
-    CommonModule,
-    AccountFormComponent,
-    AccountListComponent,
-    AccountCardsComponent,
-    NzPageHeaderModule,
-    NzButtonComponent,
-    NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
-    NzIconModule,
-    NzDividerModule,
-    NzModalModule,
-    CategoryFormComponent,
-    CategoriesListComponent
-],
+        CommonModule,
+        AccountFormComponent,
+        AccountListComponent,
+        AccountCardsComponent,
+        NzPageHeaderModule,
+        NzButtonComponent,
+        NzSpaceModule,
+        NzDescriptionsModule,
+        NzStatisticModule,
+        NzGridModule,
+        NzCardModule,
+        NzIconModule,
+        NzDividerModule,
+        NzModalModule,
+        CategoryFormComponent,
+        CategoriesListComponent,
+        NzPopoverModule
+    ],
     templateUrl: './Categories.component.html',
     styleUrl: './Categories.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,7 +138,7 @@ export class CategoriesComponent implements OnInit {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
             }
         });
     }
@@ -162,7 +164,7 @@ export class CategoriesComponent implements OnInit {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
             }
         });
     }
