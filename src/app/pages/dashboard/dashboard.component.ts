@@ -29,13 +29,12 @@ import { error } from '@ant-design/icons-angular';
 // Custom elements
 import { AccountCardsComponent } from '../../components/account/account-cards/account-cards.component';
 import { BarchartComponent } from '../../components/dashboard/charts/barchart/barchart.component';
-import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
-import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
 import { IncomesVsExpensesChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-chart/incomes-vs-expenses-chart.component';
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { NewUsersChartComponent } from '../../components/dashboard/charts/new-users-chart/new-users-chart.component';
 import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -56,7 +55,7 @@ import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboa
     NzSelectModule,
     NzButtonModule,
     CurrenciesChartComponent,
-    AccountCardsComponent
+    AccountCardsComponent,
     IncomesVsExpensesMonthlyChartComponent,
     NewUsersChartComponent        
   ],
@@ -99,16 +98,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.expenseService.reportAnualAmountByCategory(new Date().getFullYear());
-    this.incomeService.reportAnualAmountByCategory(new Date().getFullYear());
-    this.accountService.findAllSignal();
-    this.transactionService.getAllByOwnerSignal();
   }
   
   loadData() {
         if(this.authService.isAdmin()) {
             this.usersService.getNewUsersThisYear();
         }
+
+        this.accountService.findAllSignal();
+        this.transactionService.getAllByOwnerSignal();
 
         this.toolsService.currencyCodes().subscribe({
             next: (response: any) => {
@@ -154,7 +152,8 @@ export class DashboardComponent implements OnInit {
                 //this.expenseMonthByCategoryReport = response;
             },
             error: (error => {
-                this.nzNotificationService.error('Error', error.error.detail)
+                console.log(error);
+                //this.nzNotificationService.error('Error', error.error.detail)
             })
         });
 
@@ -163,7 +162,8 @@ export class DashboardComponent implements OnInit {
                 //this.incomeMonthByCategoryReport = response;
             },
             error: (error => {
-                this.nzNotificationService.error('Error', error.error.detail)
+                console.log(error);
+                //this.nzNotificationService.error('Error', error.error.detail)
             })
         });
     }
