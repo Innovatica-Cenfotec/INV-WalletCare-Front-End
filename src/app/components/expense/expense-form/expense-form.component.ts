@@ -1,6 +1,6 @@
 import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceSavingType, Itax, ITypeForm, ICategory } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -36,18 +36,19 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzSelectModule,
     NzDescriptionsModule,
     NzCalendarModule,
-    NzTypographyModule
+    NzTypographyModule,
   ],
   templateUrl: './expense-form.component.html',
   styleUrl: './expense-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpenseFormComponent extends FormModalComponent<IExpense> {
+export class ExpenseFormComponent extends FormModalComponent<IExpense> implements OnChanges {
 
   IAmountType = IAmountType;
   IIncomeExpenceType = IIncomeExpenceSavingType;
   IFrequencyType = IFrequencyType;
   TaxSelected: Itax | undefined;
+  ExpenseCategorySelected: ICategory | undefined;
   scheduledDayVisible = false;
   scheduledDay: number = 0;
   days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -70,6 +71,8 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     type: [this.item?.type],
     frequency: [this.item?.frequency],
     expenseCategory: [this.item?.expenseCategory],
+    expenseCategoryId:[],
+    taxId:[]
   });
 
   formatterConlon = (value: number): string => `₡ ${value}`;
@@ -122,12 +125,26 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     }
 
     this.formGroup.get('isTaxRelated')?.setValue(this.TaxSelected !== null);
+    this.formGroup.get('expenseCategory')?.setValue(this.ExpenseCategorySelected);
+    this.formGroup.get('tax')?.setValue(this.TaxSelected);
     this.formGroup.get('type')?.setValue(this.expenseType);
     super.handleSubmit();
   }
 
-  onSelectTax(tax: Itax): void {
-    this.TaxSelected = tax;
+  onSelectTax(id: number | null): void {
+    if (id === null) {
+      this.TaxSelected = undefined;
+    } else {
+      this.TaxSelected = this.taxList.find((t) => t.id === id);
+    }
+  }
+
+  onSelectCategory(id: number | null): void {
+    if (id === null) {
+      this.ExpenseCategorySelected = undefined;
+    } else {
+      this.ExpenseCategorySelected = this.categories.find((c) => c.id === id);
+    }
   }
 
   onSelectFrequency(frequency: IFrequencyType): void {

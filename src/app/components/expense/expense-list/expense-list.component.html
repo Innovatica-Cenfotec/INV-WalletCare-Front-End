@@ -44,7 +44,7 @@
                     Fecha de actualización: {{ getDate(data.updatedAt) }}
                 </p>
                 <p>
-                    Categoria: {{ data.expenseCategory?.name || '-' }}
+                    Categoria: {{ getExpenseCategory(data) }}
                 </p>
                 @if(data.tax != undefined){
                 <h4 nz-typography>Impuesto</h4>
