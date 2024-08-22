@@ -1,6 +1,6 @@
 import { Validators, FormBuilder, ReactiveFormsModule, FormControl ,FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -37,6 +37,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 })
 export class TransactionFormComponent implements OnChanges {
     protected fb = inject(FormBuilder);
+    protected cd = inject(ChangeDetectorRef);
     IIncomeExpenceType = IIncomeExpenceSavingType;
 
     /**
@@ -263,11 +264,23 @@ export class TransactionFormComponent implements OnChanges {
                 'Tipo no válido';
     }
 
-
+    /**
+     * Gets the no item message.
+     * @returns The no item message.
+     */
     getNoItemMessage(): string {
         return  this.type === 'income' ? '¿No encuentras el ingreso que buscas?' : 
                 this.type === 'expense' ? '¿No encuentras el gasto que buscas?':
                 this.type === 'saving' ? '¿No encuentras el ahorro que buscas?' :
                 'Tipo no válido';
+    }
+
+    /**
+     * Stops the loading.
+     * @returns The add item message.
+     */
+    stopLoading(): void {
+        this.isLoading = false;
+        this.cd.detectChanges();
     }
 }
