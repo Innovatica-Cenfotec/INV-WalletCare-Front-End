@@ -64,6 +64,7 @@ export class DashboardComponent implements OnInit {
     public incomeService = inject(IncomeService);
     public toolsService = inject(ToolsService);
     public authService = inject(AuthService);
+    public usersService = inject(UserService);
 
     // Var
     public incomesAnnualy: number[] = [];
@@ -95,15 +96,17 @@ export class DashboardComponent implements OnInit {
 
     loadData() {
         if(this.authService.isAdmin()) {
-            this.toolsService.currencyCodes().subscribe({
-                next: (response: any) => {
-                    this.currencyCodes = response;
-                },
-                error: (error => {
-                    this.nzNotificationService.error('Error', error.error.detail)
-                })
-            });
+            this.usersService.getNewUsersThisYear();
         }
+
+        this.toolsService.currencyCodes().subscribe({
+            next: (response: any) => {
+                this.currencyCodes = response;
+            },
+            error: (error => {
+                this.nzNotificationService.error('Error', error.error.detail)
+            })
+        });
         
         this.transactionService.getBalancesAnnually().subscribe({
             next: (response: any) => {
