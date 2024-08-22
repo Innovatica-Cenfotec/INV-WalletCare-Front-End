@@ -25,6 +25,8 @@ import { IncomesVsExpensesChartComponent } from '../../components/dashboard/char
 import { EstimatedExpenseVsTotalExpenseChartComponent } from '../../components/dashboard/charts/estimated-expense-vs-total-expense-chart/estimated-expense-vs-total-expense-chart.component';
 import { CurrenciesChartComponent } from '../../components/dashboard/charts/currencies-chart/currencies-chart.component';
 import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboard/charts/incomes-vs-expenses-monthly-chart/incomes-vs-expenses-monthly-chart.component';
+import { NewUsersChartComponent } from '../../components/dashboard/charts/new-users-chart/new-users-chart.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -45,7 +47,8 @@ import { IncomesVsExpensesMonthlyChartComponent } from '../../components/dashboa
         IncomesVsExpensesChartComponent,
         EstimatedExpenseVsTotalExpenseChartComponent,
         CurrenciesChartComponent,
-        IncomesVsExpensesMonthlyChartComponent
+        IncomesVsExpensesMonthlyChartComponent,
+        NewUsersChartComponent
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -59,6 +62,7 @@ export class DashboardComponent implements OnInit {
     public expenseService = inject(ExpenseService);
     public incomeService = inject(IncomeService);
     public toolsService = inject(ToolsService);
+    public usersService = inject(UserService);
 
     // Var
     public incomesAnnualy: number[] = [];
@@ -89,6 +93,10 @@ export class DashboardComponent implements OnInit {
     }
 
     loadData() {
+
+
+        this.usersService.getNewUsersThisYear();
+
         this.transactionService.getBalancesAnnually().subscribe({
             next: (response: any) => {
                 this.expensesAnnualy = response[0];

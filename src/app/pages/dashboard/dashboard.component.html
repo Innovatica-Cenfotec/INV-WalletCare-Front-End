@@ -8,6 +8,19 @@
         </ng-template>
     </nz-card>
 
+    
+    <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="24">
+            <nz-card nzTitle="Nuevos Usuarios por Mes" [nzExtra]="tmpNewUsers">
+                <app-new-users-chart [NewUsersData]="this.usersService.newUsersData$()"></app-new-users-chart>
+            </nz-card>
+            <ng-template #tmpNewUsers>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                    nzPopoverContent="Son los nueos usuarios registrados en el año actual"></span>
+            </ng-template>
+        </div>
+    </div>
+    
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="12">
             <nz-card nzTitle="Gastos mensuales por categoria (anual)" [nzExtra]="tmpYearlyExpenseCategory">
