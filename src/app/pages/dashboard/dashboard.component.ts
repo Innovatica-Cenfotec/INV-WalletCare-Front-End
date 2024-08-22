@@ -16,7 +16,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom elements
-import { IBalance, IBalanceDTO, CurrencyCodesDTO, CurrencyExchangeDTO, IBarchartData } from '../../interfaces';
+import { IBalance, IBalanceDTO, CurrencyCodesDTO, CurrencyExchangeDTO } from '../../interfaces';
 import { TransactionService } from '../../services/transaction.service';
 import { ToolsService } from '../../services/tools.service';
 import { ExpenseService } from '../../services/expense.service';
