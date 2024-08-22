@@ -50,8 +50,8 @@
                     <nz-form-item>
                         <nz-form-label nzFor="tax">Declaración de impuestos (opcional)</nz-form-label>
                         <nz-form-control>
-                            <nz-select class="select" formControlName="tax" nzAllowClear nzPlaceHolder="Seleccione impuesto" (ngModelChange)="onSelectTax($event)">
-                                <nz-option *ngFor="let tax of taxList" [nzLabel]="tax.name" [nzValue]="tax">
+                            <nz-select class="select" [ngModel]="item?.tax?.id" formControlName="taxId" nzAllowClear nzPlaceHolder="Seleccione impuesto" (ngModelChange)="onSelectTax($event)">
+                                <nz-option *ngFor="let tax of taxList" [nzLabel]="tax.name" [nzValue]="tax.id">
                                 </nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -61,10 +61,10 @@
                     <nz-form-item>
                         <nz-form-label nzFor="expenseCategory">Categoría</nz-form-label>
                         <nz-form-control>
-                            <nz-select class="select" formControlName="expenseCategory" nzAllowClear nzPlaceHolder="Seleccione categoría">
-                                <nz-option *ngFor="let category of categories" [nzLabel]="category.name || ''" [nzValue]="category">
+                            <nz-select class="select" [ngModel]="item?.expenseCategory?.id" formControlName="expenseCategoryId" nzAllowClear nzPlaceHolder="Seleccione categoría" (ngModelChange)="onSelectCategory($event)">
+                                <nz-option *ngFor="let category of categories" [nzLabel]="category.name || ''" [nzValue]="category.id">
                                 </nz-option>
-                            </nz-select>
+                            </nz-select> 
                         </nz-form-control>
                     </nz-form-item>
                 </div>

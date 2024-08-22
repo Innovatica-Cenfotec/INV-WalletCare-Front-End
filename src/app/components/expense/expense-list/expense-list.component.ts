@@ -164,6 +164,10 @@ export class ExpenseListComponent {
         return expense.tax?.name ?? "-";
     }
 
+    getExpenseCategory(expense: IExpense): string { 
+        return expense.expenseCategory?.name ?? "-";
+    }
+
     /**
      * Set the date format
      * @param date is the date

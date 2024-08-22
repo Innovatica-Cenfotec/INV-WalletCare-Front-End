@@ -45,7 +45,7 @@
                 </p>
                 @if(getExpenseFrequency(data) == 'Personalizado'){
                 <p>
-                    Día asignado: {{ data.scheduledDay || "-" }}
+                    Categoria: {{ getExpenseCategory(data) }}
                 </p>
                 } } @if(data.tax != undefined){
                 <h5 nz-typography>Impuesto</h5>
