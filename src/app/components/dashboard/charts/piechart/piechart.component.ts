@@ -58,7 +58,7 @@ export class PiechartComponent implements OnChanges {
         this.chartOptions = {
             series: [],
             chart: {
-                width: '100%',
+                width: '90%',
                 height: 350,
                 type: this.type
             },

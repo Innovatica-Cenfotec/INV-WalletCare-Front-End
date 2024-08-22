@@ -33,7 +33,8 @@ export class EstimatedExpenseVsTotalExpenseChartComponent implements OnChanges {
     this.chartOptions = {
       series: [],
       chart: {
-        width: 483,
+        width: '90%',
+        height: 350,
         type: "pie"
       },
       labels: [],

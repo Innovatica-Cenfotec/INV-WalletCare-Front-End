@@ -97,16 +97,6 @@
     </div>
 
     <div nz-col [nzSpan]="12">
-        <nz-card nzTitle="Ingresos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyIncomeCategory"
-            style="margin: 10px">
-            <app-barchart [data]="this.incomeService.incomeReport$()" [xAxisOrder]="monthOrder"></app-barchart>
-        </nz-card>
-        <ng-template #tmpYearlyIncomeCategory>
-            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
-        </ng-template>
-    </div>
-
-    <div nz-col [nzSpan]="12">
         <nz-card nzTitle="Gastos e Ingresos del Año Actual" style="margin: 10px">
             <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
                 [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
