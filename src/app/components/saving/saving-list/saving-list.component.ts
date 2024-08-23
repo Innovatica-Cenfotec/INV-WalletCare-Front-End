@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, Inject, inject, Component, EventEmitter, Input
 import { IIncomeExpenceSavingType, ISaving } from '../../../interfaces';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { differenceInDays } from 'date-fns';
+import { SortByOptions } from '../../../sortBy';
 
 
 @Component({
@@ -28,23 +29,26 @@ import { differenceInDays } from 'date-fns';
     NzSpaceModule,
     NzToolTipModule,
     NzProgressModule],
-  providers: [DatePipe],
+  providers: [DatePipe, SortByOptions],
   templateUrl: './saving-list.component.html',
   styleUrl: './saving-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
+
 export class SavingListComponent {
   IIncomeExpenseSavingType = IIncomeExpenceSavingType;
-  @Input() savingList: ISaving[] = [];
-  @Output() viewSavingDetails = new EventEmitter<ISaving>();
-  @Output() deleteSaving = new EventEmitter<ISaving>();
-  @Output() editSaving = new EventEmitter<ISaving>();
-  public datePipe = inject(DatePipe);
+  public sortby = inject(SortByOptions);
+  @Input() savingList:ISaving[]=[];
+  @Output() viewSavingDetails=new EventEmitter<ISaving>();
+  @Output() deleteSaving=new EventEmitter<ISaving>();
+  @Output() editSaving=new EventEmitter<ISaving>();  
+  public datePipe=inject(DatePipe);
   expandSet = new Set<number>();
+  
   formatDate(date: Date | string | null | undefined): string {
     return this.datePipe.transform(date, 'dd-MM-yyyy') || '';
   }
+  
   getSavingType(saving: ISaving): string {
     if (!saving) {
       return '';
@@ -59,6 +63,7 @@ export class SavingListComponent {
         return '';
     }
   }
+  
   onExpandChange(id: number | undefined, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id ?? 0);
@@ -66,6 +71,7 @@ export class SavingListComponent {
       this.expandSet.delete(id ?? 0);
     }
   }
+  
   calculateProgress(saving: ISaving): number {
     if (!saving.targetDate || !saving.createdAt) {
       return 0;
@@ -83,6 +89,7 @@ export class SavingListComponent {
 
     return Math.round(percentage);
   }
+  
   calculateDaysPassed(saving: ISaving): number {
     if (!saving.createdAt) {
       return 0;
@@ -91,6 +98,7 @@ export class SavingListComponent {
     const daysPassed = differenceInDays(new Date(),createdAt );
     return daysPassed;
   }
+  
   calculateDaysLeft(saving: ISaving): number {
     if (!saving.targetDate || !saving.createdAt) {
       return 0;

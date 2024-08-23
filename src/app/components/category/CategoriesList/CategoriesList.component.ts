@@ -6,6 +6,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { SortByOptions } from '../../../sortBy';
 
 @Component({
     selector: 'app-categories-list',
@@ -18,13 +19,14 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
         NzButtonModule,
         NzSpaceModule,
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './CategoriesList.component.html',
     styleUrl: './CategoriesList.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesListComponent {
     public datePipe = inject(DatePipe);
+    public sortby = inject(SortByOptions);
     
     /**
      * Input property to accept an array of categories to be displayed.

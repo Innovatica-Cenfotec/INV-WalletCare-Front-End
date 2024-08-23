@@ -91,6 +91,7 @@ export class IncomeComponent {
    * Close modal
    */
   onCanceled(): void {
+    this.income.set({ amount: 0 });
     this.isVisible.set(false);
     this.isLoading.set(false);
   }
@@ -130,6 +131,7 @@ export class IncomeComponent {
     income.addTransaction
     this.incomeService.saveIncomeSignal(income).subscribe({
       next: (response: any) => {
+        this.income.set({ amount: 0 });
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Ingreso creado exitosamente', { nzDuration: 5000 });
       },
@@ -175,8 +177,14 @@ export class IncomeComponent {
   * @param income income to update
   */
   updateIncome(income: IIncome): void {
+
+    if (income.tax) {
+      income.tax = { id: income.tax.id };
+    }
+
     this.incomeService.updateIncomeSignal(income).subscribe({
       next: (response: any) => {
+        this.income.set({ amount: 0 });
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Ingreso actualizado exitosamente', { nzDuration: 5000 });
       },

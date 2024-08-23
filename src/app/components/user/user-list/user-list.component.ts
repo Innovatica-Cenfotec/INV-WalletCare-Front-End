@@ -11,6 +11,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { SortByOptions } from '../../../sortBy';
 
 
 @Component({
@@ -29,12 +30,12 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzToolTipModule,
     NzButtonModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, SortByOptions],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
-  
+  public sortby = inject(SortByOptions);
   @Input() userList: IUser[] = [];
   @Output() changeUserStatus = new EventEmitter<IUser>();
 
@@ -81,5 +82,4 @@ export class UserListComponent {
   showNotification(){
     
   }
-
 }

@@ -79,6 +79,7 @@ export class ExpensesComponent implements OnInit {
      * Close a modal form.
      */
     closeModalForm(): void {
+        this.expense.set({ amount: 0 });
         this.isVisible.set(false);
         this.isLoading.set(false);
     }
@@ -123,6 +124,7 @@ export class ExpensesComponent implements OnInit {
         expense.isTemplate = true;
         this.expenseService.saveExpenseSignal(expense).subscribe({
             next: (response: any) => {
+                this.expense.set({ amount: 0 });
                 this.isVisible.set(false);
                 this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', { nzDuration: 5000 });
             },
@@ -158,6 +160,7 @@ export class ExpensesComponent implements OnInit {
 
         this.expenseService.updateExpenseSignal(expense).subscribe({
             next: (response: any) => {
+                this.expense.set({ amount: 0 });
                 this.isVisible.set(false);
                 this.nzNotificationService.create("success", "", 'Gasto editada exitosamente', { nzDuration: 5000 });
             },

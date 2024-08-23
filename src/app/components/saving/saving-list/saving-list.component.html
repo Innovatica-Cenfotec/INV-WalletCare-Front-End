@@ -2,11 +2,11 @@
     <thead>
         <tr>
             <th></th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Tipo</th>
-            <th>Monto del ahorro</th>
-            <th>Fecha de creación</th>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortby.sortByType">Tipo</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortby.sortByAmount">Monto del ahorro</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de creación</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>

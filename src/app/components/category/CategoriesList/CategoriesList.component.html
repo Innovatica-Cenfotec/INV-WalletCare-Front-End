@@ -1,9 +1,9 @@
 <nz-table #fixedTable [nzData]="categoriesList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['200px','200px','200px','120px']">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Fecha de creación</th>
-            <th>Fecha de actualización</th>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de creación</th>
+            <th nzColumnKey="updatedAt" [nzSortFn]="sortby.sortByDate">Fecha de actualización</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>

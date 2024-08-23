@@ -1,11 +1,11 @@
 <nz-table #fixedTable [nzData]="accountUsers" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['150px','200px','100px', '150px', '150px', '80px']">
     <thead>
         <tr>
-            <th nzLeft>Nombres</th>
-            <th>Correo electrónico</th>
-            <th>Estado</th>
-            <th>Balace</th>
-            <th>Fecha de unión</th>
+            <th nzLeft nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombres</th>
+            <th nzColumnKey="email" [nzSortFn]="sortby.sortByEmail">Correo electrónico</th>
+            <th nzColumnKey="status" [nzSortFn]="sortby.sortByStatus">Estado</th>
+            <th nzColumnKey="Balace" [nzSortFn]="sortby.sortByBalance">Balace</th>
+            <th nzColumnKey="joinedAt" [nzSortFn]="sortby.sortByDate">Fecha de unión</th>
             <th *ngIf="isOwner" nzRight>Acciones</th>
         </tr>
     </thead>
