@@ -10,6 +10,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { GoalStatusEnum, GoalTypeEnum, IGoal } from '../../../interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { SortByOptions } from '../../../sortBy';
 
 @Component({
     selector: 'app-goals-list',
@@ -23,7 +24,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
         NzSpaceModule,
         NzTypographyModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './goals-list.component.html',
     styleUrl: './goals-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

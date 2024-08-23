@@ -5,6 +5,7 @@ import { IBalance, ITransaction } from '../../../../interfaces';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { TransactionService } from '../../../../services/transaction.service';
+import { SortByOptions } from '../../../../sortBy';
 
 @Component({
     selector: 'app-account-tab-transactions',
@@ -15,6 +16,7 @@ import { TransactionService } from '../../../../services/transaction.service';
         NzButtonModule,
         NzIconModule
     ],
+    providers: [SortByOptions],
     templateUrl: './account-tab-transactions.component.html',
     styleUrl: './account-tab-transactions.component.scss',
 })
@@ -23,7 +25,7 @@ export class AccountTabTransactionsComponent{
     @Output() rollbackTransaction = new EventEmitter<ITransaction>();
     private datePipe = inject(DatePipe);
     public transactionService = inject(TransactionService); 
-
+    public sortby = inject(SortByOptions);
     /**
      * Set the date format
      * @param date is the date

@@ -9,6 +9,7 @@ import { NgIf } from "@angular/common";
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { SortByOptions } from '../../../../sortBy';
 
 @Component({
     selector: 'app-account-tab-members',
@@ -22,13 +23,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
         NzButtonModule,
         NzIconModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './account-tab-members.component.html',
     styleUrl: './account-tab-members.component.scss'
 })
 export class AccountTabMembersComponent {
     private datePipe = inject(DatePipe);
-
+    public sortby = inject(SortByOptions);
     @Input() account: IAccount | undefined;
     @Input() accountUsers: IAccountUser[] = [];
     @Input() isOwner: boolean = false;

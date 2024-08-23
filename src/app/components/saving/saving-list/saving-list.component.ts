@@ -10,6 +10,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { ChangeDetectionStrategy, Inject, inject,Component, EventEmitter, Input, Output } from '@angular/core';
 import { IIncomeExpenceSavingType, ISaving } from '../../../interfaces';
+import { SortByOptions } from '../../../sortBy';
 
 
 @Component({
@@ -25,17 +26,18 @@ import { IIncomeExpenceSavingType, ISaving } from '../../../interfaces';
     NzGridModule,
     NzSpaceModule,
     NzToolTipModule],
-  providers: [DatePipe],
+  providers: [DatePipe, SortByOptions],
   templateUrl: './saving-list.component.html',
   styleUrl: './saving-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
 export class SavingListComponent {
+  public sortby = inject(SortByOptions);
   @Input() savingList:ISaving[]=[];
   @Output() viewSavingDetails=new EventEmitter<ISaving>();
   @Output() deleteSaving=new EventEmitter<ISaving>();
-  @Output() editSaving=new EventEmitter<ISaving>();
+  @Output() editSaving=new EventEmitter<ISaving>();  
   public datePipe=inject(DatePipe);
   formatDate(date: Date | string | null | undefined): string {
     return this.datePipe.transform(date, 'dd-MM-yyyy') || '';

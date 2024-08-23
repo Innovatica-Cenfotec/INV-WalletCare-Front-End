@@ -106,6 +106,7 @@ export class AccountsComponent implements OnInit {
   * Sets the `isVisible` property to `false`.
   */
   onCanceled(): void {
+    this.account.set(undefined);
     this.isVisible.set(false);
     this.isLoading.set(false);
   }
@@ -140,6 +141,7 @@ export class AccountsComponent implements OnInit {
   createAccount(account: IAccount): void {
     this.accountService.saveAccountSignal(account).subscribe({
       next: (response: any) => {
+        this.account.set(undefined);
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta creada exitosamente', { nzDuration: 5000 });
       },
@@ -162,6 +164,7 @@ export class AccountsComponent implements OnInit {
   updateAccount(account: IAccount): void {
     this.accountService.updateAccountSignal(account).subscribe({
       next: (response: any) => {
+        this.account.set(undefined);
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
       },

@@ -2,10 +2,10 @@
     <thead>
         <tr>
             <th nzLeft>Nombre</th>
-            <th>Correo electrónico</th>
-            <th>Estado</th>
-            <th>NickName</th>
-            <th>Fecha de Unión</th>
+            <th nzColumnKey="email" [nzSortFn]="sortby.sortByEmail">Correo electrónico</th>
+            <th nzColumnKey="enabled" [nzSortFn]="sortby.sortByStatus">Estado</th>
+            <th nzColumnKey="nickname" [nzSortFn]="sortby.sortByNickname">NickName</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de Unión</th>
             <th>Acciones</th>
         </tr>
     </thead>

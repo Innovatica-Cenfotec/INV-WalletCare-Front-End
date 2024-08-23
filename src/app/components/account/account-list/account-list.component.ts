@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { IAccount, IAccountType, IBalance } from '../../../interfaces';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -10,6 +10,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { SortByOptions } from '../../../sortBy';
 
 @Component({
   selector: 'app-account-list',
@@ -26,11 +27,14 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzSpaceModule,
     NzToolTipModule
   ],
+  providers: [SortByOptions],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountListComponent {
+  public sortby = inject(SortByOptions);
+
   /**
    * Input property to accept an array of accounts to be displayed.
    */

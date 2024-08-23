@@ -7,6 +7,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { SortByOptions } from '../../../sortBy';
 
 @Component({
     selector: 'app-income-list',
@@ -20,7 +21,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
       NzSpaceModule,
       NzTypographyModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './income-list.component.html',
     styleUrl: './income-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +34,7 @@ export class IncomeListComponent {
     @Output() deleteIncome=new EventEmitter<IIncome>();
     @Output() editIncome=new EventEmitter<IIncome>();
     public datePipe = inject(DatePipe);
+    public sortby = inject(SortByOptions);
 
     /**
      * Get the amount type of the income.

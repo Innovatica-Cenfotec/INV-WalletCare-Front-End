@@ -11,6 +11,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 // Custom elements
 import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountType } from '../../../interfaces';
+import { SortByOptions } from '../../../sortBy';
 
 @Component({
     selector: 'app-expense-list',
@@ -24,12 +25,13 @@ import { IExpense, IIncomeExpenceSavingType, IFrequencyType, IBalance, IAmountTy
         NzSpaceModule,
         NzTypographyModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './expense-list.component.html',
     styleUrls: ['./expense-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpenseListComponent {
+    public sortby = inject(SortByOptions);
     /**
      * Input for expense data.
      */
@@ -196,126 +198,6 @@ export class ExpenseListComponent {
             }
         }
         return style;
-    }
-
-    /**
-     * Sort list of expenses by name. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by name.
-     */
-    sortByName(a: IExpense, b: IExpense): number {
-        return (a.name?.toLowerCase() ?? '').localeCompare(b.name?.toLowerCase() ?? '');
-    }
-
-    /**
-     * Sort list of expenses by description. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by decription.
-     */
-    sortByDescription(a: IExpense, b: IExpense): number {
-        return (a.description?.toLowerCase() ?? '').localeCompare(b.description?.toLowerCase() ?? '');
-    }
-
-    /**
-     * Sort list of expenses by amount. Numerical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by amount.
-     */
-    sortByAmount(a: IExpense, b: IExpense): number {
-        return (a.amount?.toString() ?? '').localeCompare(b.amount?.toString() ?? '');
-    }
-
-    /**
-     * Sort list of expenses by amount type. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by amount type.
-     */
-    sortByAmountType(a: IExpense, b: IExpense): number {
-        return (a.amountType ?? '').localeCompare(b.amountType ?? '') ;
-    }
-
-    /**
-     * Sort list of expenses by expense type. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense type.
-     */
-    sortByType(a: IExpense, b: IExpense): number {
-        return (a.type ?? '').localeCompare(b.type ?? '') ;
-    }
-
-    /**
-     * Sort list of expenses by frequency. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense frequency.
-     */
-    sortByFrequency(a: IExpense, b: IExpense): number {
-        return (a.frequency ?? '').localeCompare(b.frequency ?? '') ;
-    }
-
-    /**
-     * Sort list of expenses by scheduled day. Numerical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by scheduled day.
-     */
-    sortByScheduledDay(a: IExpense, b: IExpense): number {
-        return (a.scheduledDay?.toString() ?? '').localeCompare(b.scheduledDay?.toString() ?? '') ;
-    }
-
-    /**
-     * Sort list of expenses by account name. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense account name.
-     */
-    sortByAccount(a: IExpense, b: IExpense): number {
-        return (a.account?.name ?? '').localeCompare(b.account?.name ?? '');
-    }
-
-    /**
-     * Sort list of expenses by owner name. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense owner name.
-     */
-    sortByUser(a: IExpense, b: IExpense): number {
-        return (a.owner?.nickname ?? '').localeCompare(b.owner?.nickname ?? '');
-    }
-
-    /**
-     * Sort list of expenses by tax name. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense tax name.
-     */
-    sortByTax(a: IExpense, b: IExpense): number {
-        return (a.tax?.name ?? '').localeCompare(b.tax?.name ?? '') ;
-    }
-
-    /**
-     * Sort list of expenses by update date. Numerical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by update date.
-     */
-    sortByDate(a: IExpense, b: IExpense): number {
-        return new Date(a.updatedAt ?? new Date).getTime() - new Date(b.updatedAt ?? new Date).getTime();
-    }
-
-    /**
-     * Sort list of expenses by category name. Alphabetical order.
-     * @param a IExpense to compare with b.
-     * @param b IExpense to compare with a.
-     * @returns List of expenses sorted by expense category name.
-     */
-    sortByCategory(a: IExpense, b: IExpense): number{
-        return (a.expenseCategory?.name ?? '').localeCompare(b.expenseCategory?.name ?? '');
     }
 
     /**

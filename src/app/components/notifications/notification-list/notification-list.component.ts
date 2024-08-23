@@ -13,6 +13,7 @@ import { NotificationService } from '../../../services/notification.service';
 
 // Custom elements
 import { INotification, INotificationType } from '../../../interfaces';
+import { SortByOptions } from '../../../sortBy';
 
 
 @Component({
@@ -28,7 +29,7 @@ import { INotification, INotificationType } from '../../../interfaces';
         NzModalModule,
         NzCardModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './notification-list.component.html',
     styleUrl: './notification-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -9,6 +9,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { IBalance, IExpense, IIncome, IRecurrence } from '../../../../interfaces';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { SortByOptions } from '../../../../sortBy';
 
 @Component({
     selector: 'app-account-tab-recurrence',
@@ -21,14 +22,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
         NzButtonModule,
         NzIconModule
     ],
-    providers: [DatePipe],
+    providers: [DatePipe, SortByOptions],
     templateUrl: './account-tab-recurrence.component.html',
     styleUrl: './account-tab-recurrence.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountTabRecurrenceComponent implements OnChanges {
     private datePipe = inject(DatePipe);
-
+    public sortby = inject(SortByOptions);
     @Input() type: 'income' | 'expense' | undefined;
     @Input() recurrences: IRecurrence[] = [];
     @Output() deleteRecurrence = new EventEmitter<any>();
