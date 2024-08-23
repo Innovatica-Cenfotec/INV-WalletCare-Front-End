@@ -1,13 +1,12 @@
-<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }"
-    [nzWidthConfig]="['25px','150px', '150px', '200px', '100px', '150px', '190px']">
+<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px', '200px', '100px', '150px', '150px', '120px']">
     <thead>
         <tr>
             <th></th>
             <th>Nombre</th>
-            <TH>Fecha de creación</TH>
             <th>Descripción</th>
-            <TH>Tipo</TH>
+            <th>Tipo</th>
             <th>Monto del ahorro</th>
+            <th>Fecha de creación</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
@@ -55,6 +54,5 @@
                     (click)="onExpandChange(data.id, false)"></span>
             </ng-template>
         </ng-container>
-
     </tbody>
 </nz-table>

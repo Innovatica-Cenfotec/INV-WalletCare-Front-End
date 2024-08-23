@@ -1,50 +1,43 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { SavingService } from '../../services/saving.service';
-import {  IIncomeExpenceSavingType, ISaving, ITypeForm} from '../../interfaces';
+import { IIncomeExpenceSavingType, ISaving, ITypeForm } from '../../interfaces';
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
-import { AccountService } from '../../services/account.service';
 import { SavingListComponent } from '../../components/saving/saving-list/saving-list.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { error } from '@ant-design/icons-angular';
 import { SavingFormComponent } from '../../components/saving/saving-form/saving-form.component';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
   selector: 'app-savings',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     NzPageHeaderModule,
     NzButtonComponent,
     NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
     NzIconModule,
-    NzDividerModule,
     NzModalModule,
     SavingListComponent,
     IncomeFormComponent,
     IncomeAllocationsComponent,
     NzButtonModule,
-    NzDropDownModule, SavingFormComponent],
+    NzDropDownModule, 
+    SavingFormComponent,
+    NzPopoverModule
+  ],
   templateUrl: './savings.component.html',
   styleUrl: './savings.component.scss'
 })
@@ -53,7 +46,7 @@ export class SavingsComponent {
   public router = inject(Router);
   public ISavingType = IIncomeExpenceSavingType;
   public title: string = '';
-  public nzModalService=inject(NzModalService)
+  public nzModalService = inject(NzModalService)
   private nzNotificationService = inject(NzNotificationService);
 
   @ViewChild(SavingFormComponent) form!: SavingFormComponent;
@@ -76,7 +69,7 @@ export class SavingsComponent {
     this.isLoading.set(false);
   }
 
-  viewSavingDetails(saving:ISaving):void{
+  viewSavingDetails(saving: ISaving): void {
     this.router.navigateByUrl('app/savings/details/' + saving.id);
   }
 
@@ -90,7 +83,7 @@ export class SavingsComponent {
         this.savingService.deleteSavingSignal(saving.id).subscribe({
           next: () => {
             this.nzNotificationService.success('Éxito', 'El Ahorro se ha eliminado correctamente');
-            
+
           },
           error: (error: any) => {
             this.nzNotificationService.error('Lo sentimos', error.error.detail);
@@ -111,18 +104,22 @@ export class SavingsComponent {
 
   updateSaving(saving: ISaving): void {
     this.savingService.updateSavingSignal(saving).subscribe({
-      next:(response: any) => {
+      next: (response: any) => {
         this.isVisible.set(false);
-        this.nzNotificationService.create("success", "", 'Ahorro actualizado exitosamente', {nzDuration: 5000}); 
+        this.nzNotificationService.create("success", "", 'Ahorro actualizado exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
-        this.isLoading.set(false);
+        // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
         });
+
+        // show other errors
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
+
+        this.form.stopLoading();
       }
     })
   }

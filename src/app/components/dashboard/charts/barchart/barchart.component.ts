@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, ViewChild, Input, SimpleChanges } from "@angular/core";
+import { Component, ViewChild, Input, OnChanges, SimpleChanges } from "@angular/core";
 
 // Importing Ng-Zorro modules
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 
 // CUSTOM COMPONENT
-import { ChartOptions, IBarchartData } from '../../../../interfaces';
+import { ChartOptions, IBarcharItem, IBarchartData } from '../../../../interfaces';
 
 @Component({
     selector: 'app-barchart',
@@ -30,54 +30,48 @@ export class BarchartComponent implements OnChanges {
     /**
      * Json structure expected by the chart.
      */
-    @Input() data: IBarchartData[] = [];
+    @Input() data: IBarchartData[];
 
     /**
      * Variable with the expected order for the x axis labels.
      */
-    @Input() xAxisOrder: string[] = [];
+    @Input() xAxisOrder: string[];
 
     /**
      * Config of the chart data (ex: labels y axis, labels x axis, ₡ amounts).
      */
-    public chartOptions: Partial<ChartOptions> = {};
+    public chartOptions: Partial<ChartOptions>;
 
     /**
-     * Load chart when data is change.
+     * Initialize default chart options
      */
-    ngOnChanges(): void {
-        this.loadChart();
-    }
-
-    /**
-     * Load the chart data.
-     */
-    loadChart(): void {
-        const xAxisLabels = this.getXAxisLabels(this.data);
-        const series = this.data.map(item => ({
-            name: this.getCategory(item.category),
-            data: xAxisLabels.map(date => {
-                const expense = item.data.find(e => this.getMonth(e.month).toUpperCase() === date);
-                return expense ? expense.amount : 0;
-            })
-        }));
+    constructor() {
+        this.data = [];
+        this.xAxisOrder = [];
 
         this.chartOptions = {
-            series: series,
+            series: [],
             chart: {
-                type: "bar",
-                height: 350
+                width: '100%',
+                height: 350,
+                type: "bar"
             },
             dataLabels: {
                 enabled: false
             },
             xaxis: {
-                categories: xAxisLabels
+                categories: []
             },
             yaxis: {
                 labels: {
                     formatter: (val) => {
-                        return val / 1000 + "K";
+                        if (val >= 1000000) {
+                            return (val / 1000000).toString() + "M";
+                        } else if (val >= 1000) {
+                            return (val / 1000).toString() + "K";
+                        } else {
+                            return val.toString();
+                        }
                     }
                 }
             },
@@ -95,38 +89,77 @@ export class BarchartComponent implements OnChanges {
             },
             grid: {
                 row: {
-                    colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                    colors: ["#f3f3f3", "transparent"],
                     opacity: 0.5
                 }
             },
             title: {
                 text: "",
                 align: "left"
+            },
+            noData: {
+                text: "No se encontraron registros",
+                align: 'center',
+                verticalAlign: 'middle',
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                  fontSize: '15px'
+                }
             }
         };
     }
 
     /**
+     * Load the chart data.
+     */
+    loadChart(): void {
+        const xAxisLabels = this.getXAxisLabels(this.data);
+        
+        const series = this.data.map(item => ({
+            name: this.getCategory(item),
+            data: xAxisLabels.map(date => {
+                const objI = item.data.find(i => this.getMonth(i).toUpperCase() === date);
+                return objI ? objI.amount : 0;
+            })
+        }));
+
+        this.chartOptions.series = series;
+        this.chartOptions.xaxis = {
+            categories: xAxisLabels
+        };
+    }
+
+    /**
+     * Load chart when data is change.
+     */
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['data']) {
+            this.loadChart();
+        }
+    }
+
+    /**
      * Get category name. Capitalized.
-     * @param category String with the category value.
+     * @param item IBarcharData with the item to get category.
      * @returns The value of the category.
      */
-    private getCategory(category: string) {
-        switch (category.toLowerCase()) {
+    private getCategory(item: IBarchartData) {
+        switch (item.category?.toLowerCase()) {
             case 'uncategorized' || '' || null:
                 return this.toCapitalCase('sin categoría');
             default:
-                return this.toCapitalCase(category);
+                return this.toCapitalCase(item.category);
         }
     }
 
     /**
      * Get month name. Spanish equivalent.
-     * @param month String with the month value.
+     * @param item IBarcharData with the item to get month.
      * @returns The value of the month.
      */
-    private getMonth(month: string) {
-        switch (month.toLowerCase()) {
+    private getMonth(item: IBarcharItem) {
+        switch (item.month?.toLowerCase()) {
             case 'jan':
                 return 'Ene';
             case 'feb':
@@ -152,7 +185,7 @@ export class BarchartComponent implements OnChanges {
             case 'dec':
                 return 'Dic';
             default:
-                return this.toCapitalCase(month);
+                return this.toCapitalCase(item.month);
         }
     }
 
@@ -165,16 +198,19 @@ export class BarchartComponent implements OnChanges {
     private getXAxisLabels(data: IBarchartData[]): string[] {
         const datesSet = new Set<string>();
 
-        data.forEach(item => {
-            item.data.forEach(
-                // This will set how the label is view in grapt
-                exp => datesSet.add(this.getMonth(exp.month).toUpperCase())
-            );
-        });
+        // If xAxisOrder is not empty, add all its values to datesSet
+        if (this.xAxisOrder.length > 0) {
+            this.xAxisOrder.forEach(month => datesSet.add(month.toUpperCase()));
+        } else {
+            // Add the actual months from the data
+            data.forEach(item => {
+                item.data.forEach(i => datesSet.add(this.getMonth(i).toUpperCase()));
+            });
+        }
 
         const axisLabels = Array.from(datesSet);
 
-        if (this.xAxisOrder.length != 0) {
+        if (this.xAxisOrder.length > 0) {
             return axisLabels.sort(
                 // Order the xAxis labels
                 (a, b) => this.xAxisOrder.indexOf(a.toUpperCase()) - this.xAxisOrder.indexOf(b.toUpperCase())

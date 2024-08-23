@@ -1,12 +1,14 @@
 <nz-page-header>
-    <nz-page-header-title>Mis Ahorros</nz-page-header-title>
+    <nz-page-header-title>
+        Mis Ahorros &nbsp;
+        <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de ahorros" nzPopoverContent="En esta página encontrará todos los ahorros que ha realizado."></span>
+    </nz-page-header-title>
     <nz-page-header-extra>
         <nz-space [nzWrap]="true">
         </nz-space>
     </nz-page-header-extra>
     <nz-page-header-content>
 
-        <nz-divider></nz-divider>
         <app-saving-list [savingList]="savingService.savings$()" (deleteSaving)="deleteSaving($event)" (editSaving)="showModalEdit($event)">
         </app-saving-list>
 

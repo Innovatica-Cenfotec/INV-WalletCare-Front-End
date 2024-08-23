@@ -58,6 +58,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
     @ViewChild(IncomeFormComponent) formIncome!: IncomeFormComponent;
     @ViewChild(SavingFormComponent) formSaving!: SavingFormComponent;
+    @ViewChild(TransactionFormComponent) formTransaction!: TransactionFormComponent;
 
     /*
     * The account id.
@@ -144,6 +145,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     private nzNotificationService = inject(NzNotificationService);
     private router = inject(Router);
     private member: IAccountUser | undefined = {};
+
 
     ngOnInit(): void {
         this.expenseService.findAllSignal();
@@ -260,9 +262,19 @@ export class AccountDetailHeaderComponent implements OnChanges {
      * Shows the transaction form.
      */
     addSelectedTransaction(item: IIncome | IExpense | ISaving): void {
-        item.owner = undefined;       
+        item.owner = undefined;
         item.account = {
             id: this.id
+        }
+
+        // check if the item has a tax and set the tax id
+        if ('tax' in item && item.tax) {
+            item.tax = { id: item.tax.id };
+        }
+
+        // check if the item has a category and set the category id
+        if ('expenseCategory' in item && item.expenseCategory) {
+            item.expenseCategory = { id: item.expenseCategory.id };
         }
 
         if (this.TransactionFormType === 'income') {
@@ -279,6 +291,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -296,6 +309,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -313,6 +327,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.isLoadingTransaction = false;
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -338,7 +354,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
             this.TypeForm = ITypeForm.create;
             this.income.set({ amount: 0 });
             this.isVisibleIncome.set(true);
-        } if (this.TransactionFormType === 'saving') {
+        } else if (this.TransactionFormType === 'saving') {
             this.title = incomeOrExpenseType === IIncomeExpenceSavingType.unique ? 'Crear ahorro único' : 'Crear ahorro recurrente';
             this.incomeExpenceSavingType = incomeOrExpenseType;
             this.TypeForm = ITypeForm.create;
@@ -364,11 +380,17 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 this.nzNotificationService.create("success", "", 'Cuenta editada exitosamente', { nzDuration: 5000 });
             },
             error: (error: any) => {
-                this.isLoading.set(false);
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
-                    this.form.setControlError(fieldError.field, fieldError.message);
+                    this.formIncome.setControlError(fieldError.field, fieldError.message);
                 });
+
+                // show other errors
+                if (error.error.fieldErrors === undefined) {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
+
+                this.form.stopLoading();
             }
         });
     }
@@ -394,23 +416,31 @@ export class AccountDetailHeaderComponent implements OnChanges {
         expense.account = payload;
         this.expenseService.saveExpenseSignal(expense).subscribe({
             next: (response: any) => {
+                this.isVisibleTransaction = false;
                 this.isVisibleExpense.set(false);
+                
                 if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
                     this.nzNotificationService.create("success", "", 'Gasto agregado exitosamente', { nzDuration: 5000 });
                 }
                 else {
                     this.nzNotificationService.create("success", "", 'Gasto recurrente agregado exitosamente, se agregará a las transacciones futuras según la configuración', { nzDuration: 10000 });
                 }
+                
                 this.loadData.emit();
             },
             error: (error: any) => {
+                // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
-                    this.formExpense.setControlError(fieldError.field, fieldError.message);
+                    this.formIncome.setControlError(fieldError.field, fieldError.message);
                 });
+
+                // show other errors
                 if (error.error.fieldErrors === undefined) {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
-                this.isLoading.set(false);
+
+                this.form.stopLoading();
+                this.formExpense.stopLoading();
             }
         });
     }
@@ -433,6 +463,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.incomeService.saveIncomeSignal(income).subscribe({
             next: (response: any) => {
                 this.isVisibleIncome.set(false);
+                this.isVisibleTransaction = false;
+
                 if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
                     this.nzNotificationService.create("success", "", 'Ingreso agregado exitosamente', { nzDuration: 5000 });
                 }
@@ -452,7 +484,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
+                this.formIncome.stopLoading();
             }
         });
     }
@@ -472,6 +505,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
         this.savingService.saveSavingSignal(saving).subscribe({
             next: (response: any) => {
                 this.isVisibleSaving.set(false);
+                this.isVisibleTransaction = false;
+
                 if (this.incomeExpenceSavingType === IIncomeExpenceSavingType.unique) {
                     this.nzNotificationService.create("success", "", 'Ahorro agregado exitosamente', { nzDuration: 5000 });
                 }
@@ -480,10 +515,10 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
                 this.loadData.emit();
             },
-            error: (error: any) => {
+            error: (error: any) => {               
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
-                    this.formSaving.setControlError(fieldError.field, fieldError.message);
+                    this.formIncome.setControlError(fieldError.field, fieldError.message);
                 });
 
                 // show other errors
@@ -491,7 +526,8 @@ export class AccountDetailHeaderComponent implements OnChanges {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
 
-                this.isLoading.set(false);
+                this.form.stopLoading();
+                this.formSaving.stopLoading();
             }
         });
     }

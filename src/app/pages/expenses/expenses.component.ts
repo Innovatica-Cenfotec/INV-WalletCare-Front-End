@@ -1,21 +1,16 @@
 import { CategoryService } from './../../services/category.service';
 import { ChangeDetectionStrategy, Component, inject, signal, ViewChild, OnInit } from '@angular/core';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 // Custom elements
@@ -31,16 +26,10 @@ import { ExpenseListComponent } from '../../components/expense/expense-list/expe
     imports: [
         CommonModule,
         NzPageHeaderModule,
-        NzButtonComponent,
-        NzSpaceModule,
-        NzDescriptionsModule,
-        NzStatisticModule,
-        NzGridModule,
-        NzCardModule,
-        NzIconModule,
-        NzDividerModule,
-        NzModalModule,
         NzButtonModule,
+        NzSpaceModule,
+        NzIconModule,
+        NzModalModule,
         NzDropDownModule,
         NzPopoverModule,
         ExpenseFormComponent,
@@ -68,9 +57,6 @@ export class ExpensesComponent implements OnInit {
      */
     public isVisible = signal(false);
     public isLoading = signal(false);
-    
-    /// ------- Details
-    public isVisibleDetails = signal(false);
 
     /// ------- Details
     public isVisibleCreate = signal(false); 
@@ -80,53 +66,38 @@ export class ExpensesComponent implements OnInit {
     public title: string = '';
     public TypeForm: ITypeForm = ITypeForm.create;
 
+    /**
+     * Execute when the comonent is call.
+     */
     ngOnInit(): void {
-      this.expenseService.findAllTemplatesSignal();
-      this.taxService.findAllSignal();
-      this.CategoryService.getAllSignal();
+        this.expenseService.findAllTemplatesSignal();
+        this.taxService.findAllSignal();
+        this.CategoryService.getAllSignal();
     }
 
-    closeModalForm(): void {
-      this.isVisible.set(false);
-      this.isLoading.set(false);
-    }
-    
     /**
-     * Shows the modal to create the expense
+     * Close a modal form.
+     */
+    closeModalForm(): void {
+        this.isVisible.set(false);
+        this.isLoading.set(false);
+    }
+
+    /**
+     * Shows the modal to create the expense. Change modal form depending type.
+     * @param ExpenseType IIncomeExpenceSavingType to select modal form.
      */
     showModalCreate(ExpenseType: IIncomeExpenceSavingType): void {
         this.title = ExpenseType === IIncomeExpenceSavingType.unique ? 'Crear gasto único' : 'Crear gasto recurrente';
         this.expenseType = ExpenseType;
         this.TypeForm = ITypeForm.create;
-        this.expense.set({amount: 0});
+        this.expense.set({ amount: 0 });
         this.isVisible.set(true);
     }
 
     /**
-     * Shows the modal to disply expense details
-     */
-    showModalDetails(expense: IExpense): void {
-        this.nzModalService.info({
-            nzTitle: 'Detalles de gasto',
-            nzContent: 'Expense values: ' + expense.name,
-            nzOkText: 'Sí',
-            nzOkType: 'primary',
-            nzOnOk: () => {
-                this.expenseService.deleteExpenseSignal(expense.id).subscribe({
-                    next: () => {
-                        this.nzNotificationService.success('Éxito', 'El gasto se ha eliminado correctamente');
-                    },
-                    error: (error: any) => {
-                        this.nzNotificationService.error('Lo sentimos', error.error.detail);
-                    }
-                });
-            },
-            nzCancelText: 'No'
-        });
-    }
-
-    /**
-     * Shows the modal to edit the expense
+     * Shows the modal to edit the expense. Change modal form depending type.
+     * @param expense IExpense object to edit.
      */
     showModalEdit(expense: IExpense): void {
         this.title = 'Editar gasto';
@@ -137,42 +108,48 @@ export class ExpensesComponent implements OnInit {
     }
 
     /**
-    * Create the expense
-    */
+     * Create a new expense.
+     * @param expense IExpense object to create.
+     */
     createExpense(expense: IExpense): void {
         if (expense.tax) {
-            expense.tax = {id: expense.tax.id};
+            expense.tax = { id: expense.tax.id };
         }
 
         if (expense.expenseCategory) {
             expense.expenseCategory = { id: expense.expenseCategory.id };
         }
-        
+
         expense.isTemplate = true;
         this.expenseService.saveExpenseSignal(expense).subscribe({
-          next: (response: any) => {
-              this.isVisible.set(false);
-              this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', {nzDuration: 5000});
-          },
-          error: (error: any) => {
-              this.isLoading.set(false);
-              error.error.fieldErrors?.map((fieldError: any) => {
-                  this.form.setControlError(fieldError.field, fieldError.message);
-              });
-              if (error.error.fieldErrors === undefined) {
-                  this.nzNotificationService.error('Lo sentimos', error.error.detail);
-              }
-          }
+            next: (response: any) => {
+                this.isVisible.set(false);
+                this.nzNotificationService.create("success", "", 'Gasto creado exitosamente', { nzDuration: 5000 });
+            },
+            error: (error: any) => {
+                // Displaying the error message in the form
+                error.error.fieldErrors?.map((fieldError: any) => {
+                    this.form.setControlError(fieldError.field, fieldError.message);
+                });
+
+                // show other errors
+                if (error.error.fieldErrors === undefined) {
+                    this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                }
+
+                this.form.stopLoading();
+            }
         });
     }
-    
+
     /**
-    * Edit the expense
-    */
+     * Edit the expense
+     * @param expense IExpense object to edit.
+     */
     updateExpense(expense: IExpense): void {
 
         if (expense.tax) {
-            expense.tax = {id: expense.tax.id};
+            expense.tax = { id: expense.tax.id };
         }
 
         if (expense.expenseCategory) {
@@ -185,7 +162,6 @@ export class ExpensesComponent implements OnInit {
                 this.nzNotificationService.create("success", "", 'Gasto editada exitosamente', { nzDuration: 5000 });
             },
             error: (error: any) => {
-                this.isLoading.set(false);
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
                     this.form.setControlError(fieldError.field, fieldError.message);
@@ -195,13 +171,16 @@ export class ExpensesComponent implements OnInit {
                 if (error.error.fieldErrors === undefined) {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                 }
+
+                this.form.stopLoading();
             }
         });
     }
-    
+
     /**
-    * Delete the expense
-    */
+     * Delete the expense
+     * @param expense IExpense object to delete.
+     */
     deleteExpense(expense: IExpense): void {
         this.nzModalService.confirm({
             nzTitle: '¿Estás seguro de que quieres eliminar el gasto?',

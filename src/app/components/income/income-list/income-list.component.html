@@ -1,38 +1,71 @@
-<nz-table #fixedTable [nzData]="incomeList" [nzSize]="'small'" [nzPageSize]="15" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['150px', '150px', '200px', '100px', '150px', '190px']">
+<nz-table #fixedTable [nzData]="incomeList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '120px']">
     <thead>
         <tr>
+            <th></th>
             <th>Nombre</th>
-            <TH>Fecha de creación</TH>
             <th>Descripción</th>
-            <th>Tipo de Ingreso</th>
-            <!--<th>Tipo de Monto</th>-->
+            <th>Tipo</th>
             <th>Monto</th>
+            <th>Tipo de Monto</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of fixedTable.data">
-            <td>{{ data.name }}</td>
-            <td>{{formatDate(data.createdAt)}}</td>
-            <td>{{ data.description }}</td>
-            <td>{{getIncomeType(data)}}</td>
-            <!--<td>{{getAmountType(data)}}</td>-->
-            <td>{{"₡"+data.amount}}</td>
-            <td nzRight>
-                <nz-space>
-                    <button nz-button nzType="default" [nzSize]="'large'" (click)="viewIncomeDetails.emit(data)">
-                        <span nz-icon nzType="eye"></span>
-                    </button>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <button nz-button nzType="default" [nzSize]="'large'" (click)="editIncome.emit(data)">
-                        <span nz-icon nzType="edit"></span>
-                    </button>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteIncome.emit(data)">
-                        <span nz-icon nzType="delete"></span>
-                    </button>
-                </nz-space>
-            </td>
-        </tr>
+        <ng-container *ngFor="let data of fixedTable.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.description || '-' }}</td>
+                <td>{{ getIncomeType(data) }}</td>
+                <td [style]="formatAmount(data.amount)">₡ {{ data.amount }}</td>
+                <td>{{ getAmountType(data) }}</td>
+                <td nzRight>
+                    <nz-space>
+                        <button nz-button nzType="default" [nzSize]="'large'" (click)="editIncome.emit(data)">
+                            <span nz-icon nzType="edit"></span>
+                        </button>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteIncome.emit(data)">
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(data.id ?? 0)">
+                <h4 nz-typography>Más detalles</h4>
+                <p>
+                    Fecha de creación: {{ formatDate(data.createdAt) }}
+                </p>
+                <p>
+                    Fecha de actualización: {{ formatDate(data.updatedAt) }}
+                </p>
+
+                @if(getIncomeType(data) == 'Recurrente'){
+                <h5 nz-typography>Configuración de repetición</h5>
+                <p>
+                    Frecuencia: {{ getIncomeFrequency(data) }}
+                </p>
+                @if(getIncomeFrequency(data) == 'Personalizado'){
+                <p>
+                    Día asignado: {{ data.scheduledDay || "-" }}
+                </p>
+                } } @if(data.tax != undefined){
+                <h5 nz-typography>Impuesto</h5>
+                <p>
+                    Nombre: {{ getIncomeTax(data) }}
+                </p>
+                <p>
+                    Porcentaje: {{ data.tax.percentage || 0 }}%
+                </p>
+                <p>
+                    Descripción: {{ data.tax.description || '-' }}
+                </p>
+                }
+            </tr>
+            <ng-template #expandIcon>
+                <span nz-icon *ngIf="!expandSet.has(data.id ?? 0)" nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(data.id, true)"></span>
+                <span nz-icon *ngIf="expandSet.has(data.id ?? 0)" nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(data.id, false)"></span>
+            </ng-template>
+        </ng-container>
     </tbody>
 </nz-table>
