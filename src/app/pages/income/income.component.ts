@@ -4,25 +4,22 @@ import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 import { IncomeService } from '../../services/imcome.service';
-import { IIncome, IIncomeExpenceType, ITypeForm } from '../../interfaces';
+import { IIncome, IIncomeExpenceSavingType, ITypeForm } from '../../interfaces';
 import { IncomeFormComponent } from '../../components/income/income-form/income-form.component';
 import { IncomeAllocationsComponent } from "../../components/income/income-allocations/income-allocations.component";
 import { AccountService } from '../../services/account.service';
 import { TaxService } from '../../services/tax.service';
 import { IncomeListComponent } from '../../components/income/income-list/income-list.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-income',
@@ -30,20 +27,15 @@ import { IncomeListComponent } from '../../components/income/income-list/income-
   imports: [
     CommonModule,
     NzPageHeaderModule,
-    NzButtonComponent,
+    NzButtonModule,
     NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
     NzIconModule,
-    NzDividerModule,
     NzModalModule,
+    NzDropDownModule,
+    NzPopoverModule,
     IncomeListComponent,
     IncomeFormComponent,
-    IncomeAllocationsComponent,
-    NzButtonModule,
-    NzDropDownModule
+    IncomeAllocationsComponent
   ],
   templateUrl: './income.component.html',
   styleUrl: './income.component.scss',
@@ -55,7 +47,7 @@ export class IncomeComponent {
   private nzNotificationService = inject(NzNotificationService);
   public acccountService = inject(AccountService);
   public taxService = inject(TaxService);
-  public IIncomeExpenceType = IIncomeExpenceType;
+  public IIncomeExpenceType = IIncomeExpenceSavingType;
 
   @ViewChild(IncomeFormComponent) form!: IncomeFormComponent;
 
@@ -77,20 +69,20 @@ export class IncomeComponent {
   /*
   * Income type
   */
-  public incomeType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  public incomeType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
 
   /*
   * Title of the modal
   */
   public title: string = '';
-
+  public nzModalService = inject(NzModalService)
   /*
   * Type of form
   */
   public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
-    this.incomeService.findAllSignal();
+    this.incomeService.findAllTemplatesSignal();
     this.acccountService.findAllSignal();
     this.taxService.findAllSignal();
   }
@@ -99,6 +91,7 @@ export class IncomeComponent {
    * Close modal
    */
   onCanceled(): void {
+    this.income.set({ amount: 0 });
     this.isVisible.set(false);
     this.isLoading.set(false);
   }
@@ -109,7 +102,7 @@ export class IncomeComponent {
    */
   showModalEdit(income: IIncome): void {
     this.title = 'Editar ingreso';
-    this.incomeType = income.type || IIncomeExpenceType.unique;
+    this.incomeType = income.type || IIncomeExpenceSavingType.unique;
     this.TypeForm = ITypeForm.update;
     this.income.set(income);
     this.isVisible.set(true);
@@ -118,8 +111,8 @@ export class IncomeComponent {
   /**
    * Show modal to create income 
    */
-  showModalCreate(IncomeType: IIncomeExpenceType): void {
-    this.title = IncomeType === IIncomeExpenceType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
+  showModalCreate(IncomeType: IIncomeExpenceSavingType): void {
+    this.title = IncomeType === IIncomeExpenceSavingType.unique ? 'Crear ingreso único' : 'Crear ingreso recurrente';
     this.incomeType = IncomeType;
     this.TypeForm = ITypeForm.create;
     this.income.set({ amount: 0 });
@@ -134,16 +127,15 @@ export class IncomeComponent {
     if (income.tax) {
       income.tax = { id: income.tax.id };
     }
-     // addTransaction to income
-     income.addTransaction 
-     
+
+    income.addTransaction
     this.incomeService.saveIncomeSignal(income).subscribe({
       next: (response: any) => {
+        this.income.set({ amount: 0 });
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Ingreso creado exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
-        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -153,11 +145,30 @@ export class IncomeComponent {
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
+
+        this.form.stopLoading();
       }
     });
   }
 
   deleteIncome(income: IIncome): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar el ingreso?',
+      nzContent: 'Si eliminas el ingreso, se eliminarán todos los datos relacionados con el.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.incomeService.deleteIncomeSignal(income.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'El ingreso se ha eliminado correctamente');
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
+    });
 
   }
 
@@ -166,13 +177,18 @@ export class IncomeComponent {
   * @param income income to update
   */
   updateIncome(income: IIncome): void {
+
+    if (income.tax) {
+      income.tax = { id: income.tax.id };
+    }
+
     this.incomeService.updateIncomeSignal(income).subscribe({
       next: (response: any) => {
+        this.income.set({ amount: 0 });
         this.isVisible.set(false);
         this.nzNotificationService.create("success", "", 'Ingreso actualizado exitosamente', { nzDuration: 5000 });
       },
       error: (error: any) => {
-        this.isLoading.set(false);
         // Displaying the error message in the form
         error.error.fieldErrors?.map((fieldError: any) => {
           this.form.setControlError(fieldError.field, fieldError.message);
@@ -182,15 +198,9 @@ export class IncomeComponent {
         if (error.error.fieldErrors === undefined) {
           this.nzNotificationService.error('Lo sentimos', error.error.detail);
         }
+
+        this.form.stopLoading();
       }
     });
-  }
-
-  /**
-   * View account details
-   * @param income income to view
-   */
-  viewIncomeDetails(income: IIncome): void {
-    this.router.navigateByUrl('app/incomes/details/' + income.id);
   }
 }

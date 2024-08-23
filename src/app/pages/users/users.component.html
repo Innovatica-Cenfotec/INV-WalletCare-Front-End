@@ -1,18 +1,10 @@
-<div class="container-fluid">
-  <div>
-    <h2>Users</h2>
-  </div>
-  <div>
-    @defer {
-    <div class="d-flex justify-content-end pb-2">
-      <button type="button" class="btn btn-primary d-flex align-items-center">
-        <i class="fa-solid fa-plus white"></i>
-        <p class="mb-0">Add user</p>
-      </button>
-    </div>
-    <app-user-list></app-user-list>
-    } @loading (after 100ms; minimum 1s){
-    <app-loader></app-loader>
-    }
-  </div>
-</div>
+<nz-page-header class="site-page-header">
+  <nz-page-header-title>Usuarios</nz-page-header-title>
+  <nz-page-header-extra>
+    <nz-space>
+    </nz-space>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <app-user-list [userList]="this.usersService.users$()" (changeUserStatus)="changeUserStatus($event)" ></app-user-list>
+  </nz-page-header-content>
+</nz-page-header>

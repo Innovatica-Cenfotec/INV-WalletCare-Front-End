@@ -1,11 +1,10 @@
-<nz-table #fixedTable [nzData]="accountsList" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '0px' }"
-    [nzWidthConfig]="['200px', '200px', '200px', '200px', '200px']">
+<nz-table #fixedTable [nzData]="accountsList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['200px', '200px', '200px', '200px', '200px']">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Tipo de cuenta</th>
-            <th>Balance</th>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortby.sortByType">Tipo de cuenta</th>
+            <th nzColumnKey="balance" [nzSortFn]="sortby.sortByBalance">Balance</th>
             <th nzRight>Acciones</th>
         </tr>
     </thead>
@@ -14,7 +13,7 @@
             <td>{{ data.name }}</td>
             <td>{{ data.description }}</td>
             <td>{{ getAccountType(data) }}</td>
-            <td>{{ data.balance }}</td>
+            <td [style]="formatAmount(data.balance)">₡ {{ data.balance | currency:'':'':'1.2-2'}}</td>
             <td nzRight>
                 <nz-space>
                     <button nz-button nzType="default" [nzSize]="'large'" (click)="viewAccountDetails.emit(data)">

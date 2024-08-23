@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup} from '@angular/forms';
 import { ITypeForm } from "../../interfaces";
 
@@ -8,11 +8,11 @@ import { ITypeForm } from "../../interfaces";
     imports: [],
     template: '',
 })
-export class FormModalComponent<T> {
+export class FormModalComponent<T> implements OnChanges {
     protected fb = inject(FormBuilder);
+    private cd = inject(ChangeDetectorRef);
     protected formGroup!: FormGroup;
     protected ITypeForm = ITypeForm;
-
     /**
      * Indicates whether the form is loading or not.
      * @default false
@@ -69,10 +69,6 @@ export class FormModalComponent<T> {
                 this.formGroup.patchValue(this.item);
             }
         }
-
-        if (changes['isLoading']?.currentValue === false) {
-            console.log('isLoading', this.isLoading);
-        }
     }
 
     /**
@@ -127,5 +123,6 @@ export class FormModalComponent<T> {
 
     stopLoading(): void {
         this.isLoading = false;
+        this.cd.detectChanges();
     }
 }

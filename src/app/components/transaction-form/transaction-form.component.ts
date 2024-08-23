@@ -1,12 +1,12 @@
 import { Validators, FormBuilder, ReactiveFormsModule, FormControl ,FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { IAmountType, IFrequencyType, IIncomeExpenceType } from '../../interfaces';
+import { IAmountType, IFrequencyType, IIncomeExpenceSavingType } from '../../interfaces';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -37,7 +37,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 })
 export class TransactionFormComponent implements OnChanges {
     protected fb = inject(FormBuilder);
-    IIncomeExpenceType = IIncomeExpenceType;
+    protected cd = inject(ChangeDetectorRef);
+    IIncomeExpenceType = IIncomeExpenceSavingType;
 
     /**
      * The list of income.
@@ -50,9 +51,14 @@ export class TransactionFormComponent implements OnChanges {
     @Input() listExpense: any[] = [];
 
     /**
+     * The list of saving.
+     */
+    @Input() listSaving: any[] = [];
+
+    /**
      * The type of the form. Income or Expense.
      */
-    @Input() type: 'income' | 'expense' = 'income';
+    @Input() type: 'income' | 'expense' | 'saving' = 'income';
 
     /**
      *  Indicates whether the modal is visible or not.
@@ -79,7 +85,7 @@ export class TransactionFormComponent implements OnChanges {
     /**
      * The event emitter that emits when a new income is created.
      */
-    @Output() onCreated = new EventEmitter<IIncomeExpenceType>();
+    @Output() onCreated = new EventEmitter<IIncomeExpenceSavingType>();
 
     /**
      * The selected item.
@@ -95,6 +101,7 @@ export class TransactionFormComponent implements OnChanges {
 
     optionsIncome: any[] = [];
     optionsExpense: any[] = [];
+    optionsSaving: any[] = [];
 
     ngOnChanges(changes: SimpleChanges): void {
         // Reset the form when the modal is closed
@@ -110,6 +117,10 @@ export class TransactionFormComponent implements OnChanges {
 
         if (changes['listExpense']?.currentValue) {
             this.optionsExpense = this.listExpense.filter((item) => item.isTemplate === true);
+        }
+
+        if (changes['listSaving']?.currentValue) {
+            this.optionsSaving = this.listSaving;
         }
     }
 
@@ -129,9 +140,11 @@ export class TransactionFormComponent implements OnChanges {
      */
     handleAddItem(): void {
         if (this.type === 'income') {
-            this.onCreated.emit(IIncomeExpenceType.unique);
+            this.onCreated.emit(IIncomeExpenceSavingType.unique);
+        } else if (this.type === 'expense') {
+            this.onCreated.emit(IIncomeExpenceSavingType.unique);
         } else {
-            this.onCreated.emit(IIncomeExpenceType.unique);
+            this.onCreated.emit(IIncomeExpenceSavingType.unique);
         }
     }
 
@@ -140,9 +153,11 @@ export class TransactionFormComponent implements OnChanges {
      */
     handleAddRecurrentItem(): void {
         if (this.type === 'income') {
-            this.onCreated.emit(IIncomeExpenceType.recurrence);
+            this.onCreated.emit(IIncomeExpenceSavingType.recurrence);
+        } else if(this.type === 'expense') {
+            this.onCreated.emit(IIncomeExpenceSavingType.recurrence);
         } else {
-            this.onCreated.emit(IIncomeExpenceType.recurrence);
+            this.onCreated.emit(IIncomeExpenceSavingType.recurrence);
         }
     }
 
@@ -184,7 +199,7 @@ export class TransactionFormComponent implements OnChanges {
             return '';
         }
 
-        return item.type === IIncomeExpenceType.unique ? 'Único' : 'Recurrencia';
+        return item.type === IIncomeExpenceSavingType.unique ? 'Único' : 'Recurrencia';
     }
 
     /**
@@ -220,7 +235,11 @@ export class TransactionFormComponent implements OnChanges {
      * @returns The error message.
      */
     getErrorMessage(): string {
-        return this.type === 'income' ? 'Por favor seleccione un ingreso' : 'Por favor seleccione un gasto';
+        return  this.type === 'income' ? 'Por favor seleccione un ingreso' : 
+                this.type === 'expense' ? 'Por favor seleccione un gasto':
+                this.type === 'saving' ? 'Por favor seleccione un ahorro':
+                'Tipo no válido';
+
     }
 
     /**
@@ -228,7 +247,10 @@ export class TransactionFormComponent implements OnChanges {
      * @returns The placeholder.
      */
     getPleaceholder(): string {
-        return this.type === 'income' ? 'Seleccione un ingreso' : 'Seleccione un gasto';
+        return  this.type === 'income' ? 'Seleccione un ingreso' :
+                this.type === 'expense' ? 'Seleccione un gasto' : 
+                this.type === 'saving' ? 'Seleccione un ahorro' :
+                'Tipo no válido';
     }
 
     /**
@@ -236,11 +258,29 @@ export class TransactionFormComponent implements OnChanges {
      * @returns The title.
      */
     getTitle(): string {
-        return this.type === 'income' ? 'Agregar ingreso a la cuenta' : 'Agregar gasto a la cuenta';
+        return  this.type === 'income' ? 'Agregar ingreso a la cuenta' : 
+                this.type === 'expense'? 'Agregar gasto a la cuenta' :
+                this.type === 'saving' ? 'Agregar ahorro a la cuenta' :
+                'Tipo no válido';
     }
 
-
+    /**
+     * Gets the no item message.
+     * @returns The no item message.
+     */
     getNoItemMessage(): string {
-        return this.type === 'income' ? '¿No encuentras el ingreso que buscas?' : '¿No encuentras el gasto que buscas?';
+        return  this.type === 'income' ? '¿No encuentras el ingreso que buscas?' : 
+                this.type === 'expense' ? '¿No encuentras el gasto que buscas?':
+                this.type === 'saving' ? '¿No encuentras el ahorro que buscas?' :
+                'Tipo no válido';
+    }
+
+    /**
+     * Stops the loading.
+     * @returns The add item message.
+     */
+    stopLoading(): void {
+        this.isLoading = false;
+        this.cd.detectChanges();
     }
 }

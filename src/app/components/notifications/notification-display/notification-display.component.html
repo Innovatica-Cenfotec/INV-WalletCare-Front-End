@@ -1,0 +1,11 @@
+<span nz-popover nzPopoverTrigger="click" nzPopoverPlacement="bottomRight" [nzPopoverArrowPointAtCenter]="true" [nzPopoverTitle]="titleNotification" [nzPopoverContent]="sctNotification" [(nzPopoverVisible)]="visibleNotifications" nzType="primary" nz-icon
+    nzType="notification" nzTheme="outline"></span>
+
+<!-- NOTIFICATION DISPLAY BODY -->
+<ng-template #titleNotification>
+    <a (click)="closeNotification()"><span nzType="primary" nz-icon nzType="close" nzTheme="outline"></span></a>
+    <span>&nbsp; Notificaciones</span>
+</ng-template>
+<ng-template #sctNotification>
+    <app-notification-list [notificationList]="notificationService.notifications$()" (detailsNotification)="showModalDetails($event)" (deleteNotification)="deleteNotification($event)"></app-notification-list>
+</ng-template>

@@ -1,0 +1,150 @@
+@if(authService.isAdmin()){
+<div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Nuevos Usuarios por Mes" [nzExtra]="tmpNewUsers" style="margin: 10px; height: 500px;">
+            <app-new-users-chart [NewUsersData]="this.usersService.newUsersData$()"></app-new-users-chart>
+        </nz-card>
+        <ng-template #tmpNewUsers>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                nzPopoverContent="Son los Nuevos Usuarios Registrados en el año Actual."></span>
+        </ng-template>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Tipos de Cambio del Mes" style="margin: 10px; height: 500px;" [nzExtra]="tmpCurrencyExchange">
+            <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
+                <nz-form-item>
+                    <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
+
+                        <nz-select class="select" formControlName="currencyTo" nzAllowClear
+                            nzPlaceHolder="Selecciona la Moneda de Destino">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                [nzValue]="cc.currencyCode">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #errorCurrencyToTpl let-control>
+                            @if (control.errors?.['required']) { Por favor ingrese una moneda de destino }
+                        </ng-template>
+
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
+                            Filtrar Divisas
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+            <app-currencies-chart [days]="this.daysExchange" [exchangeRate]="this.exchangeRate"></app-currencies-chart>
+            <ng-template #tmpCurrencyExchange>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                    nzPopoverContent="Un Gráfico con los Tipos de Cambio de su Moneda de Elección."></span>
+            </ng-template>
+        </nz-card>
+    </div>
+</div>
+} @else {
+
+<nz-card [nzBordered]="false">
+    <app-account-cards [accountsList]="accountService.accounts$()" [transactions]="transactionService.transactions$()"
+        [balances]="transactionService.balances$()"> </app-account-cards>
+</nz-card>
+
+<div nz-row [nzGutter]="8">
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Tipos de Cambio del Mes" style="margin: 10px; height: 500px;" [nzExtra]="tmpCurrencyExchange">
+            <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
+                <nz-form-item>
+                    <nz-form-control [nzErrorTip]="errorCurrencyToTpl">
+
+                        <nz-select class="select" formControlName="currencyTo" nzAllowClear
+                            nzPlaceHolder="Selecciona la Moneda de Destino">
+                            <nz-option *ngFor="let cc of currencyCodes" [nzLabel]="cc.currencyName!"
+                                [nzValue]="cc.currencyCode">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #errorCurrencyToTpl let-control>
+                            @if (control.errors?.['required']) { Por favor ingrese una moneda de destino }
+                        </ng-template>
+
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzType="primary" [disabled]="loading" (click)="handleSubmit()">
+                            Filtrar Divisas
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+            <app-currencies-chart [days]="this.daysExchange" [exchangeRate]="this.exchangeRate"></app-currencies-chart>
+            <ng-template #tmpCurrencyExchange>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                    nzPopoverContent="Un Gráfico con los Tipos de Cambio de su Moneda de Elección."></span>
+            </ng-template>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos e Ingresos del Mes Actual" style="margin: 10px; height: 500px"
+            [nzExtra]="tmpMonthlyIncomesvsExpenses">
+            <app-incomes-vs-expenses-monthly-chart [DaysOfTheMonth]="this.transactionService.daysOfTheMonth$()"
+                [ExpensesData]="this.transactionService.monthlyExpenses$()"
+                [IncomesData]="this.transactionService.monthlyIncomes$()"></app-incomes-vs-expenses-monthly-chart>
+            <ng-template #tmpMonthlyIncomesvsExpenses>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                    nzPopoverContent="Son los Ingresos y Los Gastos Realizados en el mes Actual."></span>
+            </ng-template>
+        </nz-card>
+    </div>
+</div>
+
+<div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos Mensuales por Categoría (anual)" [nzExtra]="tmpYearlyExpenseCategory"
+            style="margin: 10px">
+            <app-barchart [data]="this.expenseService.expenseReport$()" [xAxisOrder]="monthOrder"></app-barchart>
+
+        </nz-card>
+        <ng-template #tmpYearlyExpenseCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                nzPopoverContent="Solo se consideran los registros propios realizados en el presente año."></span>
+        </ng-template>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos e Ingresos del Año Actual" style="margin: 10px"
+            [nzExtra]="tmpAnnuallyIncomesvsExpenses">
+            <app-incomes-vs-expenses-chart [IncomesData]="this.transactionService.annuallyIncomes$()"
+                [ExpensesData]="this.transactionService.annuallyExpenses$()"></app-incomes-vs-expenses-chart>
+            <ng-template #tmpAnnuallyIncomesvsExpenses>
+                <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                    nzPopoverContent="Son los Ingresos y Los Gastos Realizados en el año Actual."></span>
+            </ng-template>
+        </nz-card>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Gastos Estimados y Gastos Totales" style="margin: 10px;" [nzExtra]="tmpExpenses">
+            <app-estimated-expense-vs-total-expense-chart [totalExpensesData]="totalExpenses"
+                [recurringExpensesData]="recurringExpensesChart">
+                ></app-estimated-expense-vs-total-expense-chart>
+                <ng-template #tmpExpenses>
+                    <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                        nzPopoverContent="Son los Gastos Estimados y los Gastos Reales Realizados en el mes."></span>
+                </ng-template>
+        </nz-card>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Progreso de Metas" [nzExtra]="tmpGoalProgressByCategory" style="margin: 10px">
+            <app-piechart [data]="this.goalService.goalReport$()" [labelsOrder]="goalStatusOrder"></app-piechart>
+        </nz-card>
+        <ng-template #tmpGoalProgressByCategory>
+            <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover
+                nzPopoverContent="Toma en consideración todas las metas del usuario."></span>
+        </ng-template>
+    </div>
+</div>
+}

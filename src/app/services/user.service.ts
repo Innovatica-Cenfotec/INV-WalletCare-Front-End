@@ -9,9 +9,14 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
+  private newUsersDataSignal = signal<number[]>([]);
   get users$() {
     return this.userListSignal;
   }
+  get newUsersData$() {
+    return this.newUsersDataSignal;
+  }
+
   getAllSignal() {
     this.findAll().subscribe({
       next: (response: any) => {
@@ -23,10 +28,10 @@ export class UserService extends BaseService<IUser> {
       }
     });
   }
-  saveUserSignal (user: IUser): Observable<any>{
+  saveUserSignal(user: IUser): Observable<any> {
     return this.add(user).pipe(
       tap((response: any) => {
-        this.userListSignal.update( users => [response, ...users]);
+        this.userListSignal.update(users => [response, ...users]);
       }),
       catchError(error => {
         console.error('Error saving user', error);
@@ -34,7 +39,7 @@ export class UserService extends BaseService<IUser> {
       })
     );
   }
-  updateUserSignal (user: IUser): Observable<any>{
+  updateUserSignal(user: IUser): Observable<any> {
     return this.edit(user.id, user).pipe(
       tap((response: any) => {
         const updatedUsers = this.userListSignal().map(u => u.id === user.id ? response : u);
@@ -46,7 +51,7 @@ export class UserService extends BaseService<IUser> {
       })
     );
   }
-  deleteUserSignal (user: IUser): Observable<any>{
+  deleteUserSignal(user: IUser): Observable<any> {
     return this.del(user.id).pipe(
       tap((response: any) => {
         const updatedUsers = this.userListSignal().filter(u => u.id !== user.id);
@@ -57,5 +62,16 @@ export class UserService extends BaseService<IUser> {
         return throwError(error);
       })
     );
+  }
+  getNewUsersThisYear() {
+    this.http.get(`${this.source}/new-users`).subscribe({
+      next: (response: any) => {
+        response.reverse();
+        this.newUsersDataSignal.set(response);
+      },
+      error: (error: any) => {
+        console.error('Error fetching users', error);
+      }
+    });
   }
 }

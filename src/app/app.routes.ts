@@ -19,6 +19,10 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountDetailComponent } from './pages/account-detail/account-detail.component';
 import { IncomeComponent } from './pages/income/income.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
+import { GoalsComponent } from './pages/goals/goals.component';
+import { SavingsComponent } from './pages/savings/savings.component';
+import { UsersComponent } from './pages/users/users.component';
+import { CategoriesComponent } from './pages/Categories/Categories.component';
 
 export const routes: Routes = [
   {
@@ -40,7 +44,7 @@ export const routes: Routes = [
     canActivate: [GuestGuard],
   },
   {
-    path:'invitation',
+    path: 'invitation',
     component: AccountInvitationComponent
   },
   {
@@ -68,7 +72,6 @@ export const routes: Routes = [
         component: AccountsComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           layout: <ILayout>{
@@ -83,7 +86,6 @@ export const routes: Routes = [
         component: AccountDetailComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           parent: 'accounts',
@@ -116,33 +118,92 @@ export const routes: Routes = [
         component: IncomeComponent,
         data: {
           authorities: [
-            IRole.admin,
             IRole.user
           ],
           showInSidebar: true,
           layout: <ILayout>{
             icon: 'bank',
-            breadcrumb: ['Ingresos'],
-            name: 'Ingresos',
+            breadcrumb: ['Mis ingresos'],
+            name: 'Mis ingresos',
           },
         }
       },
-      // {
-      //   path: 'expense',
-      //   component: ExpensesComponent,
-      //   data: {
-      //     authorities: [
-      //       IRole.admin,
-      //       IRole.user
-      //     ],
-      //     showInSidebar: true,
-      //     layout: <ILayout>{
-      //       icon: 'fall',
-      //       breadcrumb: ['Gastos'],
-      //       name: 'Gastos',
-      //     },
-      //   }
-      // },
+      {
+        path: 'savings',
+        component: SavingsComponent,
+        data: {
+          authorities: [
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'dollar-circle',
+            breadcrumb: ['Mis ahorros'],
+            name: 'Mis ahorros',
+          },
+        }
+      },
+      {
+        path: 'expense',
+        component: ExpensesComponent,
+        data: {
+          authorities: [
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'fall',
+            breadcrumb: ['Mis gastos'],
+            name: 'Mis gastos',
+          },
+        }
+      },
+      {
+        path: 'Categories',
+        component: CategoriesComponent,
+        data: {
+          authorities: [
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'reconciliation',
+            breadcrumb: ['Mis categorias'],
+            name: 'Mis categorias',
+          },
+        }
+      },
+      {
+        path: 'goals',
+        component: GoalsComponent,
+        data: {
+          authorities: [
+            IRole.admin,
+            IRole.user
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'fund-view',
+            breadcrumb: ['Metas'],
+            name: 'Metas',
+          },
+        }
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
+        data: {
+          authorities: [
+            IRole.admin
+          ],
+          showInSidebar: true,
+          layout: <ILayout>{
+            icon: 'usergroup-add',
+            breadcrumb: ['Usuarios'],
+            name: 'Usuarios',
+          },
+        }
+      },
     ],
   },
   {

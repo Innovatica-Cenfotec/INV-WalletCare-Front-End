@@ -1,23 +1,23 @@
-<nz-table #fixedTable [nzData]="transactions" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '1000px', y: null}">
+<nz-table #fixedTable [nzData]="transactions" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['150px','100px', '150px', '200px', '150px', '150px', '80px']">
     <thead>
         <tr>
-            <th>Codigo Transacción</th>
-            <th>Tipo</th>
-            <th>Monto</th>
-            <th>Descripción</th>
-            <th>Realizada por</th>
-            <th>Fecha de Transcción </th>
-            <th>Acciones</th>
+            <th nzColumnKey="id" [nzSortFn]="sortby.sortById">Codigo Transacción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortby.sortByType">Tipo</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortby.sortByAmount">Monto</th>
+            <th nzColumnKey="description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
+            <th nzColumnKey="owner" [nzSortFn]="sortby.sortByOwner">Realizada por</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de Transcción </th>
+            <th nzRight>Acciones</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of fixedTable.data">
-            <td> {{data.id}}</td>
-            <td >{{formatSavingType(data.type)}}</td>
-            <td [style]="formatAmount(data.amount)"> ₡ {{ data.amount | currency:'':'':'1.2-2'}}</td>
-            <td>{{data.description}}</td>
-            <td>{{data.owner?.nickname}}</td>
-            <td >{{ getDate(data.createdAt) }}</td>
+            <td> {{ data.id }}</td>
+            <td>{{ formatSavingType(data.type) }}</td>
+            <td [style]="formatAmount(data.amount)"> ₡ {{ data.amount | currency:'':'':'1.2-2' }}</td>
+            <td>{{ data.description }}</td>
+            <td>{{ data.owner?.nickname }}</td>
+            <td>{{ getDate(data.createdAt) }}</td>
             <td nzRight>
                 <button nz-button nzType="primary" [nzSize]="'large'" nzDanger [disabled]="data.deleted" (click)="rollbackTransaction.emit(data)">
                     <span nz-icon nzType="undo" nzTheme="outline" ></span>

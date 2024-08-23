@@ -1,7 +1,7 @@
 import { Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceType, Itax, ITypeForm } from '../../../interfaces';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { IAmountType, IFrequencyType, IExpense, IIncomeExpenceSavingType, Itax, ITypeForm, ICategory } from '../../../interfaces';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -36,27 +36,29 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzSelectModule,
     NzDescriptionsModule,
     NzCalendarModule,
-    NzTypographyModule
+    NzTypographyModule,
   ],
   templateUrl: './expense-form.component.html',
   styleUrl: './expense-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpenseFormComponent extends FormModalComponent<IExpense> {
+export class ExpenseFormComponent extends FormModalComponent<IExpense> implements OnChanges {
 
   IAmountType = IAmountType;
-  IIncomeExpenceType = IIncomeExpenceType;
+  IIncomeExpenceType = IIncomeExpenceSavingType;
   IFrequencyType = IFrequencyType;
   TaxSelected: Itax | undefined;
+  ExpenseCategorySelected: ICategory | undefined;
   scheduledDayVisible = false;
   scheduledDay: number = 0;
   days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   @Input() taxList: any[] = [];
-  @Input() expenseType: IIncomeExpenceType = IIncomeExpenceType.unique;
+  @Input() expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
+  @Input() categories: ICategory[] = [];
   @Input() id: number = 0;
   @Input() enableTemplate: boolean = false;
-  
+
   override formGroup = this.fb.group({
     name: [this.item?.name, [Validators.required, Validators.pattern('[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ 0-9]+'), Validators.minLength(4), Validators.maxLength(100)]],
     description: [this.item?.description, [Validators.maxLength(200)]],
@@ -68,6 +70,9 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
     isTaxRelated: [this.item?.isTaxRelated],
     type: [this.item?.type],
     frequency: [this.item?.frequency],
+    expenseCategory: [this.item?.expenseCategory],
+    expenseCategoryId:[],
+    taxId:[]
   });
 
   formatterConlon = (value: number): string => `₡ ${value}`;
@@ -87,7 +92,7 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
       }
     }
 
-    if (this.expenseType === IIncomeExpenceType.recurrence) {
+    if (this.expenseType === IIncomeExpenceSavingType.recurrence) {
       const frequency = this.formGroup.get('frequency')?.value;
       // If the frequency is null, mark it as dirty
       if (frequency === null) {
@@ -115,19 +120,31 @@ export class ExpenseFormComponent extends FormModalComponent<IExpense> {
       return;
     }
 
-    if(this.enableTemplate === false) {
+    if (this.enableTemplate === false) {
       this.formGroup.get('isTemplate')?.setValue(true);
     }
 
     this.formGroup.get('isTaxRelated')?.setValue(this.TaxSelected !== null);
+    this.formGroup.get('expenseCategory')?.setValue(this.ExpenseCategorySelected);
+    this.formGroup.get('tax')?.setValue(this.TaxSelected);
     this.formGroup.get('type')?.setValue(this.expenseType);
     super.handleSubmit();
   }
 
-  
+  onSelectTax(id: number | null): void {
+    if (id === null) {
+      this.TaxSelected = undefined;
+    } else {
+      this.TaxSelected = this.taxList.find((t) => t.id === id);
+    }
+  }
 
-  onSelectTax(tax: Itax): void {
-    this.TaxSelected = tax;
+  onSelectCategory(id: number | null): void {
+    if (id === null) {
+      this.ExpenseCategorySelected = undefined;
+    } else {
+      this.ExpenseCategorySelected = this.categories.find((c) => c.id === id);
+    }
   }
 
   onSelectFrequency(frequency: IFrequencyType): void {

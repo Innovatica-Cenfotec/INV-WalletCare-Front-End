@@ -1,19 +1,19 @@
-<nz-table #fixedTable [nzData]="showTable" [nzSize]="'small'" [nzPageSize]="50" [nzScroll]="{ x: '1000px', y: null}">
+<nz-table #fixedTable [nzData]="showTable" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px','150px', '200px', '150px', '80px']">
     <thead>
-        <tr>        
-            <th>Nombre</th>
-            <th>Monto</th>
-            <th>Descripción</th>
-            <th>Fecha de creación</th>
-            <th>Acciones</th>
+        <tr>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortby.sortByAmount">Monto</th>
+            <th nzColumnKey="description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de creación</th>
+            <th nzRight>Acciones</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of fixedTable.data">
             <td>{{data.item.name}}</td>
             <td [style]="formatAmount(data.item.amount)">₡ {{data.item.amount | currency:'':'':'1.2-2'}}</td>
-            <td>{{data.item.description}}</td>            
-            <td >{{getDate(data.item.createdAt) }}</td>
+            <td>{{data.item.description}}</td>
+            <td>{{getDate(data.item.createdAt) }}</td>
             <td nzRight>
                 <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteRecurrence.emit(data)">
                     <span nz-icon nzType="delete" nzTheme="outline"></span>

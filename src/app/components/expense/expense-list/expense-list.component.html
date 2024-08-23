@@ -1,0 +1,79 @@
+<nz-table #nzTable [nzData]="expensesList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }"
+    [nzWidthConfig]="['25px','100px','200px', '100px', '150px', '135px', '150px', '120px']">
+    <thead>
+        <tr>
+            <th></th>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="'description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
+            <th nzColumnKey="type" [nzSortFn]="sortby.sortByType">Tipo</th>
+            <th nzColumnKey="amount" [nzSortFn]="sortby.sortByAmount">Monto</th>
+            <th nzColumnKey="typeAmount" [nzSortFn]="sortby.sortByAmountType">Tipo de monto</th>
+            <th nzColumnKey="category" [nzSortFn]="sortby.sortByCategory">Categoría</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of nzTable.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
+                <td>{{ data.name }}</td>
+                <td>{{ getExpenseDesc(data) }}</td>
+                <td>{{ getExpenseType(data) }}</td>
+                <td [style]="formatAmount(data.amount)"> ₡ -{{ data.amount | currency:'':'':'1.2-2' }}</td>
+                <td>{{ getAmountType(data) }}</td>
+                <td>{{ data.expenseCategory?.name || '-' }}</td>
+                <td nzRight>
+                    <nz-space>
+                        <button nz-button nzType="default" [nzSize]="'large'" (click)="editExpense.emit(data)"><span
+                                nz-icon nzType="edit"></span></button>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <button nz-button nzType="primary" [nzSize]="'large'" nzDanger
+                            (click)="deleteExpense.emit(data)"><span nz-icon nzType="delete"></span></button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(data.id ?? 0)">
+                <h4 nz-typography>Más detalles</h4>
+                <p>
+                    Fecha de creación: {{ getDate(data.createdAt) }}
+                </p>
+                <p>
+                    Fecha de actualización: {{ getDate(data.updatedAt) }}
+                </p>
+
+                @if(getExpenseType(data) == 'Recurrente'){
+                <h5 nz-typography>Configuración de repetición</h5>
+                <p>
+                    Frecuencia: {{ getExpenseFrequency(data) }}
+                </p>
+                @if(getExpenseFrequency(data) == 'Personalizado'){
+                <p>
+                    Día: {{ data.scheduledDay}}
+                </p>
+                }
+                }
+                @if(data.tax != undefined){
+                <h5 nz-typography>Impuesto</h5>
+                <p>
+                    Nombre: {{ getExpenseTax(data) }}
+                </p>
+                <p>
+                    Porcentaje: {{ data.tax.percentage || 0 }}%
+                </p>
+                <p>
+                    Descripción: {{ data.tax.description || '-' }}
+                </p>
+                }
+                @if(data.expenseCategory != undefined){
+                Categoría: {{ data.expenseCategory.name || '-' }}
+                }
+            </tr>
+            <ng-template #expandIcon>
+                <span nz-icon *ngIf="!expandSet.has(data.id ?? 0)" nzType="plus-circle" nzTheme="outline"
+                    (click)="onExpandChange(data.id, true)"></span>
+                <span nz-icon *ngIf="expandSet.has(data.id ?? 0)" nzType="minus-circle" nzTheme="outline"
+                    (click)="onExpandChange(data.id, false)"></span>
+            </ng-template>
+        </ng-container>
+    </tbody>
+</nz-table>

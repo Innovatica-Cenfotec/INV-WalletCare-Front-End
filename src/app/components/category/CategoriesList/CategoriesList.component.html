@@ -1,0 +1,28 @@
+<nz-table #fixedTable [nzData]="categoriesList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['200px','200px','200px','120px']">
+    <thead>
+        <tr>
+            <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="sortby.sortByDate">Fecha de creación</th>
+            <th nzColumnKey="updatedAt" [nzSortFn]="sortby.sortByDate">Fecha de actualización</th>
+            <th nzRight>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of fixedTable.data">
+            <td>{{ data.name }}</td>
+            <td>{{formatDate(data.createdAt)}}</td>
+            <td>{{formatDate(data.updatedAt)}}</td>
+            <td nzRight>
+                <nz-space>
+                    <button nz-button nzType="default" [nzSize]="'large'" (click)="editCategory.emit(data)">
+                        <span nz-icon nzType="edit"></span>
+                    </button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteCategory.emit(data)">
+                        <span nz-icon nzType="delete"></span>
+                    </button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -1,4 +1,4 @@
-import { inject, OnChanges, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { inject, OnChanges, SimpleChanges, TemplateRef, ViewChild, signal } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AccountTabMembersComponent } from '../../components/account/account-detail/account-tab-members/account-tab-members.component';
@@ -8,8 +8,13 @@ import { AccountTabTransactionsComponent } from '../../components/account/accoun
 import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction } from '../../interfaces';
+import { IAccount, IAccountType, IAccountUser, ITransaction, IExpense, IIncomeExpenceSavingType, ITypeForm, } from '../../interfaces';
 import { AccountTabRecurrenceComponent } from '../../components/account/account-detail/account-tab-recurrence/account-tab-recurrence.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ExpenseService } from '../../services/expense.service';
+import { ExpenseListComponent } from '../../components/expense/expense-list/expense-list.component';
+import { ExpenseFormComponent } from '../../components/expense/expense-form/expense-form.component';
+
 
 // Importing Ng-Zorro modules
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -20,10 +25,10 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { RecurrenceService } from '../../services/recurrence.service';
+
 
 @Component({
   selector: 'app-account-detail',
@@ -36,6 +41,7 @@ import { RecurrenceService } from '../../services/recurrence.service';
     NzButtonComponent,
     NzDropDownModule,
     NzIconModule,
+    NzModalModule,
     NzTabsModule,
     NzDividerModule,
     AccountTabMembersComponent,
@@ -43,12 +49,18 @@ import { RecurrenceService } from '../../services/recurrence.service';
     NzModalModule,
     InviteAccountComponent,
     AccountDetailHeaderComponent,
-    AccountTabRecurrenceComponent
+    AccountTabRecurrenceComponent,
+    AccountTabTransactionsComponent,
+    AccountDetailHeaderComponent,
+    ExpenseListComponent,
+    ExpenseFormComponent,
+    InviteAccountComponent
   ],
   providers: [DatePipe],
   templateUrl: './account-detail.component.html',
   styleUrl: './account-detail.component.scss'
 })
+
 export class AccountDetailComponent implements OnInit, OnChanges {
   public accountService = inject(AccountService);
   public transactionService = inject(TransactionService);
@@ -62,19 +74,80 @@ export class AccountDetailComponent implements OnInit, OnChanges {
   public recurringIncomes = 0;
 
   private nzNotificationService = inject(NzNotificationService);
+
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  public router = inject(Router);
+  // Services
   private nzModalService = inject(NzModalService);
+  private authService = inject(AuthService);
+  public expenseService = inject(ExpenseService);
 
   /*
   * Id of the account
   */
   public id: number = 0;
 
+  /**
+   * The visibility of the account creation form.
+   */
+  public isVisible = signal(false);
+
+  /**
+   * The loading state of the account form.
+   */
+  public isLoading = signal(false);
+
+  // Expenses modal
+  @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
+  public expenseType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
+  public title: string = '';
+  public TypeForm: ITypeForm = ITypeForm.create;
+
   ngOnInit(): void {
     this.loadData();
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      if (!id || isNaN(+id)) {
+        this.nzNotificationService.error('Error', 'El id de la cuenta no es válido');
+        return;
+      }
+
+      this.id = Number(id);
+      this.accountService.getAccountSignal(this.id).subscribe({
+        next: (response: IAccount) => {
+          if (this.isAccountShared()) {
+            this.accountService.getMembersSignal(this.id);
+          }
+        },
+        error: (error: any) => {
+          this.nzNotificationService.error('Error', 'No se pudo obtener la cuenta');
+        }
+      });
+    });
+  }
+
+  /**
+  * Closes the expense creation form.
+  * Sets the `isVisible` property to `false`.
+  */
+  onCanceled(): void {
+    this.isVisible.set(false);
+    this.isLoading.set(false);
+  }
+
+
+  /**
+   * Shows the modal to edit the expense
+   */
+  showModalEditExpense(expense: IExpense): void {
+    this.title = 'Editar gasto';
+    this.TypeForm = ITypeForm.update;
+    console.log(this.formExpense); // Log the value
+    this.formExpense.item = expense;
+    console.log("Item property works perfectly."); // print if actual modal display
+    this.isVisible.set(true);
   }
 
 
@@ -138,7 +211,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
    * @param account The account object
    * @returns True if the current user is the owner, false otherwise
    */
-  isOwer(): boolean {
+  isOwner(): boolean {
     const account = this.accountService.account$();
     if (!account) {
       return false;
@@ -157,13 +230,13 @@ export class AccountDetailComponent implements OnInit, OnChanges {
       nzOnOk: () => {
         this.recurrenceService.deleteRecurrenceSignal(recurrence.id).subscribe({
           next: (response: any) => {
-            this.nzNotificationService.success('Éxito',type === 'gasto' ? 'Se ha eliminado el gasto recurrente con éxito' : 'Se ha eliminado el ingreso recurrente con éxito');
+            this.nzNotificationService.success('Éxito', type === 'gasto' ? 'Se ha eliminado el gasto recurrente con éxito' : 'Se ha eliminado el ingreso recurrente con éxito');
             this.loadData();
           },
           error: (error => {
             this.nzNotificationService.error('Error', error.error.detail)
           })
-        });      
+        });
       },
       nzCancelText: 'No'
     });
@@ -175,7 +248,6 @@ export class AccountDetailComponent implements OnInit, OnChanges {
    * deletes a friend from the account
    */
   deleteFriend(accountUser: IAccountUser): void {
-
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres eliminar a ${accountUser.user?.nickname} (${accountUser.user?.email}) de la cuenta?`,
       nzContent: 'Si lo eliminas, perderas su colaboración y tanto sus gastos, ingresos y ahorros se eliminaran de esta cuenta.',
@@ -218,7 +290,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
     }
 
     // Check if the user is a member of the account
-    if (this.isOwer()) {
+    if (this.isOwner()) {
       return members.length + 1;
     }
 
@@ -232,7 +304,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
   rollbackTransaction(transaction: ITransaction) {
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
-      nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
+      nzContent: 'Si lo haces esta descición no puede ser desecha.',
       nzOkText: 'Sí',
       nzOkType: 'primary',
       nzOnOk: () => {
@@ -253,10 +325,9 @@ export class AccountDetailComponent implements OnInit, OnChanges {
     });
   }
 
-
   /**
-   * Makes the load of all the data in the view 
-   */
+     * Makes the load of all the data in the view 
+     */
   loadData() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -290,6 +361,38 @@ export class AccountDetailComponent implements OnInit, OnChanges {
           this.recurringIncomes = response.recurrentIncomesBalance;
         }
       });
+      this.transactionService.getBalancesByOwner().subscribe({
+        next: (response: any) => {
+          //this.monthExpenses = response.monthlyExpenseBalance;
+          //&this.recurringExpenses = response.recurrentExpensesBalance;
+          //this.monthIncomes = response.monthlyIncomeBalance;
+          //this.recurringIncomes = response.recurrentIncomesBalance;
+          
+        }
+      })
+    });
+  }
+
+  /**
+  * Deletes the expense
+  */
+  deleteExpense(expense: IExpense): void {
+    this.nzModalService.confirm({
+      nzTitle: '¿Estás seguro de que quieres eliminar el gasto?',
+      nzContent: 'Si eliminas el gasto, se eliminarán todos los datos relacionados al mismo.',
+      nzOkText: 'Sí',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.expenseService.deleteExpenseSignal(expense.id).subscribe({
+          next: () => {
+            this.nzNotificationService.success('Éxito', 'El gasto se ha eliminado correctamente');
+          },
+          error: (error: any) => {
+            this.nzNotificationService.error('Lo sentimos', error.error.detail);
+          }
+        });
+      },
+      nzCancelText: 'No'
     });
   }
 }

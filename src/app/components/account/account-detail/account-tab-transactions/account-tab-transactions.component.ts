@@ -1,11 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { NzTableComponent, NzTableModule } from 'ng-zorro-antd/table';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { NzTableModule } from 'ng-zorro-antd/table';
 import { IBalance, ITransaction } from '../../../../interfaces';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { TransactionService } from '../../../../services/transaction.service';
-import { catchError, tap } from 'rxjs';
+import { SortByOptions } from '../../../../sortBy';
 
 @Component({
     selector: 'app-account-tab-transactions',
@@ -16,18 +16,16 @@ import { catchError, tap } from 'rxjs';
         NzButtonModule,
         NzIconModule
     ],
+    providers: [SortByOptions],
     templateUrl: './account-tab-transactions.component.html',
     styleUrl: './account-tab-transactions.component.scss',
 })
 export class AccountTabTransactionsComponent{
-    
-
     @Input() transactions: ITransaction[] = [];
     @Output() rollbackTransaction = new EventEmitter<ITransaction>();
     private datePipe = inject(DatePipe);
     public transactionService = inject(TransactionService); 
-
-
+    public sortby = inject(SortByOptions);
     /**
      * Set the date format
      * @param date is the date
@@ -78,6 +76,4 @@ export class AccountTabTransactionsComponent{
                 return '';
         }
     }
-
-
 }

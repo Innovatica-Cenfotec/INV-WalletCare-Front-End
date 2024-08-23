@@ -1,0 +1,55 @@
+<nz-table #nzTable [nzData]="goalsList" [nzSize]="'small'" nzTableLayout="fixed" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px','200px', '150px', '100px', '150px', '80px']">
+    <thead>
+        <tr>
+            <th nzWidth="50px"></th>
+            <th *ngIf="!authService.isAdmin()" nzColumnKey="'account.name'" [nzSortFn]="sortByAccount">Cuenta</th>
+            <th nzColumnKey="name" [nzSortFn]="sortByName">Nombre</th>
+            <th nzColumnKey="'type'" [nzSortFn]="sortByType">Tipo</th>
+            <th nzColumnKey="'status'" [nzSortFn]="sortByStatus">Estado</th>
+            <th nzColumnKey="'targetDate'" [nzSortFn]="sortByDateTarget">Fecha de objetivo</th>
+            <th nzRight *ngIf="!authService.isAdmin()" nzColumnKey="'actions'">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of nzTable.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(data.id ?? 0)" [nzExpandIcon]="expandIcon"></td>
+                <td *ngIf="!authService.isAdmin()">{{ data.account?.name }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ getType(data.type) }}</td>
+                <td>{{ getGoalStatus(data.status) }}</td>
+                <td>{{ getDate(data.targetDate) }}</td>
+                <td nzRight *ngIf="!authService.isAdmin()">
+                    <nz-space nzAlign="center" nzSize="small" nzWrap="true">
+                        @if (data.status == GoalStatusEnum.goal_pending) {
+                        <button *nzSpaceItem nz-button nzType="primary" [nzSize]="'small'" (click)="acceptGoal.emit(data)"><span nz-icon nzType="check"></span></button>
+                        <button *nzSpaceItem nz-button nzType="primary" [nzSize]="'small'" nzDanger (click)="rejectGoal.emit(data)"><span nz-icon nzType="close"></span></button> } @else {
+                        <button *nzSpaceItem nz-button nzType="primary" [nzSize]="'small'" nzDanger (click)="deleteGoal.emit(data)"><span nz-icon nzType="delete"></span></button> }
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(data.id ?? 0)">
+                <h5 nz-typography>Meta</h5>
+                <p>
+                    {{ data.targetAmount }}
+                </p>
+                <h5 nz-typography>Descripción</h5>
+                <p>
+                    {{ data.description }}
+                </p>
+                <h5 nz-typography>Recomendación</h5>
+                <p>
+                    {{ data.recommendation }}
+                </p>
+                <h5 nz-typography>Fecha de Creación</h5>
+                <p>
+                    {{getDate(data.createdAt)}}
+                </p>
+            </tr>
+            <ng-template #expandIcon>
+                <span nz-icon *ngIf="!expandSet.has(data.id ?? 0)" nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(data.id, true)"></span>
+                <span nz-icon *ngIf="expandSet.has(data.id ?? 0)" nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(data.id, false)"></span>
+            </ng-template>
+        </ng-container>
+    </tbody>
+</nz-table>

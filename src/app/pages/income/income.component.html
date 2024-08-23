@@ -1,43 +1,30 @@
 <nz-page-header>
-  <nz-page-header-title>Mis Ingresos</nz-page-header-title>
-  <nz-page-header-extra>
-    <nz-space [nzWrap]="true">
-      <button *nzSpaceItem nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
-        Crear Ingreso
-        <span nz-icon nzType="down"></span>
-      </button>
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.unique)">
-            <a>Ingreso único</a>
-          </li>
-          <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.recurrence)">
-            <a>Ingreso recurrente</a>
-          </li>
-        </ul>
-      </nz-dropdown-menu>
-    </nz-space>
-  </nz-page-header-extra>
-  <nz-page-header-content>
-    
-    <nz-divider></nz-divider>
-    <app-income-list 
-    [incomeList]="incomeService.incomes$()"
-    (viewIncomeDetails)="viewIncomeDetails($event)"
-    (deleteIncome)="deleteIncome($event)"
-    (editIncome)="showModalEdit($event)">
-    </app-income-list>
-   
-
-  </nz-page-header-content>
+    <nz-page-header-title>
+        Mis Ingresos
+        <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de plantillas" nzPopoverContent="En esta página encontrará todas sus plantillas de ingresos."></span>
+    </nz-page-header-title>
+    <nz-page-header-extra>
+        <nz-space [nzWrap]="true">
+            <button *nzSpaceItem nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+                Crear Plantilla <span nz-icon nzType="down"></span>
+            </button>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.unique)">
+                        <a>Ingreso único</a>
+                    </li>
+                    <li nz-menu-item (click)="showModalCreate(IIncomeExpenceType.recurrence)">
+                        <a>Ingreso recurrente</a>
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </nz-space>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+        <app-income-list [incomeList]="incomeService.incomes$()" (deleteIncome)="deleteIncome($event)" (editIncome)="showModalEdit($event)">
+        </app-income-list>
+    </nz-page-header-content>
 </nz-page-header>
 
-<app-income-form #form [isVisible]="isVisible()" [item]="income()"
-  [type]="TypeForm"
-  [title]="title"
-  [incomeType]="incomeType"
-  [taxList]="taxService.taxes$()"
-  (onCanceled)="onCanceled()" 
-  (onCreated)="createIncome($event)"
-  (onUpdated)="updateIncome($event)">
+<app-income-form #form [isVisible]="isVisible()" [item]="income()" [type]="TypeForm" [title]="title" [incomeType]="incomeType" [taxList]="taxService.taxes$()" (onCanceled)="onCanceled()" (onCreated)="createIncome($event)" (onUpdated)="updateIncome($event)">
 </app-income-form>
