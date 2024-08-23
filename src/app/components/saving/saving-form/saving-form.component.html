@@ -124,6 +124,14 @@
                         programado se ajustará al último día del mes</span>
                 </div>
             </div>
+
+            <!-- Fecha Objetivo -->
+            <nz-form-item *ngIf="savingType === IIncomeExpenseSavingType.recurrence">
+                <nz-form-label nzRequired nzFor="targetDate">Fecha Objetivo</nz-form-label>
+                <nz-form-control>
+                    <nz-date-picker formControlName="targetDate"[(ngModel)]="date" (ngModelChange)="onChange($event)" [nzDisabledDate]="disabledDate" [nzDefaultPickerValue]="defaultPickerValue"></nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
         </form>
     </div>
     <div *nzModalFooter>
