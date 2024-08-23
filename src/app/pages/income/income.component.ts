@@ -4,15 +4,10 @@ import { Router } from '@angular/router';
 
 // Importing Ng-Zorro modules
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
@@ -32,21 +27,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   imports: [
     CommonModule,
     NzPageHeaderModule,
-    NzButtonComponent,
+    NzButtonModule,
     NzSpaceModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzGridModule,
-    NzCardModule,
     NzIconModule,
-    NzDividerModule,
     NzModalModule,
+    NzDropDownModule,
+    NzPopoverModule,
     IncomeListComponent,
     IncomeFormComponent,
-    IncomeAllocationsComponent,
-    NzButtonModule,
-    NzDropDownModule,
-    NzPopoverModule
+    IncomeAllocationsComponent
   ],
   templateUrl: './income.component.html',
   styleUrl: './income.component.scss',
@@ -93,7 +82,7 @@ export class IncomeComponent {
   public TypeForm: ITypeForm = ITypeForm.create;
 
   ngOnInit(): void {
-    this.incomeService.findAllSignal();
+    this.incomeService.findAllTemplatesSignal();
     this.acccountService.findAllSignal();
     this.taxService.findAllSignal();
   }
@@ -205,13 +194,5 @@ export class IncomeComponent {
         this.form.stopLoading();
       }
     });
-  }
-
-  /**
-   * View account details
-   * @param income income to view
-   */
-  viewIncomeDetails(income: IIncome): void {
-    this.router.navigateByUrl('app/incomes/details/' + income.id);
   }
 }

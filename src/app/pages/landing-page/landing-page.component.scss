@@ -33,8 +33,8 @@ section {
 }
 
 .hero img {
-    width: 300px;
-    height: 300px;
+    width: 25vw;
+    height: 25vw;
 }
 
 .hero-cont {
@@ -79,27 +79,30 @@ section {
     color: #063678;
 }
 
-.sct-what-is, .sct-how-we-help {
+.sct-what-is,
+.sct-how-we-help {
     display: flex;
 }
 
-.sct-what-is div, .sct-how-we-help div {
+.sct-what-is div,
+.sct-how-we-help div {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .sct-what-is img {
-    width: 300px;
+    width: 30vw;
     margin-right: 60px;
 }
 
 .sct-how-we-help img {
-    width: 300px;
+    width: 30vw;
     margin-left: 60px;
 }
 
-.sct-what-is a, .sct-how-we-help a {
+.sct-what-is a,
+.sct-how-we-help a {
     color: #b8b8b8;
     margin-top: 20px;
 }
@@ -114,7 +117,7 @@ section {
     color: #FFFFFF;
 }
 
-footer { 
+footer {
     padding: 60px;
     color: #063678;
 }
@@ -132,7 +135,7 @@ footer {
     .hero-cont h1 {
         font-size: 3rem;
     }
-    .hero-features{
+    .hero-features {
         align-items: center;
         justify-content: center;
     }
@@ -149,8 +152,8 @@ footer {
         flex-direction: column-reverse;
         align-items: center;
     }
-
-    .sct-what-is img, .sct-how-we-help img {
+    .sct-what-is img,
+    .sct-how-we-help img {
         margin: 0;
         width: 250px;
     }

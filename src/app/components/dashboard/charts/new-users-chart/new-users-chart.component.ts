@@ -1,23 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
-import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
-import { ChartOptions, IBalance } from '../../../../interfaces';
+import {
+    ApexAxisChartSeries,
+    ApexChart,
+    ChartComponent,
+    ApexDataLabels,
+    ApexXAxis,
+    ApexPlotOptions,
+    NgApexchartsModule
+  } from "ng-apexcharts";
+import { ChartOptions } from '../../../../interfaces';
 
 @Component({
-    selector: 'app-incomes-vs-expenses-chart',
+    selector: 'app-new-users-chart',
     standalone: true,
     imports: [
         CommonModule,
         NgApexchartsModule
     ],
-    templateUrl: './incomes-vs-expenses-chart.component.html',
-    styleUrl: './incomes-vs-expenses-chart.component.scss',
+    templateUrl: './new-users-chart.component.html',
+    styleUrl: './new-users-chart.component.scss',
 })
-export class IncomesVsExpensesChartComponent implements OnChanges {
+export class NewUsersChartComponent { 
+
 
     @ViewChild("chart") chart: ChartComponent | undefined;
-    @Input() IncomesData: number[] = [];
-    @Input() ExpensesData: number[] = [];
+    @Input() NewUsersData: number[] = [];
     public chartOptions: Partial<ChartOptions>;
 
     constructor() {
@@ -25,26 +33,22 @@ export class IncomesVsExpensesChartComponent implements OnChanges {
             series: [],
             chart: {
                 height: 350,
-                type: "line",
+                type: "bar",
                 zoom: {
                     enabled: false
                 }
             },
+            plotOptions: {
+                bar: {
+                  horizontal: true
+                }
+              },
             dataLabels: {
                 enabled: true
-            },
-            stroke: {
-                curve: "straight"
             },
             title: {
                 text: "",
                 align: "left"
-            },
-            grid: {
-                row: {
-                    colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-                    opacity: 0.5
-                }
             },
             xaxis: {
                 categories: [
@@ -64,22 +68,18 @@ export class IncomesVsExpensesChartComponent implements OnChanges {
             }
         };
     }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['IncomesData'] || changes['ExpensesData']) {
+        if (changes['NewUsersData']) {
             this.chartOptions.series = [
                 {
-                    name: "Ingresos",
-                    data: this.IncomesData,
-                    color: IBalance.surplus
+                    name: "Nuevos Ingresos",
+                    data: this.NewUsersData,
                 },
-                {
-                    name: "Gastos",
-                    data: this.ExpensesData,
-                    color: IBalance.deficit
-                }
+
             ]
         }
 
     }
+
 }

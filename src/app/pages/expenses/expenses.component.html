@@ -21,10 +21,9 @@
         </nz-space>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <app-expense-list [showTax]="true" [expensesList]="expenseService.expenses$()" (detailsExpense)="showModalDetails($event)" (editExpense)="showModalEdit($event)" (deleteExpense)="deleteExpense($event)"></app-expense-list>
+        <app-expense-list [expensesList]="expenseService.expenses$()" (editExpense)="showModalEdit($event)" (deleteExpense)="deleteExpense($event)"></app-expense-list>
     </nz-page-header-content>
 </nz-page-header>
 
 <app-expense-form #form [isVisible]="isVisible()" [isLoading]="isLoading()" [item]="expense()" [type]="TypeForm" [title]="title" [expenseType]="expenseType" [taxList]="taxService.taxes$()" (onCanceled)="closeModalForm()" (onCreated)="createExpense($event)"
-    [categories]="CategoryService.categories$()"
-    (onUpdated)="updateExpense($event)"></app-expense-form>
+    [categories]="CategoryService.categories$()" (onUpdated)="updateExpense($event)"></app-expense-form>
