@@ -58,6 +58,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
     @ViewChild(ExpenseFormComponent) formExpense!: ExpenseFormComponent;
     @ViewChild(IncomeFormComponent) formIncome!: IncomeFormComponent;
     @ViewChild(SavingFormComponent) formSaving!: SavingFormComponent;
+    @ViewChild(TransactionFormComponent) formTransaction!: TransactionFormComponent;
 
     /*
     * The account id.
@@ -290,6 +291,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -307,6 +309,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 },
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -325,6 +328,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 error: (error: any) => {
                     this.nzNotificationService.error('Lo sentimos', error.error.detail);
                     this.isLoadingTransaction = false;
+                    this.formTransaction.stopLoading();
                 }
             });
         }
@@ -436,6 +440,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
 
                 this.form.stopLoading();
+                this.formExpense.stopLoading();
             }
         });
     }
@@ -480,6 +485,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
 
                 this.form.stopLoading();
+                this.formIncome.stopLoading();
             }
         });
     }
@@ -509,7 +515,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
                 this.loadData.emit();
             },
-            error: (error: any) => {
+            error: (error: any) => {               
                 // Displaying the error message in the form
                 error.error.fieldErrors?.map((fieldError: any) => {
                     this.formIncome.setControlError(fieldError.field, fieldError.message);
@@ -521,6 +527,7 @@ export class AccountDetailHeaderComponent implements OnChanges {
                 }
 
                 this.form.stopLoading();
+                this.formSaving.stopLoading();
             }
         });
     }

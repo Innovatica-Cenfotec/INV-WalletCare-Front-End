@@ -8,7 +8,7 @@ import { AccountTabTransactionsComponent } from '../../components/account/accoun
 import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
-import { IAccount, IAccountType, IAccountUser, IBalance, IRecurrence, ITransaction, IExpense, IIncomeExpenceSavingType, ITypeForm, } from '../../interfaces';
+import { IAccount, IAccountType, IAccountUser, ITransaction, IExpense, IIncomeExpenceSavingType, ITypeForm, } from '../../interfaces';
 import { AccountTabRecurrenceComponent } from '../../components/account/account-detail/account-tab-recurrence/account-tab-recurrence.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseService } from '../../services/expense.service';
@@ -304,7 +304,7 @@ export class AccountDetailComponent implements OnInit, OnChanges {
   rollbackTransaction(transaction: ITransaction) {
     this.nzModalService.confirm({
       nzTitle: `¿Estás seguro de que quieres reversar esta transacción?`,
-      nzContent: 'Si lo haces esta descición no puede ser desehcha. ',
+      nzContent: 'Si lo haces esta descición no puede ser desecha.',
       nzOkText: 'Sí',
       nzOkType: 'primary',
       nzOnOk: () => {

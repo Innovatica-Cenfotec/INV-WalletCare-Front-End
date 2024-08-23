@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
-import { ApexAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip,
-    ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle } from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexNonAxisChartSeries, ApexChart, ApexYAxis, ApexXAxis, ApexFill, ApexTooltip, ApexDataLabels, ApexPlotOptions, ApexGrid, ApexStroke, ApexTitleSubtitle, ApexResponsive, ApexNoData, ApexLegend } from 'ng-apexcharts';
+
 
 export interface ILoginResponse {
     accessToken: string;
@@ -12,8 +12,9 @@ export interface IResponse<T> {
 }
 
 export interface ChartOptions {
-    series: ApexAxisChartSeries;
+    series: ApexAxisChartSeries | ApexNonAxisChartSeries;
     chart: ApexChart;
+    labels: any;
     yaxis: ApexYAxis;
     xaxis: ApexXAxis;
     fill: ApexFill;
@@ -24,11 +25,27 @@ export interface ChartOptions {
     grid: ApexGrid;
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
+    responsive: ApexResponsive[];
+    noData: ApexNoData;
+};
+
+export interface ChartOptionsNonAxis {
+    series: ApexNonAxisChartSeries;
+    chart: ApexChart;
+    responsive: ApexResponsive[];
+    labels: any;
+    fill?: ApexFill;
+    legend?: ApexLegend;
 };
 
 export interface IBarchartData {
     category: string;
     data: IBarcharItem[];
+}
+
+export interface IPiechartData {
+    category: string;
+    data: number;
 }
 
 export interface IBarcharItem {
@@ -339,12 +356,12 @@ export enum ICurrencyType {
     dollars = "DOLLARS"
 }
 
-export interface CurrencyCodesDTO{
+export interface CurrencyCodesDTO {
     currencyCode?: string;
     currencyName?: string;
 }
 
-export interface CurrencyExchangeDTO{
+export interface CurrencyExchangeDTO {
     currencyFrom?: string | null;
     currencyTo?: string | null;
     amount?: 0 | number | null,

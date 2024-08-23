@@ -1,6 +1,6 @@
 <nz-page-header>
     <nz-page-header-title>
-        Mis Ingresos &nbsp;
+        Mis Ingresos
         <span nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="'#d48806'" nzType="info-circle" nz-popover nzPopoverTitle="Lista de plantillas" nzPopoverContent="En esta página encontrará todas sus plantillas de ingresos."></span>
     </nz-page-header-title>
     <nz-page-header-extra>
@@ -21,7 +21,7 @@
         </nz-space>
     </nz-page-header-extra>
     <nz-page-header-content>
-        <app-income-list [incomeList]="incomeService.incomes$()" (viewIncomeDetails)="viewIncomeDetails($event)" (deleteIncome)="deleteIncome($event)" (editIncome)="showModalEdit($event)">
+        <app-income-list [incomeList]="incomeService.incomes$()" (deleteIncome)="deleteIncome($event)" (editIncome)="showModalEdit($event)">
         </app-income-list>
     </nz-page-header-content>
 </nz-page-header>

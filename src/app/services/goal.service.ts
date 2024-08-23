@@ -1,8 +1,6 @@
-import { Injectable, Signal, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IAccount, IAccountUser, IGenericResponse, IGoal } from '../interfaces';
-import { Observable, Subscription, catchError, tap } from 'rxjs';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { IGoal, IPiechartData } from '../interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +9,7 @@ export class GoalService extends BaseService<IGoal> {
     protected override source: string = 'goals';
     private goalListSignal = signal<IGoal[]>([]);
     private isProposingGoalSignal = signal(false);
+    private goalReportSignal = signal<IPiechartData[]>([]);
 
     get goals$() {
         return this.goalListSignal;
@@ -18,6 +17,13 @@ export class GoalService extends BaseService<IGoal> {
 
     get isProposingGoal$() {
         return this.isProposingGoalSignal;
+    }
+
+    /*
+    * Get the goals report.
+    */
+    get goalReport$() {
+        return this.goalReportSignal.asReadonly();
     }
 
     /**
@@ -90,29 +96,45 @@ export class GoalService extends BaseService<IGoal> {
      * @throws If there is an error proposing the goal.
      */
     proposeGoal() {
-            this.isProposingGoalSignal.set(true);
-            this.http.post<IGoal>(`${this.source}/propose`, null).subscribe({
-                next: (response: any) => {
-                    this.goalListSignal.update(goals => [...goals, response]);
-                    this.SortListByDate();
-                    this.isProposingGoalSignal.set(false);
-                },
-                error: (error: any) => {
-                    this.isProposingGoalSignal.set(false);
-                    console.error('Error proposing goal', error);
-                    throw error;
-                }
-            });
-        }
+        this.isProposingGoalSignal.set(true);
+        this.http.post<IGoal>(`${this.source}/propose`, null).subscribe({
+            next: (response: any) => {
+                this.goalListSignal.update(goals => [...goals, response]);
+                this.SortListByDate();
+                this.isProposingGoalSignal.set(false);
+            },
+            error: (error: any) => {
+                this.isProposingGoalSignal.set(false);
+                console.error('Error proposing goal', error);
+                throw error;
+            }
+        });
+    }
 
     /**
      * Sorts the goals by date in descending order.
      */
     private SortListByDate() {
-            this.goalListSignal.update(goals => goals.sort((a, b) => {
-                const dateA = a.createdAt ? new Date(a.createdAt) : null;
-                const dateB = b.createdAt ? new Date(b.createdAt) : null;
-                return dateB && dateA ? dateB.getTime() - dateA.getTime() : 0;
-            }));
-        }
+        this.goalListSignal.update(goals => goals.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt) : null;
+            const dateB = b.createdAt ? new Date(b.createdAt) : null;
+            return dateB && dateA ? dateB.getTime() - dateA.getTime() : 0;
+        }));
+    }
+    
+    /**
+     * Get a count of goals by their status.
+     * @returns List of IPiecharData with the count by goal status.
+     */
+    reportProgressByStatus() {
+        return this.http.get<IPiechartData[]>(`${this.source}/report/progress-by-status`).subscribe({
+            next: (response: any) => {
+                this.goalReportSignal.set(response);
+            },
+            error: (error: any) => {
+                console.error('Error fetching report data', error);
+                throw error;
+            }
+        });
+    }
 }
