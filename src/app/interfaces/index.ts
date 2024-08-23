@@ -380,6 +380,7 @@ export interface ISaving {
     account?: IAccount;
     createdAt?: Date;
     updatedAt?: Date;
+    targetDate?: Date;
     deleted?: boolean;
 }
 

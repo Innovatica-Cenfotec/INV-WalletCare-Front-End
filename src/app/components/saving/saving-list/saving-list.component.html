@@ -1,6 +1,7 @@
-<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['100px', '200px', '100px', '150px', '150px', '120px']">
+<nz-table #fixedTable [nzData]="savingList" [nzSize]="'small'" [nzPageSize]="10" [nzScroll]="{ x: '0px' }" [nzWidthConfig]="['25px','100px', '200px', '100px', '150px', '150px', '120px']">
     <thead>
         <tr>
+            <th></th>
             <th nzColumnKey="name" [nzSortFn]="sortby.sortByName">Nombre</th>
             <th nzColumnKey="description" [nzSortFn]="sortby.sortByDescription">Descripción</th>
             <th nzColumnKey="type" [nzSortFn]="sortby.sortByType">Tipo</th>
@@ -10,23 +11,48 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of fixedTable.data">
-            <td>{{ data.name }}</td>
-            <td>{{ data.description }}</td>
-            <td>{{ getSavingType(data) }}</td>
-            <td>{{ "₡"+data.amount }}</td>
-            <td>{{ formatDate(data.createdAt) }}</td>
-            <td nzRight>
-                <nz-space>
-                    <button nz-button nzType="default" [nzSize]="'large'" (click)="editSaving.emit(data)">
-                        <span nz-icon nzType="edit"></span>
-                    </button>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <button nz-button nzType="primary" [nzSize]="'large'" nzDanger (click)="deleteSaving.emit(data)">
-                        <span nz-icon nzType="delete"></span>
-                    </button>
-                </nz-space>
-            </td>
-        </tr>
+        <ng-container *ngFor="let data of fixedTable.data">
+            <tr>
+                <td *ngIf="data.type==IIncomeExpenseSavingType.unique"></td>
+                <td *ngIf="data.type==IIncomeExpenseSavingType.recurrence" [nzExpand]="expandSet.has(data.id ?? 0)"[nzExpandIcon]="expandIcon"></td>
+                <td>{{ data.name }}</td>
+                <td>{{formatDate(data.createdAt)}}</td>
+                <td>{{data.description}}</td>
+                <td>{{getSavingType(data)}}</td>
+                <td>{{"₡"+data.amount}}</td>
+                <td nzRight>
+                    <nz-space>
+                        <button nz-button nzType="default" [nzSize]="'large'" (click)="editSaving.emit(data)">
+                            <span nz-icon nzType="edit"></span>
+                        </button>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <button nz-button nzType="primary" [nzSize]="'large'" nzDanger
+                            (click)="deleteSaving.emit(data)">
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(data.id ?? 0)">
+                <td>
+                    <nz-space nzDirection="horizontal" nzSize="large" class="details-progress">
+                        <div *nzSpaceItem>
+                            <h4 nz-typography>Más detalles</h4>
+                            <p>Fecha Objetivo: {{ formatDate(data.targetDate) }}</p>
+                            <p>Fecha de Creación: {{ formatDate(data.createdAt) }}</p>
+                            <p>Días transcurridos: {{ calculateDaysPassed(data) }}</p>
+                            <p>Días Restantes: {{ calculateDaysLeft(data) }}</p>
+                        </div>
+                        <nz-progress *nzSpaceItem nzType="circle"[nzPercent]="getProgressForSaving(data)"></nz-progress>
+                    </nz-space>
+                </td>
+            </tr>
+            <ng-template #expandIcon>
+                <span nz-icon *ngIf="!expandSet.has(data.id ?? 0)" nzType="plus-circle" nzTheme="outline"
+                    (click)="onExpandChange(data.id, true)"></span>
+                <span nz-icon *ngIf="expandSet.has(data.id ?? 0)" nzType="minus-circle" nzTheme="outline"
+                    (click)="onExpandChange(data.id, false)"></span>
+            </ng-template>
+        </ng-container>
     </tbody>
 </nz-table>
