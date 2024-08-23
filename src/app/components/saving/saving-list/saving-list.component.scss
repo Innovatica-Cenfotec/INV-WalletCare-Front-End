@@ -1,0 +1,20 @@
+/* styles.scss */
+.details-progress {
+  display: flex;
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  gap: 24px; /* Ajusta el espacio entre los elementos, por ejemplo 24px */
+  padding: 16px; /* Ajusta el espacio interno alrededor de los elementos */
+}
+
+.details-progress div {
+  flex: 1; /* Asegura que el contenido dentro del contenedor se ajuste adecuadamente */
+}
+
+.details-progress h4 {
+  margin: 0 0 8px 0; /* Ajusta el margen del título */
+}
+
+.details-progress p {
+  margin: 4px 0; /* Ajusta el margen de los párrafos */
+}

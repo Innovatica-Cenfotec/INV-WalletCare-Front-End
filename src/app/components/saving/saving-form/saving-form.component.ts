@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input , inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -51,24 +51,17 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 })
 export class SavingFormComponent extends FormModalComponent<ISaving> {
   date: Date | null = null;
-  defaultPickerValue: Date;
+  today = new Date();
+  defaultPickerValue= new Date(this.today.setDate(this.today.getDate() + 1));
   isEnglish = false;
-  constructor() {
-    super();
+  private i18n = inject(NzI18nService);
 
-    // Calcula la fecha predeterminada para el date picker (un mes después de hoy)
-    const today = new Date();
-    this.defaultPickerValue = new Date(today.setMonth(today.getMonth() + 1));
-  }
-
-  private i18n= inject(NzI18nService);
-  
-
+  selectedFrequency: IFrequencyType = IFrequencyType.daily;
   IIncomeExpenseSavingType = IIncomeExpenceSavingType;
   IFrequencyType = IFrequencyType;
   scheduledDayVisible = false;
   scheduledDay: number = 0;
-  days = Array.from({length: 31}, (_, i) => i + 1);
+  days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   @Input() savingType: IIncomeExpenceSavingType = IIncomeExpenceSavingType.unique;
   @Input() id: number = 0;
@@ -79,7 +72,7 @@ export class SavingFormComponent extends FormModalComponent<ISaving> {
     description: [this.item?.description, [Validators.maxLength(200)]],
     amount: [this.item?.amount, [Validators.required, Validators.min(1)]],
     scheduledDay: [this.item?.scheduledDay],
-    targetDate:[this.item?.targetDate],
+    targetDate: [this.item?.targetDate],
     type: [this.item?.type],
     frequency: [this.item?.frequency],
   });
@@ -134,7 +127,10 @@ export class SavingFormComponent extends FormModalComponent<ISaving> {
   }
 
   onSelectFrequency(frequency: IFrequencyType): void {
+    this.selectedFrequency = frequency;
     this.scheduledDayVisible = frequency === IFrequencyType.other ? true : false;
+    this.formGroup.get('targetDate')!.updateValueAndValidity();
+    this.updateDefaultPickerValue();
   }
 
   onSelectScheduledDay(scheduledDay: any): void {
@@ -145,9 +141,65 @@ export class SavingFormComponent extends FormModalComponent<ISaving> {
   }
   disabledDate = (current: Date): boolean => {
     const today = new Date();
-    const oneMonthFromToday = new Date(today.setMonth(today.getMonth() + 1));
-    return current <= oneMonthFromToday;
-  };
-
+    let comparisonDate: Date;
   
+    switch (this.selectedFrequency) {
+      case IFrequencyType.daily:
+        comparisonDate = new Date(today);
+        comparisonDate.setDate(today.getDate() + 1); // Un día después de hoy
+        return current <= today; // Permite todas las fechas después de hoy
+  
+      case IFrequencyType.weekly:
+        comparisonDate = new Date(today);
+        comparisonDate.setDate(today.getDate() + 7); // Una semana después de hoy
+        return current <= comparisonDate; // Permite fechas después de una semana
+  
+      case IFrequencyType.biweekly:
+        comparisonDate = new Date(today);
+        comparisonDate.setDate(today.getDate() + 14); // Dos semanas después de hoy
+        return current <= comparisonDate; // Permite fechas después de dos semanas
+  
+      case IFrequencyType.monthly:
+        comparisonDate = new Date(today);
+        comparisonDate.setMonth(today.getMonth() + 1); // Un mes después de hoy
+        return current <= comparisonDate; // Permite fechas después de un mes
+  
+      case IFrequencyType.annual:
+        comparisonDate = new Date(today);
+        comparisonDate.setFullYear(today.getFullYear() + 1); // Un año después de hoy
+        return current <= comparisonDate; // Permite fechas después de un año
+      case IFrequencyType.other:
+        comparisonDate = new Date(today);
+        comparisonDate.setDate(today.getDate() + 1); // Un día después de hoy
+        return current <= today; // Permite todas las fechas después de hoy
+  
+      default:
+        return false; // No permite ninguna fecha si no se selecciona frecuencia
+    }
+  };
+  updateDefaultPickerValue(): void {
+    const today = new Date();
+    switch (this.selectedFrequency) {
+      case IFrequencyType.daily:
+        this.defaultPickerValue = new Date(today.setDate(today.getDate() + 1));
+        break;
+      case IFrequencyType.weekly:
+        this.defaultPickerValue = new Date(today.setDate(today.getDate() + 7));
+        break;
+      case IFrequencyType.biweekly:
+        this.defaultPickerValue = new Date(today.setDate(today.getDate() + 14));
+        break;
+      case IFrequencyType.monthly:
+        this.defaultPickerValue = new Date(today.setMonth(today.getMonth() + 1));
+        break;
+      case IFrequencyType.annual:
+        this.defaultPickerValue = new Date(today.setFullYear(today.getFullYear() + 1));
+        break;
+      case IFrequencyType.other:
+        this.defaultPickerValue = new Date(today.setDate(today.getDate() + 1));
+        break;
+      default:
+        this.defaultPickerValue = today;
+    }
+  }
 }
